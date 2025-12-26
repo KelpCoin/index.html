@@ -2,43 +2,194 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Claim 500 KelpCoin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Brown Eye Cortex - MTG Arbitrage Loop</title>
   <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #111827;
+      --accent: #22d3ee;
+      --muted: #94a3b8;
+      --text: #e2e8f0;
+      --success: #34d399;
+    }
+    * { box-sizing: border-box; }
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f0fdf4;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
       margin: 0;
-      padding: 40px;
+      background: radial-gradient(circle at 20% 20%, rgba(34,211,238,0.08), transparent 30%),
+                  radial-gradient(circle at 80% 10%, rgba(52,211,153,0.08), transparent 25%),
+                  var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 40px 18px 72px;
+      display: flex;
+      justify-content: center;
     }
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
+    .shell {
+      width: min(1100px, 100%);
+      background: var(--panel);
+      border: 1px solid rgba(148,163,184,0.2);
+      border-radius: 18px;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.35);
+      padding: 28px;
     }
-    p {
-      font-size: 1rem;
-      margin-bottom: 2rem;
-      color: #555;
+    h1 { font-size: 2.2rem; margin: 0 0 4px; }
+    .lead { color: var(--muted); margin: 0 0 24px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+    .card {
+      background: #0b1220;
+      border: 1px solid rgba(148,163,184,0.18);
+      border-radius: 14px;
+      padding: 16px 18px 18px;
     }
-    iframe {
-      border: none;
-      width: 100%;
-      max-width: 700px;
-      height: 800px;
-      border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    .card h2 { margin: 0 0 8px; font-size: 1.1rem; }
+    .card p { margin: 0 0 8px; color: var(--muted); line-height: 1.55; font-size: 0.98rem; }
+    .tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+    .tag { background: rgba(34,211,238,0.14); color: #5eead4; border-radius: 999px; padding: 6px 10px; font-size: 0.85rem; }
+    .step-list { margin: 12px 0 0 18px; color: var(--muted); }
+    .step-list li { padding: 4px 0; }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(34,211,238,0.16);
+      border: 1px solid rgba(34,211,238,0.45);
+      color: #e0f2fe;
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-weight: 600;
+      margin: 4px 8px 12px 0;
     }
+    .section-title { margin: 26px 0 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); font-size: 0.85rem; }
+    .callout {
+      background: linear-gradient(120deg, rgba(52,211,153,0.08), rgba(34,211,238,0.05));
+      border: 1px solid rgba(52,211,153,0.4);
+      border-radius: 14px;
+      padding: 16px 18px;
+      margin-top: 16px;
+    }
+    .callout strong { color: #bbf7d0; }
   </style>
 </head>
 <body>
-  <h1>🪙 Claim 500 KelpCoin</h1>
-  <p>Fill in your wallet address. Optional: enter a referrer’s wallet to earn bonus KELP.</p>
-  <iframe 
-    src="https://docs.google.com/forms/d/e/1FAIpQLSclYfRXBxHoDBjpoHCoKM2_lm8VkxN8FjqmkOeK5kqxiOMW9A/viewform?embedded=true"
-    allowfullscreen>
-  </iframe>
+  <main class="shell">
+    <h1>Brown Eye Cortex</h1>
+    <p class="lead">Self-improving loop for Magic: The Gathering arbitrage, targeted seeding via PowerShell, and Discord revenue alerts.</p>
+
+    <div class="section-title">Operating signals</div>
+    <div class="grid">
+      <div class="card">
+        <h2>Seeds (manual, targeted)</h2>
+        <p>PowerShell still injects curated seeds. Keep them narrow: card sets, marketplace SKUs, shipping regions, and buylist caps.</p>
+        <div class="tag-row">
+          <span class="tag">PowerShell inject</span>
+          <span class="tag">Set & SKU filters</span>
+          <span class="tag">Refocus weekly</span>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Data triangulation</h2>
+        <p>Cross cardsphere / TCGplayer / CardMarket spreads. Normalize with FX + fee models and persist deltas every pull.</p>
+        <ul class="step-list">
+          <li>Fetch prices → clean → persist to cache/db</li>
+          <li>Compute spread vs. shipping + fees</li>
+          <li>Score: liquidity × margin × velocity</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h2>Discord webhooks</h2>
+        <p>Push only profitable, actionable lots. Attach source links, photo hash (if available), and target flips.</p>
+        <div class="tag-row">
+          <span class="tag">Threshold filters</span>
+          <span class="tag">Markdown payloads</span>
+          <span class="tag">Auto-archive</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title">Closed-loop revenue loop</div>
+    <div class="card">
+      <p><span class="pill">1. Acquire</span> Poll marketplaces with seeded filters; lock lots that exceed margin & velocity guardrails.</p>
+      <p><span class="pill">2. Flip</span> Auto-post to target markets; reuse shipping templates and pre-filled condition notes.</p>
+      <p><span class="pill">3. Signal</span> Discord webhook posts: spread %, fees, projected net, and next-hop listing links.</p>
+      <p><span class="pill">4. Learn</span> Capture realized vs. projected profit and push back into scoring weights.</p>
+    </div>
+
+    <div class="section-title">Automation checklist</div>
+    <div class="grid">
+      <div class="card">
+        <h2>Ingestion</h2>
+        <p>Scheduled pulls (cron/Task Scheduler) with retry + backoff; tag each run with seed ID and timestamp.</p>
+        <ul class="step-list">
+          <li>Normalize currencies (USD/EUR/GBP) and fees</li>
+          <li>Cache last price window to detect fresh spikes</li>
+          <li>Flag illiquid cards with volume < X per week</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h2>Scoring engine</h2>
+        <p>Weighted score: margin (40%) + liquidity (30%) + velocity (20%) + risk (10%).</p>
+        <ul class="step-list">
+          <li>Auto-drop if photos missing and condition = unknown</li>
+          <li>Prefer playsets; penalize singletons with low volume</li>
+          <li>Surface floor/ceiling spreads for Discord preview</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h2>Webhook payloads</h2>
+        <p>Send compact JSON to Discord:</p>
+        <ul class="step-list">
+          <li>Title: <strong>[Spread%] Card @ Source → Target</strong></li>
+          <li>Fields: buy price, sell price, fees, net, velocity</li>
+          <li>Links: source listing, target draft listing</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h2>Feedback & tuning</h2>
+        <p>Append realized profit per lot and seed ID; retrain weights weekly. Expire stale seeds automatically.</p>
+        <ul class="step-list">
+          <li>Drop SKUs with repeated failed flips</li>
+          <li>Boost seeds that hit >X profit/turnover</li>
+          <li>Archive metrics to CSV/Sheets for audit</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="section-title">Minimum viable scripts</div>
+    <div class="grid">
+      <div class="card">
+        <h2>PowerShell seed injector</h2>
+        <p>Maintain manual control over targeting while automating ingestion.</p>
+        <ul class="step-list">
+          <li><code>Invoke-RestMethod</code> to push seed JSON into the pipeline</li>
+          <li>Include set code, SKU list, region, min margin, max buy price</li>
+          <li>Trigger Windows Task Scheduler to kick collectors</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h2>Python collector</h2>
+        <p>Requests/HTTPX fetchers with simple adapters per marketplace.</p>
+        <ul class="step-list">
+          <li>Persist to SQLite/Parquet for quick diffing</li>
+          <li>Compute spread + fees → score → filter</li>
+          <li>Send Discord webhook via <code>requests.post</code></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h2>Discord notifier</h2>
+        <p>Markdown cards per hit to keep the team aligned.</p>
+        <ul class="step-list">
+          <li>Embed: title, thumbnail (card art), buttons</li>
+          <li>Color-code by margin tier</li>
+          <li>Auto-thread by seed ID for discussion</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout">
+      <strong>Next sprint:</strong> wire PowerShell seed drops into the Python collector, add FX/fee normalizer, and ship Discord alerts. Once closed-loop profit is stable, replace manual seeding with heuristics fed by realized returns.
+    </div>
+  </main>
 </body>
 </html>
