@@ -1,0 +1,17 @@
+{
+  "name": "Simulation Digest",
+  "data_dir": "pipelines/simulation_digest/data/simulations",
+  "output_dir": "pipelines/simulation_digest/output",
+  "listing_dir": "pipelines/simulation_digest/listings",
+  "log_file": "pipelines/logs/simulation_digest.log",
+  "price_nzd": 12.0,
+  "price_usd": 7.5,
+  "patreon_link": "https://patreon.com/browneye-meta",
+  "discord_gate": "https://discord.gg/meta",
+  "upsell_bundle_hint": "Pair with Deck Funeral reports for a statistically favored arsenal",
+  "cta_links": [
+    "https://gumroad.com/browneye/sim-digest",
+    "https://patreon.com/browneye-meta"
+  ],
+  "days_until_next": 7
+}

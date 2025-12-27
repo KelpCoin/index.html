@@ -1,0 +1,15 @@
+{
+  "name": "Content Pack Factory",
+  "seeds_dir": "pipelines/content_pack_factory/data/seeds",
+  "output_dir": "pipelines/content_pack_factory/output",
+  "listing_dir": "pipelines/content_pack_factory/listings",
+  "log_file": "pipelines/logs/content_pack.log",
+  "themes": ["starter", "control", "combo"],
+  "price_nzd": 10.0,
+  "price_usd": 6.0,
+  "days_until_next": 2,
+  "affiliate_links": [
+    "https://affiliates.store/coaching",
+    "https://affiliates.store/sideboard"
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "name": "Deck Funeral + Upgrade",
+  "input_dir": "pipelines/deck_funeral_upgrade/data/decklists",
+  "output_dir": "pipelines/deck_funeral_upgrade/output",
+  "listing_dir": "pipelines/deck_funeral_upgrade/listings",
+  "log_file": "pipelines/logs/deck_funeral.log",
+  "price_nzd": 15.0,
+  "price_usd": 9.0,
+  "affiliate_links": [
+    "https://affiliates.store/cardsleeves",
+    "https://affiliates.store/playmats"
+  ],
+  "gumroad_slug": "deck-funeral",
+  "days_until_next": 3
+}
