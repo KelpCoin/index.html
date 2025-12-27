@@ -1,0 +1,20 @@
+{
+  "deck_name": "Kaalia of the Vast Blitz",
+  "commander": "Kaalia of the Vast",
+  "simulated_games": 1500,
+  "overall_win_rate": 0.672,
+  "average_win_turn": 4.6,
+  "mulligan_kept_rate": 0.83,
+  "average_damage_turn4": 19.4,
+  "matchups": {
+    "stax": {"win_rate": 0.69, "games": 360},
+    "control": {"win_rate": 0.71, "games": 420},
+    "midrange": {"win_rate": 0.66, "games": 540},
+    "combo": {"win_rate": 0.64, "games": 180}
+  },
+  "closing_lines": [
+    {"line": "Kaalia + haste enabler into Avacyn, Angel of Hope", "frequency": 0.41},
+    {"line": "Kaalia into Master of Cruelties for immediate elimination", "frequency": 0.22},
+    {"line": "Kaalia + Balefire Dragon board wipe swing", "frequency": 0.18}
+  ]
+}
