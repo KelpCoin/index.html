@@ -1,0 +1,1 @@
+{"timestamp": "2024-12-27T01:10:00Z", "job_name": "arbitrage_analysis", "confidence": 0.55, "touches_money": true, "overwrites_files": false, "deletes_data": false, "changes_behavior": true, "summary": "Would place a new order on low confidence signal", "metadata": {"pair": "USD/EUR"}, "status": "pending-approval"}

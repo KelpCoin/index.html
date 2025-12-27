@@ -1,0 +1,12 @@
+{
+  "timestamp": "20241227T011500Z",
+  "job_type": "queue_run",
+  "input_summary": "Processed 42 queued tasks",
+  "decision": "Executed tasks and rescheduled 3 retries",
+  "risk_level": "low",
+  "confidence": 0.93,
+  "human_summary": "Queue runner executed the pending tasks and safely retried a few failures. No sensitive files or payouts were touched.",
+  "metadata": {
+    "retry_count": 3
+  }
+}
