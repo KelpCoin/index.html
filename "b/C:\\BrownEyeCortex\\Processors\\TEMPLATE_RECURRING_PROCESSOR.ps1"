@@ -1,0 +1,81 @@
+<#!
+.SYNOPSIS
+    Template for a BrownEye Cortex recurring processor that runs a Python script via Windows Task Scheduler.
+
+.DESCRIPTION
+    - Loads and executes a Python script defined in PY_SCRIPT.
+    - Appends timestamped output to LOG_FILE (folder created if missing).
+    - Logs failures but always exits with code 0 so Task Scheduler continues the schedule.
+    - Replace JOB_NAME, PY_SCRIPT, and LOG_FILE with real values before use.
+
+.TASK SCHEDULER EXAMPLE
+    SCHTASKS /Create /SC DAILY /TN "JOB_NAME" /TR "powershell.exe -ExecutionPolicy Bypass -File `"C:\BrownEyeCortex\Processors\TEMPLATE_RECURRING_PROCESSOR.ps1`"" /ST 02:00
+
+.NOTES
+    Keep this script idempotent and non-terminating; errors are logged and suppressed to preserve scheduling.
+#>
+
+[CmdletBinding()]
+param()
+
+$ErrorActionPreference = 'Stop'
+
+# Placeholders to be customized
+$JobName = 'JOB_NAME'
+$PythonScript = 'PY_SCRIPT'
+$LogFile = 'LOG_FILE'
+
+# Ensure the log directory exists
+$logDirectory = Split-Path -Path $LogFile -Parent
+if (-not (Test-Path -Path $logDirectory)) {
+    New-Item -Path $logDirectory -ItemType Directory -Force | Out-Null
+}
+
+function Write-Log {
+    param(
+        [Parameter(Mandatory)][string] $Message
+    )
+
+    $timestamp = Get-Date -Format 'yyyy-MM-dd HH:mm:ss'
+    "$timestamp`t$Message" | Out-File -FilePath $LogFile -Append -Encoding UTF8
+}
+
+# Trap any unhandled errors to keep the process alive and logged
+trap {
+    Write-Log "[$JobName] Unhandled error: $_"
+    continue
+}
+
+Write-Log "[$JobName] Starting recurring processor."
+
+try {
+    if (-not (Test-Path -Path $PythonScript)) {
+        throw "Python script not found: $PythonScript"
+    }
+
+    $pythonExecutable = (Get-Command python -ErrorAction Stop).Source
+    Write-Log "[$JobName] Using Python: $pythonExecutable"
+    Write-Log "[$JobName] Executing: $PythonScript"
+
+    $output = & $pythonExecutable $PythonScript 2>&1
+    if ($output) {
+        $output | ForEach-Object { Write-Log "[$JobName] $_" }
+    }
+
+    $processExitCode = $LASTEXITCODE
+    if ($processExitCode -ne 0) {
+        throw "Python exited with code $processExitCode"
+    }
+
+    Write-Log "[$JobName] Completed successfully."
+}
+catch {
+    Write-Log "[$JobName] Error: $_"
+    Write-Log "[$JobName] Processor continuing; exiting with code 0 to satisfy scheduler."
+}
+finally {
+    Write-Log "[$JobName] Run finished."
+    # Always return success for Task Scheduler
+    $global:LASTEXITCODE = 0
+    exit 0
+}
