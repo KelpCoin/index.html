@@ -1,0 +1,5 @@
+__pycache__/
+*.pyc
+cortex_mirror/BrownEyeCortex/Logs/**/*.log
+cortex_mirror/BrownEyeCortex/Logs/**/*.jsonl
+cortex_mirror/BrownEyeCortex/Logs/Explanations/*.json
