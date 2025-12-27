@@ -2,43 +2,94 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Claim 500 KelpCoin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Arbitrage Dashboard</title>
   <style>
+    :root {
+      --green: #0ea55f;
+      --green-light: #e8f6ed;
+      --text: #1f2933;
+      --muted: #4b5563;
+      --border: #d1d5db;
+    }
+    * { box-sizing: border-box; }
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f0fdf4;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background-color: var(--green-light);
       display: flex;
       flex-direction: column;
       align-items: center;
       margin: 0;
-      padding: 40px;
+      padding: 40px 16px 56px;
+      color: var(--text);
     }
     h1 {
       font-size: 2rem;
-      margin-bottom: 0.5rem;
+      margin: 0 0 0.25rem 0;
     }
     p {
       font-size: 1rem;
-      margin-bottom: 2rem;
-      color: #555;
+      margin: 0 0 24px 0;
+      color: var(--muted);
+      text-align: center;
+      max-width: 700px;
+    }
+    .panel {
+      width: 100%;
+      max-width: 780px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      box-shadow: 0 0 18px rgba(0, 0, 0, 0.08);
+      padding: 24px;
+    }
+    .actions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 14px;
+      background: var(--green);
+      color: #fff;
+      text-decoration: none;
+      font-weight: 600;
+      border-radius: 8px;
+      border: 1px solid #0a7d47;
+      transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.2s ease;
+    }
+    .action:focus,
+    .action:hover {
+      background: #0c8f52;
+      box-shadow: 0 8px 18px rgba(14, 165, 95, 0.25);
+      transform: translateY(-1px);
     }
     iframe {
       border: none;
       width: 100%;
-      max-width: 700px;
-      height: 800px;
-      border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      height: 820px;
+      border-radius: 8px;
     }
   </style>
 </head>
 <body>
-  <h1>🪙 Claim 500 KelpCoin</h1>
-  <p>Fill in your wallet address. Optional: enter a referrer’s wallet to earn bonus KELP.</p>
-  <iframe 
-    src="https://docs.google.com/forms/d/e/1FAIpQLSclYfRXBxHoDBjpoHCoKM2_lm8VkxN8FjqmkOeK5kqxiOMW9A/viewform?embedded=true"
-    allowfullscreen>
-  </iframe>
+  <h1>Arbitrage Dashboard</h1>
+  <p>Run the queued tasks, kick off LearnBot, or open the latest results CSV directly from this dashboard.</p>
+
+  <div class="panel">
+    <div class="actions">
+      <a class="action" href="file://C:/BrownEyeCortex/Bootstraps/Launch_RunQueue.ps1">Run Queue Now</a>
+      <a class="action" href="file://C:/BrownEyeCortex/Bootstraps/Launch_LearnBot.ps1">Run LearnBot</a>
+      <a class="action" href="file://C:/BrownEyeCortex/Bootstraps/Launch_OpenResults.ps1">Open Results CSV</a>
+    </div>
+    <iframe
+      src="https://docs.google.com/forms/d/e/1FAIpQLSclYfRXBxHoDBjpoHCoKM2_lm8VkxN8FjqmkOeK5kqxiOMW9A/viewform?embedded=true"
+      allowfullscreen>
+    </iframe>
+  </div>
 </body>
 </html>
