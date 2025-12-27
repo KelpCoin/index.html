@@ -1,0 +1,13 @@
+{
+  "name": "Atraxa Superfriends",
+  "commander": "Atraxa, Praetors' Voice",
+  "cards": [
+    {"name": "Sol Ring", "qty": 1},
+    {"name": "Arcane Signet", "qty": 1},
+    {"name": "Cultivate", "qty": 2},
+    {"name": "Rhystic Study", "qty": 1},
+    {"name": "Solemn Simulacrum", "qty": 2},
+    {"name": "Generic Threat", "qty": 4},
+    {"name": "Basic Land", "qty": 87}
+  ]
+}
