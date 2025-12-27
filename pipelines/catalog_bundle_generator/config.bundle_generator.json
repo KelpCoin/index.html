@@ -1,0 +1,19 @@
+{
+  "name": "Catalog Bundle Generator",
+  "catalog_roots": [
+    "pipelines/simulation_digest/output",
+    "pipelines/deck_funeral_upgrade/output",
+    "pipelines/content_pack_factory/output"
+  ],
+  "output_dir": "pipelines/catalog_bundle_generator/output",
+  "listing_dir": "pipelines/catalog_bundle_generator/listings",
+  "log_file": "pipelines/logs/catalog_bundle.log",
+  "bundle_rules": [
+    {"name": "Control Pack", "tag": "control", "price_multiplier": 1.8},
+    {"name": "Starter Bundle", "tag": "starter", "price_multiplier": 1.5},
+    {"name": "Upgrade Arsenal", "tag": "upgrade", "price_multiplier": 2.0}
+  ],
+  "base_price_nzd": 20.0,
+  "base_price_usd": 12.0,
+  "days_until_next": 5
+}
