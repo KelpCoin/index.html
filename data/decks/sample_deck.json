@@ -1,0 +1,20 @@
+{
+  "deck_name": "Verdant Surge",
+  "author": "Cortex Builder",
+  "strategy": "Ramp quickly into resilient finishers while maintaining card advantage.",
+  "key_cards": [
+    "Overgrowth Channeler",
+    "Tidecall Analyst",
+    "Bloom Engineer",
+    "Crested Guardian"
+  ],
+  "weaknesses": [
+    "Graveyard disruption",
+    "Fast airborne aggression"
+  ],
+  "gameplan": [
+    "Mulligan for ramp and early interaction",
+    "Stabilize with midgame blockers",
+    "Transition to value engines and protect finishers"
+  ]
+}

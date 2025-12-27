@@ -1,0 +1,8 @@
+[
+  {"asset": "KELP", "market": "reef_dex", "price": 1.00, "timestamp": "2024-02-10T10:00:00Z"},
+  {"asset": "KELP", "market": "bay_cex", "price": 1.08, "timestamp": "2024-02-10T10:05:00Z"},
+  {"asset": "KELP", "market": "harbor_dex", "price": 0.97, "timestamp": "2024-02-10T09:55:00Z"},
+  {"asset": "REEF", "market": "reef_dex", "price": 14.50, "timestamp": "2024-02-10T10:00:00Z"},
+  {"asset": "REEF", "market": "bay_cex", "price": 14.00, "timestamp": "2024-02-10T10:04:00Z"},
+  {"asset": "REEF", "market": "harbor_dex", "price": 13.80, "timestamp": "2024-02-10T10:03:00Z"}
+]

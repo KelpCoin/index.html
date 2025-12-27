@@ -1,0 +1,8 @@
+{
+  "jobs": [
+    "arbitrage_seed",
+    "arbitrage_rescore",
+    "primer_generate",
+    "deckfuneral_analyze"
+  ]
+}

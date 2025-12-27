@@ -1,0 +1,8 @@
+{
+  "auto_approve": ["non_destructive_read"],
+  "require_manual_approval": ["overwrite", "policy_change"],
+  "supervisor_thresholds": {
+    "repeated_failures": 3,
+    "mass_overwrite_count": 5
+  }
+}
