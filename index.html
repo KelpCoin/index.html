@@ -1,44 +1,124 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Claim 500 KelpCoin</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BrownEye MTG Arbitrage Dashboard</title>
   <style>
+    :root {
+      --bg: #0b1523;
+      --panel: #111c2c;
+      --accent: #3fb27f;
+      --accent-2: #66c2ff;
+      --text: #e8f5ff;
+      --muted: #8fa5c2;
+      --border: #1f2c43;
+    }
+    * { box-sizing: border-box; }
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f0fdf4;
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin: 0;
-      padding: 40px;
+      padding: 30px 16px 80px;
     }
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
+    h1, h2, h3 { color: var(--text); margin-top: 0; }
+    p { color: var(--muted); }
+    .container { width: 100%; max-width: 1100px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+    .card {
+      background: linear-gradient(145deg, #0d1725, #0f1b2d);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 18px;
+      box-shadow: 0 8px 28px rgba(0,0,0,0.35);
     }
-    p {
-      font-size: 1rem;
-      margin-bottom: 2rem;
-      color: #555;
-    }
+    .tag { display: inline-block; padding: 4px 10px; border-radius: 999px; font-size: 12px; background: #152538; color: var(--accent-2); border: 1px solid var(--border); }
+    ul { padding-left: 18px; margin: 0; }
     iframe {
-      border: none;
       width: 100%;
-      max-width: 700px;
-      height: 800px;
-      border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      max-width: 900px;
+      height: 760px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      box-shadow: 0 8px 28px rgba(0,0,0,0.35);
+      background: #0d1725;
     }
+    .checklist li { margin-bottom: 8px; }
+    code { background: #0b111c; padding: 3px 6px; border-radius: 4px; color: var(--accent-2); }
+    .muted { color: var(--muted); }
   </style>
 </head>
 <body>
-  <h1>🪙 Claim 500 KelpCoin</h1>
-  <p>Fill in your wallet address. Optional: enter a referrer’s wallet to earn bonus KELP.</p>
-  <iframe 
-    src="https://docs.google.com/forms/d/e/1FAIpQLSclYfRXBxHoDBjpoHCoKM2_lm8VkxN8FjqmkOeK5kqxiOMW9A/viewform?embedded=true"
-    allowfullscreen>
-  </iframe>
+  <div class="container">
+    <h1>BrownEye MTG Arbitrage Dashboard</h1>
+    <p>Closed-loop arbitrage pipeline with seed ingestion, scoring, Discord alerts, and feedback tuning. All artifacts land in the BrownEye Cortex data lake.</p>
+
+    <div class="grid" style="margin-bottom: 18px;">
+      <div class="card">
+        <h3>Pipeline</h3>
+        <ul>
+          <li><strong>Seeds:</strong> JSON jobs dropped into <code>C:\BrownEyeCortex\Queue\</code>.</li>
+          <li><strong>Ingestion:</strong> SeedBot normalizes card SKUs, marketplaces, and fee assumptions.</li>
+          <li><strong>Scoring:</strong> ScoreBot applies margin, liquidity, velocity, risk weights from <code>Arbitrage_Scoring_Config.json</code>.</li>
+          <li><strong>Alerts:</strong> AlertBot posts qualified hits to Discord with normalized FX and fee load.</li>
+          <li><strong>Feedback:</strong> LearnBot reviews realized P&amp;L and adjusts weights automatically.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Bots and Roles</h3>
+        <ul>
+          <li>SeedBot: queue seeding and validation.</li>
+          <li>CollectBot: scrape or import market snapshots.</li>
+          <li>ScoreBot: compute normalized scores and priority.</li>
+          <li>AlertBot: send Discord alerts and append CSV output.</li>
+          <li>LearnBot: tune scoring weights based on historical performance.</li>
+          <li>BuildBot: artifact generation for primers and funerals.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Data Lake Layout</h3>
+        <ul>
+          <li><code>C:\BrownEyeCortex\Data\Lake\Arbitrage\</code></li>
+          <li><code>C:\BrownEyeCortex\Data\Lake\Primers\</code></li>
+          <li><code>C:\BrownEyeCortex\Data\Lake\DeckFunerals\</code></li>
+          <li><code>C:\BrownEyeCortex\Data\Lake\Kelphaven\</code></li>
+          <li><code>C:\BrownEyeCortex\Data\Lake\System\</code></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom: 18px;">
+      <h3>Operational Checklist</h3>
+      <ul class="checklist">
+        <li>Run the mega bootstrap: <code>powershell -ExecutionPolicy Bypass -File C:\BrownEyeCortex\Bootstraps\BrownEye_Factory_MegaBootstrap.ps1</code>.</li>
+        <li>Confirm queue folder exists and is writable.</li>
+        <li>Set <code>$env:DISCORD_WEBHOOK_URL</code> before enabling alerts.</li>
+        <li>Ensure Scheduled Tasks are enabled for SeedBot and ScoreBot cadences.</li>
+        <li>Review <code>C:\BrownEyeCortex\Logs\Arbitrage\</code> for run health and tuning notes.</li>
+      </ul>
+    </div>
+
+    <div class="card" style="margin-bottom: 18px;">
+      <h3>Minimum Viable Scripts</h3>
+      <ul>
+        <li>Seed injector drops JSON into queue with card, set, marketplace, thresholds.</li>
+        <li>Queue runner locks each job, computes normalized margin via FX/fee normalizer.</li>
+        <li>Scoring engine weights margin, velocity, liquidity, and risk into a single score.</li>
+        <li>AlertBot posts Markdown-friendly summary to Discord and appends CSV to <code>Arbitrage_Results.csv</code>.</li>
+        <li>LearnBot updates weights daily using realized profit signals in the data lake.</li>
+      </ul>
+    </div>
+
+    <div class="card" style="margin-bottom: 18px;">
+      <h3>KelpCoin Claim Form</h3>
+      <p class="muted">Claim starter KelpCoin and add a referrer wallet for bonus allocation. Form is embedded for ease of use.</p>
+      <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSclYfRXBxHoDBjpoHCoKM2_lm8VkxN8FjqmkOeK5kqxiOMW9A/viewform?embedded=true" allowfullscreen title="KelpCoin Claim Form"></iframe>
+    </div>
+  </div>
 </body>
 </html>
