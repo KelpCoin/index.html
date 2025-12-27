@@ -1,0 +1,12 @@
+{
+  "name": "Isshin Tokens",
+  "commander": "Isshin, Two Heavens as One",
+  "cards": [
+    {"name": "Sol Ring", "qty": 1},
+    {"name": "Arcane Signet", "qty": 1},
+    {"name": "Cultivate", "qty": 1},
+    {"name": "Lightning Bolt", "qty": 3},
+    {"name": "Generic Threat", "qty": 6},
+    {"name": "Basic Land", "qty": 88}
+  ]
+}

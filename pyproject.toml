@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "browneye-sim"
+version = "0.1.0"
+description = "BrownEye Commander Simulator"
+authors = [{name = "BrownEye AI"}]
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+keywords = ["mtg", "commander", "simulation", "cli"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: Microsoft :: Windows",
+]
+
+[project.scripts]
+browneye-sim = "browneye_sim.cli:main"
