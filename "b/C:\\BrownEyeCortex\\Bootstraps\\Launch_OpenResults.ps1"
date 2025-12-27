@@ -1,0 +1,8 @@
+$ErrorActionPreference = "Stop"
+$target = "C:\BrownEyeCortex\Results.csv"
+
+if (Test-Path -LiteralPath $target) {
+    Start-Process -FilePath $target
+} else {
+    Write-Error "Missing file: $target"
+}

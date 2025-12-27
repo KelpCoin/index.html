@@ -1,0 +1,8 @@
+$ErrorActionPreference = "Stop"
+$target = "C:\BrownEyeCortex\LearnBot.ps1"
+
+if (Test-Path -LiteralPath $target) {
+    Start-Process -FilePath "powershell.exe" -ArgumentList "-ExecutionPolicy Bypass -File `"$target`"" -WindowStyle Normal
+} else {
+    Write-Error "Missing script: $target"
+}
