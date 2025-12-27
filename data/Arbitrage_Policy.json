@@ -1,0 +1,13 @@
+{
+  "preferred_marketplaces": [
+    "AquaExchange",
+    "Seagrass",
+    "BrineBay"
+  ],
+  "banned_cards": [
+    "RogueCurrent"
+  ],
+  "risk_tolerance": 0.5,
+  "min_liquidity": 1000,
+  "sell_window_days": 7
+}
