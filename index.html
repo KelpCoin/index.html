@@ -36,6 +36,36 @@
 <body>
   <h1>🪙 Claim 500 KelpCoin</h1>
   <p>Fill in your wallet address. Optional: enter a referrer’s wallet to earn bonus KELP.</p>
+
+  <section aria-labelledby="gpu-plan-title">
+    <h2 id="gpu-plan-title">GPU Fallback Plan</h2>
+    <ol>
+      <li>
+        <strong>Detect GPU health</strong>
+        <ul>
+          <li>Run a fast probe at startup (e.g., CUDA/ROCm device query or simple tensor op) and record driver/runtime versions.</li>
+          <li>Check for recent device errors (watchdog resets, ECC faults, thermal throttling) and GPU memory availability.</li>
+          <li>Expose a lightweight health endpoint/metric so schedulers can see GPU readiness.</li>
+        </ul>
+      </li>
+      <li>
+        <strong>Switch workloads intelligently</strong>
+        <ul>
+          <li>Route latency-sensitive or heavy parallel jobs to healthy GPUs; keep small/batchable tasks on CPU when GPUs are saturated.</li>
+          <li>Use a per-job capability flag ("gpu_preferred", "gpu_required", "cpu_ok") to decide whether to fall back or fail fast.</li>
+          <li>When a GPU probe fails mid-run, gracefully checkpoint, reschedule on CPU, and throttle GPU retry frequency.</li>
+        </ul>
+      </li>
+      <li>
+        <strong>Log and observe fallbacks</strong>
+        <ul>
+          <li>Emit structured logs with job id, node, GPU id, probe results, and reason for CPU fallback.</li>
+          <li>Count fallback events in metrics (e.g., Prometheus counter) and alert on spikes or repeated device failures.</li>
+          <li>Include timing data comparing GPU vs CPU execution to tune future scheduling decisions.</li>
+        </ul>
+      </li>
+    </ol>
+  </section>
   <iframe 
     src="https://docs.google.com/forms/d/e/1FAIpQLSclYfRXBxHoDBjpoHCoKM2_lm8VkxN8FjqmkOeK5kqxiOMW9A/viewform?embedded=true"
     allowfullscreen>
