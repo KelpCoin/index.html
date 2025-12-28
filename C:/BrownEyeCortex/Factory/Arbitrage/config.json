@@ -1,0 +1,13 @@
+{
+  "discord_webhook": "https://discord.com/api/webhooks/REPLACE_ME",
+  "data_sources": [
+    { "name": "SourceA", "type": "mock" },
+    { "name": "SourceB", "type": "mock" },
+    { "name": "FaultySource", "type": "mock" }
+  ],
+  "retry_policy": { "retries": 1, "delay_seconds": 2 },
+  "artifact_output_dir": "C:/BrownEyeCortex/Factory/Arbitrage/Artifacts",
+  "logging_dir": "C:/BrownEyeCortex/Factory/Arbitrage/Logs",
+  "enable_gpu": false,
+  "pricing_thresholds": { "allow": 0.25, "hold": 0.08 }
+}
