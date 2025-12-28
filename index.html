@@ -3,42 +3,196 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Claim 500 KelpCoin</title>
+  <title>Arbitrage Outcome Labeler</title>
   <style>
+    :root {
+      --kelp-green: #16a34a;
+      --kelp-light: #ecfdf3;
+      --kelp-border: #d1fae5;
+      --kelp-text: #0f172a;
+    }
+    * {
+      box-sizing: border-box;
+    }
     body {
       font-family: 'Segoe UI', sans-serif;
-      background-color: #f0fdf4;
+      background-color: var(--kelp-light);
       display: flex;
       flex-direction: column;
       align-items: center;
       margin: 0;
-      padding: 40px;
+      padding: 40px 20px;
+      color: var(--kelp-text);
     }
     h1 {
       font-size: 2rem;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.25rem;
     }
     p {
       font-size: 1rem;
-      margin-bottom: 2rem;
-      color: #555;
+      margin-bottom: 1.5rem;
+      color: #475569;
+      text-align: center;
+      max-width: 720px;
     }
-    iframe {
-      border: none;
+    .card {
       width: 100%;
-      max-width: 700px;
-      height: 800px;
+      max-width: 720px;
+      background: #fff;
+      border: 1px solid var(--kelp-border);
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 12px 30px rgba(22, 163, 74, 0.12);
+    }
+    form {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px 20px;
+      margin-bottom: 24px;
+    }
+    label {
+      font-weight: 600;
+      font-size: 0.95rem;
+      display: block;
+      margin-bottom: 6px;
+    }
+    input[type="number"] {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+    input[type="number"]:focus {
+      outline: 2px solid #bbf7d0;
+      border-color: var(--kelp-green);
+    }
+    .actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    button {
+      background-color: var(--kelp-green);
+      color: #fff;
+      border: none;
       border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      padding: 12px 18px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.1s ease, box-shadow 0.2s ease;
+      box-shadow: 0 10px 20px rgba(22, 163, 74, 0.25);
+    }
+    button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 14px 28px rgba(22, 163, 74, 0.3);
+    }
+    .helper-text {
+      color: #475569;
+      font-size: 0.95rem;
+    }
+    pre {
+      background: #0f172a;
+      color: #e2e8f0;
+      border-radius: 12px;
+      padding: 16px;
+      overflow-x: auto;
+      font-size: 0.95rem;
+      margin: 0;
+    }
+    .error {
+      color: #b91c1c;
+      font-weight: 600;
+      margin-top: -6px;
+      margin-bottom: 10px;
     }
   </style>
 </head>
 <body>
-  <h1>🪙 Claim 500 KelpCoin</h1>
-  <p>Fill in your wallet address. Optional: enter a referrer’s wallet to earn bonus KELP.</p>
-  <iframe 
-    src="https://docs.google.com/forms/d/e/1FAIpQLSclYfRXBxHoDBjpoHCoKM2_lm8VkxN8FjqmkOeK5kqxiOMW9A/viewform?embedded=true"
-    allowfullscreen>
-  </iframe>
+  <h1>🧭 Arbitrage Outcome Labeler</h1>
+  <p>
+    Compute profit and label outcomes for executed arbitrage signals based on execution price, exit price, and fees.
+  </p>
+
+  <div class="card">
+    <form id="label-form">
+      <div>
+        <label for="execution_price">Execution Price</label>
+        <input type="number" step="any" id="execution_price" required />
+      </div>
+      <div>
+        <label for="exit_price">Exit Price</label>
+        <input type="number" step="any" id="exit_price" required />
+      </div>
+      <div>
+        <label for="fees">Fees</label>
+        <input type="number" step="any" id="fees" required />
+      </div>
+      <div>
+        <label for="time_to_close">Time to Close (minutes)</label>
+        <input type="number" step="1" id="time_to_close" required />
+      </div>
+    </form>
+
+    <div class="actions">
+      <button id="calculate">Label Trade</button>
+      <span class="helper-text">Logic: profit = (exit_price - execution_price) - fees</span>
+    </div>
+    <div id="error" class="error" role="alert" aria-live="polite"></div>
+    <pre id="output" aria-live="polite">{
+  "label": "win | loss | neutral",
+  "profit": 0,
+  "explanation": ""
+}</pre>
+  </div>
+
+  <script>
+    const form = document.getElementById('label-form');
+    const output = document.getElementById('output');
+    const error = document.getElementById('error');
+    const calculate = document.getElementById('calculate');
+
+    const buildExplanation = (label) => {
+      switch (label) {
+        case 'win':
+          return 'Profit after fees positive.';
+        case 'loss':
+          return 'Profit after fees negative.';
+        default:
+          return 'Profit within fee threshold; outcome neutral.';
+      }
+    };
+
+    const labelOutcome = ({ execution_price, exit_price, fees }) => {
+      const profit = (exit_price - execution_price) - fees;
+      const label = Math.abs(profit) < fees ? 'neutral' : profit > 0 ? 'win' : 'loss';
+      return { label, profit: Number(profit.toFixed(6)), explanation: buildExplanation(label) };
+    };
+
+    const parseNumber = (input) => {
+      const value = Number.parseFloat(input.value);
+      return Number.isFinite(value) ? value : null;
+    };
+
+    calculate.addEventListener('click', (event) => {
+      event.preventDefault();
+      error.textContent = '';
+
+      const execution_price = parseNumber(document.getElementById('execution_price'));
+      const exit_price = parseNumber(document.getElementById('exit_price'));
+      const fees = parseNumber(document.getElementById('fees'));
+      const time_to_close_minutes = parseNumber(document.getElementById('time_to_close'));
+
+      if ([execution_price, exit_price, fees, time_to_close_minutes].some((v) => v === null)) {
+        error.textContent = 'All fields must contain valid numbers.';
+        return;
+      }
+
+      const result = labelOutcome({ execution_price, exit_price, fees, time_to_close_minutes });
+      output.textContent = JSON.stringify(result, null, 2);
+    });
+  </script>
 </body>
 </html>
