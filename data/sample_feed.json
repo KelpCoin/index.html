@@ -1,0 +1,20 @@
+{
+  "movements": [
+    {
+      "name": "Jeweled Lotus",
+      "price_nzd": 210.50,
+      "change_pct": 8.5,
+      "reason": "Commander demand spike after new legend reveals",
+      "category": "mover",
+      "uri": "https://example.com/jeweled-lotus"
+    },
+    {
+      "name": "Shockland Bundle",
+      "price_nzd": 37.25,
+      "change_pct": -4.2,
+      "reason": "reprint scare fading",
+      "category": "arbitrage",
+      "uri": "https://example.com/shockland"
+    }
+  ]
+}
