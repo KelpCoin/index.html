@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Day 3 Offer | Amplissa</title>
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; background: #0f1116; color: #e7eefb; padding: 20px; }
+    .card { background: #131823; border: 1px solid #1f2937; border-radius: 12px; padding: 20px; max-width: 640px; margin: auto; }
+    .button { display: inline-block; background: linear-gradient(135deg, #f97316, #fb923c); color: #0f1116; padding: 10px 14px; border-radius: 10px; font-weight: 700; text-decoration: none; }
+    p { color: #9fb0c8; line-height: 1.6; }
+    .muted { color: #9fb0c8; font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>48h bonus ends soon</h1>
+    <p>Hi {{ email }}, your bonus for {{ creator }} expires in 48 hours. Use code <strong>{{ coupon_code }}</strong> at checkout to save on the <strong>“Velvet Night” digital set</strong>.</p>
+    <p>Taxes and platform fees stay transparent; receipts list every line item for compliance. No need to reply—support is automated.</p>
+    <a class="button" href="{{ checkout_url }}">Redeem code</a>
+    <p class="muted">If you have a refund request, use the self-service link in your receipt. Replies to this inbox are not monitored.</p>
+  </div>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Signup Confirmation | Amplissa</title>
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; background: #0f1116; color: #e7eefb; padding: 20px; }
+    .card { background: #131823; border: 1px solid #1f2937; border-radius: 12px; padding: 20px; max-width: 640px; margin: auto; }
+    .button { display: inline-block; background: linear-gradient(135deg, #f97316, #fb923c); color: #0f1116; padding: 10px 14px; border-radius: 10px; font-weight: 700; text-decoration: none; }
+    p { color: #9fb0c8; line-height: 1.6; }
+    .muted { color: #9fb0c8; font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Welcome to Amplissa</h1>
+    <p>Thanks for opting into updates for <strong>{{ creator }}</strong>. We send receipts and delivery links automatically; no need to DM.</p>
+    <p>Adult-content notice: access is limited to 18+ users and blocked where prohibited. Taxes are collected per region; no evasion or under-reporting.</p>
+    <a class="button" href="{{ checkout_url }}">Browse offers</a>
+    <p class="muted">If you did not request this, ignore the email. You won't be contacted again without another opt-in.</p>
+  </div>
+</body>
+</html>
