@@ -2,43 +2,254 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Claim 500 KelpCoin</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f0fdf4;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin: 0;
-      padding: 40px;
-    }
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
-    }
-    p {
-      font-size: 1rem;
-      margin-bottom: 2rem;
-      color: #555;
-    }
-    iframe {
-      border: none;
-      width: 100%;
-      max-width: 700px;
-      height: 800px;
-      border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Amplissa | BBW & SSBBW Creator Platform</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <h1>🪙 Claim 500 KelpCoin</h1>
-  <p>Fill in your wallet address. Optional: enter a referrer’s wallet to earn bonus KELP.</p>
-  <iframe 
-    src="https://docs.google.com/forms/d/e/1FAIpQLSclYfRXBxHoDBjpoHCoKM2_lm8VkxN8FjqmkOeK5kqxiOMW9A/viewform?embedded=true"
-    allowfullscreen>
-  </iframe>
+  <header class="site-header">
+    <div class="logo">Amplissa</div>
+    <nav class="nav">
+      <a href="#priorities">Priorities</a>
+      <a href="#automation">Automation</a>
+      <a href="#compliance">Compliance</a>
+      <a href="#portals">Portals</a>
+      <a href="#checkout">Checkout</a>
+      <a href="#signup" class="button ghost">Email Drip</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero__content">
+        <p class="eyebrow">BBW & SSBBW FIRST</p>
+        <h1>Amplissa keeps creators in control while fans onboard in seconds.</h1>
+        <p class="lede">A public hub, automated model portals, and transparent payouts that meet Stripe & CCBill standards with zero back-and-forth DMs.</p>
+        <div class="hero__actions">
+          <a class="button primary" href="#portals">Launch a model portal</a>
+          <a class="button secondary" href="portals/lillpeggy.html">See LILLPEGGY live</a>
+        </div>
+        <div class="hero__pillars">
+          <span>🧡 Empower creators</span>
+          <span>💸 Minimal platform fees</span>
+          <span>⚙️ Full automation</span>
+        </div>
+      </div>
+      <div class="hero__card">
+        <div class="card-header">Automation summary</div>
+        <ul class="checklist">
+          <li>Identity + geo gating with compliant consent checkboxes.</li>
+          <li>Instant receipts + tax lines generated per purchase.</li>
+          <li>Auto-expiring download links for digital goods.</li>
+          <li>Escrowed payouts with fee transparency dashboard.</li>
+        </ul>
+        <p class="small">No manual customer conversation: every action responds with templated email or on-page flows.</p>
+      </div>
+    </section>
+
+    <section id="priorities" class="section split">
+      <div>
+        <p class="eyebrow">Platform priorities</p>
+        <h2>Built to protect creators and fans.</h2>
+        <p>Amplissa is designed for BBW and SSBBW creators who need consistent income without surprise deductions. We publish fee schedules publicly and give models a live ledger so they always know what they keep.</p>
+        <div class="pill-grid">
+          <div class="pill">2.5% platform fee cap</div>
+          <div class="pill">Automated chargeback packet</div>
+          <div class="pill">Content classification for geo filtering</div>
+          <div class="pill">No tax evasion — VAT & sales tax captured</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">Fee transparency</div>
+        <div class="fee-grid">
+          <div><strong>Item</strong><span>Details</span></div>
+          <div><strong>Processor</strong><span>Stripe / CCBill direct contracts</span></div>
+          <div><strong>Platform</strong><span>2.5% flat (no hidden FX)</span></div>
+          <div><strong>Creator payout</strong><span>Weekly, ledger exportable CSV</span></div>
+          <div><strong>Refunds</strong><span>Automated with documented receipts</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="automation" class="section">
+      <p class="eyebrow">Automation</p>
+      <h2>Zero manual customer conversation.</h2>
+      <div class="grid three">
+        <article class="card">
+          <h3>Self-serve support</h3>
+          <p>Dynamic FAQ and smart responses trigger on checkout, delivery, and renewals. Users receive receipts and self-cancel links instantly.</p>
+        </article>
+        <article class="card">
+          <h3>Receipts & taxation</h3>
+          <p>Receipts include merchant of record, tax lines, and refund policy per region. Templates meet Stripe evidence standards.</p>
+        </article>
+        <article class="card">
+          <h3>Geo + age gates</h3>
+          <p>Adult content is hidden where disallowed. A lightweight script enforces country blocks and birthday attestation before purchase.</p>
+        </article>
+      </div>
+      <div class="stacked-cards">
+        <div class="card">
+          <div class="card-header">Webhook-ready automation</div>
+          <p>Use the sample payload below to connect Stripe/CCBill webhooks to your static deployment. Each event triggers an email from the drip templates with zero manual steps.</p>
+          <pre class="code-block">{
+  "event": "payment_succeeded",
+  "user_email": "fan@example.com",
+  "product": "LILLPEGGY Digital Set",
+  "receipt_url": "https://amplissa.com/receipts/12345",
+  "download_link": "https://amplissa.com/downloads/12345?expires=3600",
+  "geo": "US",
+  "tax_collected": "VAT/Sales auto-calculated",
+  "support": "https://amplissa.com/help"
+}</pre>
+        </div>
+        <div class="card">
+          <div class="card-header">Automation checklist</div>
+          <ul class="checklist">
+            <li>Offer, checkout, delivery, and renewal emails pre-written.</li>
+            <li>Webhooks map to drip steps without human replies.</li>
+            <li>Receipts and refund buttons respect processor policies.</li>
+            <li>Exports: CSV payouts, tax reports, and consent logs.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="compliance" class="section split">
+      <div>
+        <p class="eyebrow">Compliance</p>
+        <h2>Aligned with Stripe, CCBill, and local law.</h2>
+        <p>We avoid risky shortcuts. Amplissa enforces identity verification for models, requires merchant of record disclosures, and blocks jurisdictions that prohibit adult media.</p>
+        <ul class="checklist">
+          <li>Country-aware blocking and geo redirects.</li>
+          <li>Tax collection support — no advice, just accurate capture.</li>
+          <li>Receipts that include refund terms and descriptors.</li>
+          <li>Content labeling to prevent misclassified ads.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-header">Consent & safety UI</div>
+        <form class="inline-form" id="compliance-form">
+          <label>
+            <span>Country</span>
+            <select name="country" required>
+              <option value="">Select</option>
+              <option value="US">United States</option>
+              <option value="CA">Canada</option>
+              <option value="GB">United Kingdom</option>
+              <option value="DE">Germany</option>
+              <option value="Other">Other</option>
+            </select>
+          </label>
+          <label>
+            <span>Date of birth</span>
+            <input type="date" name="dob" required />
+          </label>
+          <label class="checkbox">
+            <input type="checkbox" name="consent" required />
+            <span>I am of legal age, agree to Terms, and understand content classifications.</span>
+          </label>
+          <button class="button primary" type="submit">Check eligibility</button>
+          <p class="form-note" id="compliance-result"></p>
+        </form>
+      </div>
+    </section>
+
+    <section id="portals" class="section">
+      <p class="eyebrow">Model portals</p>
+      <h2>Reusable portal system with the first live profile ready.</h2>
+      <div class="grid two">
+        <div class="card">
+          <div class="card-header">Portal template</div>
+          <p>Prebuilt HTML you can duplicate for any Amplissa creator. Slots for hero, pricing, bundles, compliance notes, and embedded checkout buttons.</p>
+          <a class="button secondary" href="portals/template.html">Open template</a>
+        </div>
+        <div class="card highlight">
+          <div class="card-header">LILLPEGGY — live</div>
+          <p>First BBW/SSBBW creator onboarded. Portal includes geo-safe previews, instant checkout for digital sets, and transparent earnings.</p>
+          <div class="portal-preview">
+            <span>💋 LILLPEGGY</span>
+            <span>Digital set • PPV clips • Custom requests</span>
+            <a href="portals/lillpeggy.html" class="button primary">View portal</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="checkout" class="section split">
+      <div>
+        <p class="eyebrow">Checkout</p>
+        <h2>Digital goods, instant delivery.</h2>
+        <p>Checkout pages are static, PCI-compliant when paired with Stripe Elements or CCBill FlexForms. Receipts and download links auto-send via webhook.</p>
+        <div class="pill-grid">
+          <div class="pill">One-click upsells</div>
+          <div class="pill">Receipts with tax lines</div>
+          <div class="pill">Auto-expiring downloads</div>
+          <div class="pill">Refund portal link</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">Ready-to-use pages</div>
+        <ul class="checklist">
+          <li><a href="checkout/index.html">General store checkout</a></li>
+          <li><a href="checkout/lillpeggy-bundle.html">LILLPEGGY digital set checkout</a></li>
+        </ul>
+        <p class="small">Replace publishable keys in the scripts with your Stripe/CCBill credentials. All pricing is editable via data attributes.</p>
+      </div>
+    </section>
+
+    <section id="signup" class="section">
+      <p class="eyebrow">Email signup</p>
+      <h2>Fans get the drip, creators get the ledger.</h2>
+      <div class="grid two">
+        <form class="card" id="signup-form">
+          <div class="card-header">Collect emails with zero manual replies</div>
+          <label>
+            <span>Email</span>
+            <input type="email" name="email" required placeholder="fan@example.com" />
+          </label>
+          <label>
+            <span>Favorite creator</span>
+            <select name="creator">
+              <option value="">Select</option>
+              <option value="LILLPEGGY">LILLPEGGY</option>
+              <option value="Future creators">Future creators</option>
+            </select>
+          </label>
+          <button type="submit" class="button primary">Start drip</button>
+          <p class="form-note" id="signup-result"></p>
+        </form>
+        <div class="card">
+          <div class="card-header">Included drip templates</div>
+          <ul class="checklist">
+            <li>Signup confirmation with geo disclaimer.</li>
+            <li>Day 1: welcome + best seller checkout link.</li>
+            <li>Day 3: limited bonus with expiring code.</li>
+            <li>Receipts and delivery templates per purchase.</li>
+          </ul>
+          <a class="button secondary" href="emails/signup-confirmation.html">View templates</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div>
+      <strong>Amplissa</strong>
+      <p>Creator-first infra for BBW & SSBBW performers. Transparent, automated, and compliant.</p>
+    </div>
+    <div class="footer-links">
+      <a href="#compliance">Compliance</a>
+      <a href="#portals">Portals</a>
+      <a href="#signup">Email</a>
+      <a href="DEPLOYMENT.md">Deploy</a>
+    </div>
+    <div class="footer-note">No tax evasion. Stripe/CCBill aligned. Respect adult-content geographic rules.</div>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
 </body>
 </html>

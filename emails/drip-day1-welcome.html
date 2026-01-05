@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Day 1 Welcome | Amplissa</title>
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; background: #0f1116; color: #e7eefb; padding: 20px; }
+    .card { background: #131823; border: 1px solid #1f2937; border-radius: 12px; padding: 20px; max-width: 640px; margin: auto; }
+    .button { display: inline-block; background: linear-gradient(135deg, #22c55e, #10b981); color: #0f1116; padding: 10px 14px; border-radius: 10px; font-weight: 700; text-decoration: none; }
+    p { color: #9fb0c8; line-height: 1.6; }
+    .muted { color: #9fb0c8; font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Your best starting offer</h1>
+    <p>Hi {{ email }}, thanks for joining {{ creator }}. The best seller right now is the <strong>“Velvet Night” digital set</strong>. Checkout is instant with receipts that list platform fee and taxes for full transparency.</p>
+    <a class="button" href="{{ checkout_url }}">Checkout now</a>
+    <p class="muted">You are receiving this because you opted into Amplissa updates. No manual replies are monitored; use the self-serve help link in your receipt.</p>
+  </div>
+</body>
+</html>

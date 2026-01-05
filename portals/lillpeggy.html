@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LILLPEGGY | Amplissa Portal</title>
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <main>
+    <section class="section hero">
+      <div class="hero__content">
+        <p class="eyebrow">Live portal</p>
+        <h1>LILLPEGGY — BBW/SSBBW creator, digital-first.</h1>
+        <p class="lede">Curvy, bold, and 100% fan-led. LILLPEGGY delivers digital sets, PPV clips, and custom requests with geo and age safety baked in.</p>
+        <div class="hero__actions">
+          <a class="button primary" href="#offers">Buy the digital set</a>
+          <a class="button secondary" href="../checkout/index.html">Store checkout</a>
+        </div>
+      </div>
+      <div class="hero__card">
+        <div class="card-header">Fast facts</div>
+        <ul class="checklist">
+          <li>Age 18+ verified, content labeled accordingly.</li>
+          <li>Geo blocks: DE, Other restricted countries.</li>
+          <li>Delivery: instant for downloads, 48h for customs.</li>
+          <li>Platform fee visible on every receipt.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section split">
+      <div>
+        <p class="eyebrow">Bio</p>
+        <h2>LILLPEGGY</h2>
+        <p>Amplissa’s first SSBBW feature. Think plush lingerie sets, playful POV clips, and thick-focused customs. Respectful requests only; illegal or hateful content is refused automatically.</p>
+        <div class="pill-grid">
+          <div class="pill">SSBBW</div>
+          <div class="pill">Digital sets</div>
+          <div class="pill">PPV clips</div>
+          <div class="pill">Custom videos</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">Creator ledger</div>
+        <div class="fee-grid">
+          <div><strong>Platform fee</strong><span>2.5% flat</span></div>
+          <div><strong>Payout</strong><span>Weekly (CSV export)</span></div>
+          <div><strong>Refunds</strong><span>48h self-serve window</span></div>
+          <div><strong>Geo rules</strong><span>Blocks: DE + restricted countries</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="offers">
+      <p class="eyebrow">Offers</p>
+      <h2>Digital content + custom work</h2>
+      <div class="grid two">
+        <article class="card">
+          <h3>Digital Set — “Velvet Night”</h3>
+          <p>25-photo HD set plus 2 bonus slow-pan clips. Adult 18+ only. Includes personal-use license; reselling prohibited.</p>
+          <div class="pill-grid">
+            <div class="pill">$25</div>
+            <div class="pill">Instant download</div>
+            <div class="pill">Receipt + tax line</div>
+          </div>
+          <button class="button primary" data-checkout-button data-product="LILLPEGGY Velvet Night" data-price="25.00" onclick="location.href='../checkout/lillpeggy-bundle.html'">Checkout</button>
+        </article>
+        <article class="card">
+          <h3>Custom Video — 5 minutes</h3>
+          <p>Soft-spoken, teasing, or playful. No illegal, hateful, or non-consent scenarios. Delivery in 48 hours with private download link.</p>
+          <div class="pill-grid">
+            <div class="pill">$120</div>
+            <div class="pill">48h delivery</div>
+            <div class="pill">Compliant consent record</div>
+          </div>
+          <button class="button secondary" data-checkout-button data-product="LILLPEGGY Custom 5min" data-price="120.00">Request form</button>
+        </article>
+      </div>
+    </section>
+
+    <section class="section split">
+      <div>
+        <p class="eyebrow">Compliance</p>
+        <h2>Safe by default</h2>
+        <ul class="checklist">
+          <li>Merchant descriptor: AMPLISSA*LILLPEGGY</li>
+          <li>VAT/sales tax collected; no evasion or under-reporting.</li>
+          <li>Refund policy: 48h self-service; chargebacks auto-handled.</li>
+          <li>Geo blocking enforced per country rules; minors barred.</li>
+        </ul>
+      </div>
+      <form class="card inline-form" id="compliance-form">
+        <div class="card-header">Age + geo gate</div>
+        <label><span>Date of birth</span><input type="date" name="dob" required></label>
+        <label><span>Country</span>
+          <select name="country" required>
+            <option value="">Select</option>
+            <option value="US">United States</option>
+            <option value="CA">Canada</option>
+            <option value="GB">United Kingdom</option>
+            <option value="DE">Germany</option>
+            <option value="Other">Other</option>
+          </select>
+        </label>
+        <label class="checkbox"><input type="checkbox" required><span>I am 18+ and agree to Terms/Privacy.</span></label>
+        <button class="button primary" type="submit">Check eligibility</button>
+        <p class="form-note" id="compliance-result"></p>
+      </form>
+    </section>
+
+    <section class="section">
+      <p class="eyebrow">Support</p>
+      <h2>Automated replies only.</h2>
+      <p class="lede">All messages trigger prewritten templates: order confirmation, download link, renewal, and refund info. Fans can self-serve without DMing the creator.</p>
+      <div class="card">
+        <div class="card-header">Links</div>
+        <ul class="checklist">
+          <li><a href="../emails/signup-confirmation.html">Signup confirmation email</a></li>
+          <li><a href="../emails/drip-day1-welcome.html">Day 1 welcome email</a></li>
+          <li><a href="../emails/drip-day3-offer.html">Day 3 offer email</a></li>
+        </ul>
+      </div>
+    </section>
+  </main>
+  <script src="../assets/js/main.js"></script>
+</body>
+</html>

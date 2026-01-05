@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Amplissa Portal Template</title>
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <main>
+    <section class="section hero">
+      <div class="hero__content">
+        <p class="eyebrow">Portal template</p>
+        <h1>[CREATOR NAME] — BBW/SSBBW creator portal</h1>
+        <p class="lede">Swap text, prices, and media links to launch a compliant portal within minutes. Buttons connect to the checkout pages in <code>/checkout</code>.</p>
+        <div class="hero__actions">
+          <a class="button primary" href="../checkout/index.html">General checkout</a>
+          <a class="button secondary" href="../index.html#automation">Automation guide</a>
+        </div>
+      </div>
+      <div class="hero__card">
+        <div class="card-header">Fill these fields</div>
+        <ul class="checklist">
+          <li>Creator name, pronouns, and genre tags.</li>
+          <li>Featured products (digital set, clips, bundles).</li>
+          <li>Bio and compliance notes (age + geo statement).</li>
+          <li>Support email and refund terms.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section split">
+      <div>
+        <p class="eyebrow">Bio</p>
+        <h2>[CREATOR NAME]</h2>
+        <p>Replace this with a 2-3 sentence intro. Keep it fan-facing, but add a short compliance line like “Content labeled 18+; blocked where prohibited.”</p>
+        <div class="pill-grid">
+          <div class="pill">[Tag: BBW]</div>
+          <div class="pill">[Tag: SSBBW]</div>
+          <div class="pill">[Tag: Customs]</div>
+          <div class="pill">[Tag: Live Shows]</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">Quick stats</div>
+        <div class="fee-grid">
+          <div><strong>Turnaround</strong><span>[e.g., 48h delivery]</span></div>
+          <div><strong>Platform fee</strong><span>2.5% flat</span></div>
+          <div><strong>Payout</strong><span>Weekly / CSV ledger</span></div>
+          <div><strong>Geo</strong><span>Blocks: [list countries]</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="products">
+      <p class="eyebrow">Products</p>
+      <h2>Featured offers</h2>
+      <div class="grid two">
+        <article class="card">
+          <h3>Digital set</h3>
+          <p>Short description and file count. Include rating and usage terms.</p>
+          <button class="button primary" data-checkout-button data-product="[Creator] Digital Set" data-price="25.00" onclick="location.href='../checkout/lillpeggy-bundle.html'">Checkout</button>
+        </article>
+        <article class="card">
+          <h3>Custom video</h3>
+          <p>Describe delivery time, length, and any disallowed requests.</p>
+          <button class="button secondary" data-checkout-button data-product="[Creator] Custom Video" data-price="120.00">Request form</button>
+        </article>
+      </div>
+    </section>
+
+    <section class="section split">
+      <div>
+        <p class="eyebrow">Compliance</p>
+        <h2>Required disclosures</h2>
+        <ul class="checklist">
+          <li>Merchant descriptor, refund window, and download expiration.</li>
+          <li>Age/geo statement plus link to Terms/Privacy.</li>
+          <li>Note that taxes are collected automatically; no evasion.</li>
+        </ul>
+      </div>
+      <form class="card inline-form" id="compliance-form">
+        <div class="card-header">Test the gate</div>
+        <label><span>Date of birth</span><input type="date" name="dob" required></label>
+        <label><span>Country</span>
+          <select name="country" required>
+            <option value="">Select</option>
+            <option value="US">United States</option>
+            <option value="CA">Canada</option>
+            <option value="GB">United Kingdom</option>
+            <option value="DE">Germany</option>
+            <option value="Other">Other</option>
+          </select>
+        </label>
+        <label class="checkbox"><input type="checkbox" required><span>I am 18+ and agree to platform rules.</span></label>
+        <button class="button primary" type="submit">Check eligibility</button>
+        <p class="form-note" id="compliance-result"></p>
+      </form>
+    </section>
+
+    <section class="section">
+      <p class="eyebrow">Support</p>
+      <h2>Zero manual chat required.</h2>
+      <p class="lede">Insert your support email and point fans to the automated FAQ. Every action (signup, checkout, delivery) triggers emails found in <code>/emails</code>.</p>
+      <div class="card">
+        <div class="card-header">Automation sequence</div>
+        <ol class="checklist" style="list-style: decimal; padding-left: 18px;">
+          <li style="padding-left:0">Signup confirmation → Welcome offer</li>
+          <li style="padding-left:0">Payment receipt → Download link</li>
+          <li style="padding-left:0">Renewal reminder → Self-cancel link</li>
+          <li style="padding-left:0">Refund flow → Evidence packet</li>
+        </ol>
+      </div>
+    </section>
+  </main>
+  <script src="../assets/js/main.js"></script>
+</body>
+</html>

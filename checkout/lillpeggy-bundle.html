@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LILLPEGGY Digital Set Checkout</title>
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <main>
+    <section class="section">
+      <p class="eyebrow">Checkout</p>
+      <h1>LILLPEGGY — “Velvet Night” Digital Set</h1>
+      <p class="lede">25-photo HD set + 2 bonus clips. Instant, geo-aware delivery. Taxes and platform fee shown before you pay.</p>
+    </section>
+
+    <section class="section grid two">
+      <div class="card">
+        <div class="card-header">Order summary</div>
+        <div class="fee-grid">
+          <div><strong>Digital set</strong><span>$25.00</span></div>
+          <div><strong>Platform fee</strong><span>2.5%</span></div>
+          <div><strong>Tax</strong><span>Auto (processor)</span></div>
+          <div><strong>Total (est.)</strong><span>$25.63</span></div>
+        </div>
+        <p class="small">Stripe/CCBill handle card data. Receipts include merchant descriptor AMPLISSA*LILLPEGGY and a link to request refunds within 48h.</p>
+      </div>
+      <form class="card inline-form" id="payment-form">
+        <div class="card-header">Payment</div>
+        <label><span>Email</span><input type="email" name="email" required placeholder="fan@example.com"></label>
+        <label><span>Country</span>
+          <select name="country" required>
+            <option value="">Select</option>
+            <option value="US">United States</option>
+            <option value="CA">Canada</option>
+            <option value="GB">United Kingdom</option>
+            <option value="DE">Germany</option>
+            <option value="Other">Other</option>
+          </select>
+        </label>
+        <label class="checkbox"><input type="checkbox" required><span>I am 18+, accept geo rules, and agree to the refund policy.</span></label>
+        <div class="card" style="border-style:dashed;">
+          <p class="small">Embed Stripe Elements or CCBill FlexForm here. Set <code>data-product-id="lillpeggy-velvet-night"</code> and your publishable key for live use.</p>
+        </div>
+        <button class="button primary" type="submit" data-checkout-button data-product="LILLPEGGY Velvet Night" data-price="25.00">Complete order</button>
+        <p class="form-note" id="checkout-status">Ready for live keys.</p>
+      </form>
+    </section>
+
+    <section class="section card">
+      <div class="card-header">Delivery automation</div>
+      <p class="small">On <code>payment_succeeded</code>, send the email templates in <code>/emails</code>, attach the receipt URL, and generate a signed download link that expires in 1 hour. No manual replies are required.</p>
+      <pre class="code-block">{
+  "event": "payment_succeeded",
+  "product_id": "lillpeggy-velvet-night",
+  "email": "fan@example.com",
+  "download": "https://amplissa.com/downloads/lp-velvet?expires=3600",
+  "receipt": "https://amplissa.com/receipts/lp-velvet",
+  "geo": "US",
+  "tax": "Calculated by processor",
+  "support": "https://amplissa.com/help"
+}</pre>
+    </section>
+  </main>
+  <script src="../assets/js/main.js"></script>
+</body>
+</html>

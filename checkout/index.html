@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Amplissa Checkout</title>
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <main>
+    <section class="section">
+      <p class="eyebrow">Checkout</p>
+      <h1>Amplissa Digital Store</h1>
+      <p class="lede">Static, PCI-friendly checkout shell. Swap the publishable keys below with your Stripe Elements or CCBill FlexForms integration. Taxes are calculated by your processor; we expose them on every receipt.</p>
+    </section>
+
+    <section class="section grid two">
+      <div class="card">
+        <div class="card-header">Cart</div>
+        <div class="fee-grid">
+          <div><strong>Item</strong><span>Price</span></div>
+          <div><strong>Tip</strong><span>$5.00 (optional)</span></div>
+          <div><strong>Platform fee</strong><span>2.5%</span></div>
+          <div><strong>Tax</strong><span>Auto</span></div>
+        </div>
+        <p class="small">All purchases generate receipts with tax lines and refund instructions. No manual email is required; webhooks trigger the drip templates.</p>
+      </div>
+      <form class="card inline-form" id="payment-form">
+        <div class="card-header">Payment details</div>
+        <label><span>Email</span><input type="email" name="email" required placeholder="fan@example.com"></label>
+        <label><span>Country</span>
+          <select name="country" required>
+            <option value="">Select</option>
+            <option value="US">United States</option>
+            <option value="CA">Canada</option>
+            <option value="GB">United Kingdom</option>
+            <option value="DE">Germany</option>
+            <option value="Other">Other</option>
+          </select>
+        </label>
+        <label class="checkbox"><input type="checkbox" required><span>I confirm I am 18+, accept the adult-content notice, and agree to receipts with taxes included.</span></label>
+        <div class="card" style="border-style:dashed;">
+          <p class="small">Embed Stripe Elements or CCBill FlexForm here. Publishable keys are set in <code>data-stripe-key</code> / <code>data-ccbill-key</code> attributes. </p>
+        </div>
+        <button class="button primary" type="submit" data-checkout-button data-product="General Cart" data-price="30.00">Pay now</button>
+        <p class="form-note" id="checkout-status">Ready for live keys.</p>
+      </form>
+    </section>
+
+    <section class="section card">
+      <div class="card-header">Webhook blueprint</div>
+      <p class="small">Connect your payment processor to <code>/webhooks/payments</code> (or your serverless URL). Response should map to drip emails and download fulfillment automatically.</p>
+      <pre class="code-block">POST /webhooks/payments
+{
+  "processor": "stripe|ccbill",
+  "event": "payment_succeeded",
+  "email": "fan@example.com",
+  "product": "Cart",
+  "amount": 30.00,
+  "currency": "USD",
+  "tax": 2.40,
+  "download": "https://amplissa.com/downloads/abc?expires=3600",
+  "receipt": "https://amplissa.com/receipts/abc",
+  "support": "https://amplissa.com/help"
+}</pre>
+    </section>
+  </main>
+  <script src="../assets/js/main.js"></script>
+</body>
+</html>
