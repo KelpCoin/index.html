@@ -2,43 +2,398 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Claim 500 KelpCoin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Autopilot Money Factory — Execution Kit</title>
   <style>
+    :root {
+      --bg: #05060a;
+      --card: #0e1118;
+      --muted: #a2aab6;
+      --accent: #7cf0c9;
+      --accent-2: #a2b5ff;
+      --text: #e8ecf5;
+      --border: rgba(255, 255, 255, 0.06);
+      --shadow: 0 20px 70px rgba(0, 0, 0, 0.35);
+    }
+
+    * { box-sizing: border-box; }
+
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f0fdf4;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
       margin: 0;
-      padding: 40px;
+      background: radial-gradient(circle at 15% 20%, rgba(124, 240, 201, 0.12), transparent 35%),
+        radial-gradient(circle at 85% 10%, rgba(162, 181, 255, 0.15), transparent 30%),
+        var(--bg);
+      color: var(--text);
+      padding: 48px 20px 120px;
+      line-height: 1.6;
     }
+
+    header {
+      max-width: 1100px;
+      margin: 0 auto 36px auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 28px;
+      align-items: center;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, rgba(124, 240, 201, 0.1), rgba(162, 181, 255, 0.08));
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 28px;
+      box-shadow: var(--shadow);
+    }
+
     h1 {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
+      font-size: clamp(28px, 4vw, 44px);
+      margin: 0 0 14px 0;
+      line-height: 1.15;
     }
-    p {
-      font-size: 1rem;
-      margin-bottom: 2rem;
-      color: #555;
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 1.05rem;
+      margin-bottom: 22px;
     }
-    iframe {
-      border: none;
-      width: 100%;
-      max-width: 700px;
-      height: 800px;
-      border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
     }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px 18px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      font-weight: 700;
+      text-decoration: none;
+      color: var(--bg);
+      background: var(--accent);
+      transition: transform 0.15s ease, box-shadow 0.2s ease, filter 0.2s ease;
+      box-shadow: 0 12px 30px rgba(124, 240, 201, 0.25);
+    }
+
+    .btn.secondary {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+      box-shadow: none;
+    }
+
+    .btn:hover { transform: translateY(-1px); filter: brightness(1.05); }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      max-width: 1100px;
+      margin: 0 auto 24px auto;
+    }
+
+    section {
+      margin: 18px auto;
+      max-width: 1100px;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    h2 { margin: 0 0 12px; font-size: 1.3rem; }
+    h3 { margin: 18px 0 10px; font-size: 1.05rem; }
+
+    ul { padding-left: 18px; margin: 10px 0 0; color: var(--muted); }
+    li { margin-bottom: 8px; }
+
+    .badge { color: var(--accent); font-weight: 700; letter-spacing: 0.02em; }
+
+    .tagline { color: var(--muted); font-size: 0.95rem; margin-top: -6px; margin-bottom: 14px; }
+
+    .pill {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(124, 240, 201, 0.14);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .list-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 12px;
+    }
+
+    .list-grid .card { height: 100%; }
+
+    .muted { color: var(--muted); }
+
+    .promo-day { display: grid; grid-template-columns: 80px 1fr; gap: 10px; align-items: start; }
+    .promo-day strong { color: var(--accent); }
+
+    footer { text-align: center; color: var(--muted); margin-top: 40px; font-size: 0.9rem; }
+    footer a { color: var(--accent); text-decoration: none; }
   </style>
 </head>
 <body>
-  <h1>🪙 Claim 500 KelpCoin</h1>
-  <p>Fill in your wallet address. Optional: enter a referrer’s wallet to earn bonus KELP.</p>
-  <iframe 
-    src="https://docs.google.com/forms/d/e/1FAIpQLSclYfRXBxHoDBjpoHCoKM2_lm8VkxN8FjqmkOeK5kqxiOMW9A/viewform?embedded=true"
-    allowfullscreen>
-  </iframe>
+  <header>
+    <div class="hero">
+      <p class="pill">Execution Kit — Autopilot Money Factory</p>
+      <h1>Ship-ready assets to sell today — not prompts.</h1>
+      <p class="subtitle">Plug-and-play files, checkout copy, automations, and a 14-day promo loop. Aim: money in within 30 days with minimal build time.</p>
+      <div class="cta-row">
+        <a class="btn" href="#checkout">Download the execution kit</a>
+        <a class="btn secondary" href="#bundles">See bundles & upsells</a>
+      </div>
+      <p class="tagline">Built for creators and solopreneurs who want real listings, real automations, and a repeatable cloning playbook.</p>
+    </div>
+  </header>
+
+  <section id="offer" class="card">
+    <h2>1) Offer Snapshot</h2>
+    <ul>
+      <li><strong>Who:</strong> busy creators and micro-agencies selling digital kits, automations, or templates.</li>
+      <li><strong>Problem solved:</strong> replaces blank-page syndrome with finished assets across checkout, files, promo, and automation.</li>
+      <li><strong>Formats:</strong> PDF playbooks, CSV trackers, Notion board, Canva/PNG promos, prewritten copy blocks.</li>
+      <li><strong>Promise:</strong> deploy a revenue-ready product page, delivery pack, and promo loop in one afternoon.</li>
+      <li><strong>Price targets:</strong> $29 one-time starter; $39/mo recurring drops for ongoing niches.</li>
+    </ul>
+  </section>
+
+  <section id="files">
+    <h2>2) Files to Create</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Product Delivery</h3>
+        <ul>
+          <li>/products/Autopilot_Execution_Kit.pdf — 15-page quickstart with setup checklists.</li>
+          <li>/products/Automation_Wiring_Checklist.csv — triggers, actions, and webhook URLs.</li>
+          <li>/products/Promo_Visuals_1-4.png — hero, carousel, testimonial, urgency banner.</li>
+          <li>/products/Personal-Use_License.txt — usage + reskin rights.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Templates & Ops</h3>
+        <ul>
+          <li>/templates/Gumroad_Listing_Copy.md — headline, bullets, tags, post-purchase note.</li>
+          <li>/templates/Stripe_Checkout_Copy.md — confirmation text, thank-you CTA.</li>
+          <li>/templates/Patreon_Tier.md — tier benefits + first drop script.</li>
+          <li>/templates/Promo_Loop_Notion.json — 14-day calendar board with statuses.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Delivery Hooks</h3>
+        <ul>
+          <li>/automations/Zapier_Recipes.txt — 6 zaps with trigger/action/fields.</li>
+          <li>/automations/Discord_Welcome_Message.txt — DM script for new buyers.</li>
+          <li>/automations/Email_Drip_3part.md — day 0, day 3, day 10 follow-ups.</li>
+          <li>/automations/Airtable_Schema.csv — columns for customer log + renewal dates.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="gumroad" class="card">
+    <h2>3) Gumroad Product</h2>
+    <p class="tagline">Copy-paste this into Gumroad and attach the zip with the files above.</p>
+    <div class="list-grid">
+      <div class="card">
+        <p class="badge">Listing</p>
+        <h3>Name: Autopilot Money Factory — Execution Kit</h3>
+        <p class="muted">Slug: /autopilot-execution-kit • Price: $29 (one-time) • Alt: pay-what-you-want, min $19.</p>
+        <p><strong>Hook:</strong> “Stop brainstorming. Launch a revenue-ready product today with files, copy, and automations done for you.”</p>
+        <p><strong>What you get:</strong></p>
+        <ul>
+          <li>15-page execution blueprint + wiring checklists.</li>
+          <li>Gumroad, Stripe, Patreon copy blocks ready to paste.</li>
+          <li>Automation recipes (Discord, Airtable, email) plus promo visuals.</li>
+        </ul>
+        <p><strong>Perfect for:</strong></p>
+        <ul>
+          <li>Creators who need a shippable offer this week.</li>
+          <li>Micro-agencies packaging ops into resale kits.</li>
+        </ul>
+        <p><strong>Post-purchase message:</strong> “Your kit link is below. Import the automation recipes first, then schedule the promo loop. DM us ‘AUTOPILOT’ on Discord for support.”</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="stripe">
+    <h2>4) Stripe Checkout + Pricing</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Product</h3>
+        <p><strong>Name:</strong> Autopilot Money Factory — Execution Kit</p>
+        <p><strong>Mode:</strong> One-time</p>
+        <p><strong>Price:</strong> $29</p>
+        <p><strong>Payment link nickname:</strong> autopilot-kit-one-time</p>
+        <p><strong>Confirmation URL:</strong> https://yourdomain.com/thank-you</p>
+      </div>
+      <div class="card">
+        <h3>Thank-you Copy</h3>
+        <p>“Access your kit immediately. Check your email for the download link, Discord invite, and the 14-day promo calendar. Start with Step 1: publish the Gumroad listing using the provided copy.”</p>
+      </div>
+      <div class="card">
+        <h3>Subscription Option</h3>
+        <p><strong>Name:</strong> Autopilot Drops — Monthly</p>
+        <p><strong>Mode:</strong> Subscription ($39/mo, cancel anytime)</p>
+        <p><strong>Use:</strong> monthly reskins + new niches delivered; include automation updates.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="patreon" class="card">
+    <h2>5) Patreon Tier / Drop</h2>
+    <p><strong>Tier:</strong> “Execution Lab” — $15/mo</p>
+    <p class="muted">Benefits: Monthly drop of a fresh execution kit (new niche), Discord role with office hours, early access to promo visuals.</p>
+    <h3>First Drop</h3>
+    <p><strong>Title:</strong> “Execution Kit: Creator Cashflow Edition”</p>
+    <p><strong>Body (markdown-ready):</strong></p>
+    <ul>
+      <li>Download link to the full kit</li>
+      <li>Setup steps for Gumroad, Stripe, Patreon, bundles</li>
+      <li>Automation wiring checklist + Airtable base</li>
+      <li>Promo loop swipe copy (14-day schedule)</li>
+    </ul>
+    <p><strong>Schedule:</strong> Post on the 1st of each month; recap + Q&A on the 15th.</p>
+  </section>
+
+  <section id="bundles">
+    <h2>6) Bundles & Upsells</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Bundle 1: Launch Weekend Pack</h3>
+        <p>$59 (save 20%) — includes Execution Kit, Automation Wiring Checklist, and Promo Visuals 1-4.</p>
+      </div>
+      <div class="card">
+        <h3>Bundle 2: Agency License Pack</h3>
+        <p>$129 — includes everything in Launch Weekend + license to resell to 5 clients + monthly office-hours call.</p>
+      </div>
+      <div class="card">
+        <h3>Upsell at Checkout</h3>
+        <p>“Add the Automation Concierge Loom walkthrough for +$19” — a 20-minute screen-share showing wiring inside Zapier/Make.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="automation">
+    <h2>7) Automation & Hooks</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Zap 1</h3>
+        <p><strong>Trigger:</strong> Gumroad sale</p>
+        <p><strong>Action:</strong> Discord webhook to #sales-log with buyer email, country, SKU.</p>
+      </div>
+      <div class="card">
+        <h3>Zap 2</h3>
+        <p><strong>Trigger:</strong> Stripe subscription created</p>
+        <p><strong>Action:</strong> Add row to Airtable “Subscribers” (name, email, plan, next-drop date) + send Gmail with onboarding link.</p>
+      </div>
+      <div class="card">
+        <h3>Zap 3</h3>
+        <p><strong>Trigger:</strong> Patreon new patron</p>
+        <p><strong>Action:</strong> Assign Discord role “Execution Lab” + email the latest kit.</p>
+      </div>
+      <div class="card">
+        <h3>Zap 4</h3>
+        <p><strong>Trigger:</strong> Gumroad purchase refunded</p>
+        <p><strong>Action:</strong> Remove Airtable row + revoke Discord role via bot.</p>
+      </div>
+      <div class="card">
+        <h3>Zap 5</h3>
+        <p><strong>Trigger:</strong> 14-day promo task due in Notion</p>
+        <p><strong>Action:</strong> Schedule a buffer post draft + send reminder to Slack/Discord.</p>
+      </div>
+      <div class="card">
+        <h3>Zap 6</h3>
+        <p><strong>Trigger:</strong> Stripe payment failed</p>
+        <p><strong>Action:</strong> Send retry email with 48-hour grace bonus (extra template) to encourage update.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="promo" class="card">
+    <h2>8) Promo Loop (14 Days)</h2>
+    <div class="promo-day">
+      <strong>Day 1</strong>
+      <div>Discord #announcements — launch post with screenshot of the kit + Gumroad link.</div>
+    </div>
+    <div class="promo-day">
+      <strong>Day 2</strong>
+      <div>Twitter/LinkedIn — thread on “zero prompt launches” with CTA to the kit.</div>
+    </div>
+    <div class="promo-day">
+      <strong>Day 4</strong>
+      <div>Email #1 — story: “blank page to revenue-ready in 1 afternoon” + link.</div>
+    </div>
+    <div class="promo-day">
+      <strong>Day 6</strong>
+      <div>Instagram carousel — before/after of Gumroad listing copy + visuals.</div>
+    </div>
+    <div class="promo-day">
+      <strong>Day 8</strong>
+      <div>Discord — behind-the-scenes Loom showing automation wiring.</div>
+    </div>
+    <div class="promo-day">
+      <strong>Day 10</strong>
+      <div>Email #2 — testimonial + FAQ (license, support, resell rights).</div>
+    </div>
+    <div class="promo-day">
+      <strong>Day 12</strong>
+      <div>Social — give away one promo visual PNG as a free sample.</div>
+    </div>
+    <div class="promo-day">
+      <strong>Day 14</strong>
+      <div>Email #3 — urgency: bundle pricing ends tonight + upsell reminder.</div>
+    </div>
+  </section>
+
+  <section id="clone">
+    <h2>9) Cloning Angles</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Reskin Niches</h3>
+        <ul>
+          <li>Indie game dev launch kit (swap visuals + examples).</li>
+          <li>Local service “offer in a box” (photographers, fitness coaches).</li>
+          <li>Creator AI tools bundle (swap automation recipes for AI workflows).</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Format Exports</h3>
+        <ul>
+          <li>Convert PDF to Notion dashboard with databases for promo calendar and buyer log.</li>
+          <li>Turn visuals into Canva templates with editable colorways.</li>
+          <li>Export checklists into Google Sheets for clients.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Audience Variations</h3>
+        <ul>
+          <li>NZ freelancers (GST-ready invoicing tips + local payment links).</li>
+          <li>Discord community owners (role automation heavy, upsell to VIP tiers).</li>
+          <li>Education creators (bundle LMS handoff docs + parent comms templates).</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <footer id="checkout">
+    <p>Ready to deploy? Upload the files, paste the copy, and start the 14-day loop. <a href="#offer">Back to top</a></p>
+  </footer>
 </body>
 </html>
