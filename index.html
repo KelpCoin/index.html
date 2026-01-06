@@ -2,43 +2,380 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Claim 500 KelpCoin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Money Factory - Autopilot Digital Product Pipelines</title>
   <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #111827;
+      --accent: #22c55e;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+    }
+    * { box-sizing: border-box; }
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f0fdf4;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
       margin: 0;
-      padding: 40px;
+      padding: 0;
+      font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+      background: radial-gradient(circle at 20% 20%, rgba(34,197,94,0.1), transparent 25%),
+                  radial-gradient(circle at 80% 10%, rgba(52,211,153,0.08), transparent 20%),
+                  linear-gradient(180deg, #0b1222 0%, #0b1222 30%, #0d1629 100%);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    header {
+      padding: 36px 16px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
     }
     h1 {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
+      margin: 0 0 12px;
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      letter-spacing: -0.02em;
     }
-    p {
-      font-size: 1rem;
-      margin-bottom: 2rem;
-      color: #555;
+    .subtitle {
+      margin: 0 auto;
+      max-width: 760px;
+      color: var(--muted);
+      line-height: 1.6;
     }
-    iframe {
-      border: none;
-      width: 100%;
-      max-width: 700px;
-      height: 800px;
+    main {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 24px 16px 64px;
+      display: grid;
+      gap: 18px;
+    }
+    section {
+      background: var(--panel);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+    }
+    section h2 {
+      margin-top: 0;
+      margin-bottom: 12px;
+      font-size: 1.3rem;
+      letter-spacing: -0.01em;
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(34,197,94,0.12);
+      color: #bbf7d0;
+      font-size: 0.9rem;
+      margin-bottom: 10px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 12px;
+    }
+    .card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      padding: 14px;
+      display: grid;
+      gap: 8px;
+      height: 100%;
+    }
+    .card strong { color: #fff; }
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .label { color: #c7d2fe; font-size: 0.9rem; }
+    .copy-block {
+      background: #0b1222;
+      border: 1px dashed rgba(255,255,255,0.1);
       border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      padding: 12px;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      color: #d1d5db;
+      white-space: pre-wrap;
+      line-height: 1.5;
     }
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 6px;
+      font-size: 0.95rem;
+    }
+    .table th, .table td {
+      padding: 10px 8px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      text-align: left;
+      vertical-align: top;
+    }
+    .table th { color: #cbd5e1; font-weight: 600; }
+    .table td { color: #d1d5db; }
+    .tiny { color: var(--muted); font-size: 0.9rem; }
+    footer {
+      text-align: center;
+      color: var(--muted);
+      padding: 16px;
+      font-size: 0.9rem;
+    }
+    ul { margin: 0 0 0 18px; color: var(--muted); }
+    ul li { margin: 4px 0; }
+    .stack { display: grid; gap: 10px; }
   </style>
 </head>
 <body>
-  <h1>🪙 Claim 500 KelpCoin</h1>
-  <p>Fill in your wallet address. Optional: enter a referrer’s wallet to earn bonus KELP.</p>
-  <iframe 
-    src="https://docs.google.com/forms/d/e/1FAIpQLSclYfRXBxHoDBjpoHCoKM2_lm8VkxN8FjqmkOeK5kqxiOMW9A/viewform?embedded=true"
-    allowfullscreen>
-  </iframe>
+  <header>
+    <div class="pill">FACTORY OF FACTORIES • Legal • Ethical • Transparent</div>
+    <h1>Autopilot Money Factory: Ship, Bundle, Repeat</h1>
+    <p class="subtitle">
+      Copy-paste deployment kits for automated digital product pipelines. Every item ships with a product,
+      checkout page, automated delivery, promo loop, bundles, upsells, and cloning angles.
+    </p>
+  </header>
+
+  <main>
+    <section>
+      <h2>Execution Loop (never stops)</h2>
+      <div class="grid">
+        <div class="card">
+          <strong>Step Pattern</strong>
+          <p>Identify tiny pain → Build asset → Write 90-word pitch → Upload to Gumroad (auto delivery) → Add as Patreon perk → Create Stripe checkout if recurring → Publish landing page → Schedule Discord/blog → Bundle → Repeat.</p>
+        </div>
+        <div class="card">
+          <strong>Automation Layer</strong>
+          <p>
+            Zapier/Make: Gumroad sale → Discord webhook + Airtable log. Patreon new patron → Stripe coupon email (Gmail draft). Stripe subscription payment → Discord role update + calendar task to drop monthly asset.
+          </p>
+        </div>
+        <div class="card">
+          <strong>Promo Rhythm</strong>
+          <p>Day 1 tweet/Discord/blog; Day 3 email drip; Day 7 bundle upsell; Day 14 evergreen repost. Rotate thumbnails/titles before editing products.</p>
+        </div>
+      </div>
+      <p class="tiny">Default price $7–$27. Delivery: Gumroad hosted file/zip, Patreon attachment or paid post, Stripe Checkout → Thrivecart-style thank-you page linking to Gumroad file.</p>
+    </section>
+
+    <section>
+      <h2>Universal Checkout + Delivery Block (copy-paste)</h2>
+      <div class="stack">
+        <div class="copy-block">Gumroad
+- Create new product → Upload PDF/ZIP → Toggle "Send files automatically" ON.
+- URL slug: /{short-name}. Price: ${7-27}. Description: bullet points below.
+- Post-purchase message: "You now own [PRODUCT]. If you want lifetime updates, reply with your Stripe receipt email."</div>
+        <div class="copy-block">Patreon
+- New paid post → Attach same file/ZIP → Tag with category → Set visibility to paying patrons.
+- For tiers: add "Monthly Drop" benefit; schedule on 1st of each month.</div>
+        <div class="copy-block">Stripe
+- Create Payment Link → Pricing ${9-27} one-time or ${9-15}/mo subscription.
+- Confirmation page URL: landing-page-url/thank-you → embed Gumroad download link + Discord invite.</div>
+        <div class="copy-block">Promo Scheduling
+- Discord: schedule #announcements with 3 bullets + checkout link.
+- Blog/WordPress: publish 200-word SEO block; link to Stripe + Gumroad.
+- Email: 3-step drip (Announcement, Social proof, Bundle).
+- Evergreen: Buffer queue weekly; rotate titles and covers.</div>
+      </div>
+    </section>
+
+    <section>
+      <h2>1) RPG + Kelplantis Tools</h2>
+      <div class="grid">
+        <div class="card">
+          <strong>Products (clone: fantasy / sci-fi / post-apoc)</strong>
+          <table class="table">
+            <tr><th>Name</th><th>Format</th><th>What to Upload</th></tr>
+            <tr><td>NPC Quickforge</td><td>PDF + CSV</td><td>50 NPC prompts, d20 traits table, CSV for Notion/Sheets import.</td></tr>
+            <tr><td>Encounter Seeds Vol.1</td><td>PDF</td><td>30 one-shot hooks with scaling notes.</td></tr>
+            <tr><td>Micro Maps Pack</td><td>ZIP</td><td>12 2K PNG maps + printable PDFs.</td></tr>
+            <tr><td>Loot Deck</td><td>PDF + Cards</td><td>52-card printable deck; CSV for VTT.</td></tr>
+            <tr><td>Kelplantis Faction Kit</td><td>PDF</td><td>3 factions, sigils, rumors, questlines.</td></tr>
+          </table>
+        </div>
+        <div class="card">
+          <strong>Bundles & Upsells</strong>
+          <ul>
+            <li><b>Dungeon Starter Bundle</b>: NPC Quickforge + Encounter Seeds + Micro Maps ($21).</li>
+            <li><b>Kelplantis Deluxe</b>: Everything + 3 bonus maps ($29).</li>
+            <li>Upsell at checkout: add Loot Deck for +$6.</li>
+          </ul>
+          <strong>Monthly Subscription Drop</strong>
+          <p>"Kelplantis Monthly Drop" ($12/mo Stripe): 2 maps + 10 encounters + 10 NPCs. Deliver via Patreon post + Stripe email.</p>
+        </div>
+        <div class="card">
+          <strong>Sales Copy</strong>
+          <div class="copy-block">Stop stalling your sessions. Drop these ready-to-run NPCs, hooks, and maps straight into tonight's game.
+What you get: 50 NPCs, 30 encounters, 12 maps, 52 loot drops, 3 factions.
+Works for any system. Print-ready + VTT-friendly. Ship in under 5 minutes.
+Licensing: personal + 3 tables; reskin freely. Satisfaction guarantee.</div>
+          <p class="tiny">Promo loop: launch day Discord + screenshot of a map; day 3 Reddit post; day 7 bundle reminder; day 14 alt cover.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>2) Creator Tools</h2>
+      <div class="grid">
+        <div class="card">
+          <strong>Products (clone: coaching / indie dev / edu)</strong>
+          <table class="table">
+            <tr><th>Name</th><th>Format</th><th>Contents</th></tr>
+            <tr><td>Caption Vault 150</td><td>PDF + CSV</td><td>150 hooks + CTAs; reels + carousels.</td></tr>
+            <tr><td>Story Template Kit</td><td>Canva</td><td>30 editable story frames; export link.</td></tr>
+            <tr><td>Content Calendar 90</td><td>Notion + CSV</td><td>90-day prompts; status tracker.</td></tr>
+            <tr><td>Launch Day Checklist</td><td>PDF</td><td>Step-by-step posting schedule.</td></tr>
+            <tr><td>Hashtag & SEO Pack</td><td>CSV</td><td>200 hashtags + 50 YouTube titles.</td></tr>
+          </table>
+        </div>
+        <div class="card">
+          <strong>Bundles & Upsells</strong>
+          <ul>
+            <li><b>Creator Kickoff</b>: Caption Vault + Story Templates + Calendar ($24).</li>
+            <li><b>Launch Lab</b>: Everything + bonus Canva covers ($29).</li>
+            <li>Upsell: add Hashtag Pack at checkout +$5.</li>
+          </ul>
+          <strong>Monthly Subscription Drop</strong>
+          <p>"Creator Drop" ($10/mo Stripe): 30 fresh captions + 10 Canva stories + 1 checklist monthly. Publish on Patreon.</p>
+        </div>
+        <div class="card">
+          <strong>Copy Block</strong>
+          <div class="copy-block">Plug-and-play creator stack. Copy, paste, post. 90 days of prompts, 150 captions, 30 Canva stories, launch checklists, and a hashtag vault. Rebrand in minutes. Built for IG, TikTok, YT Shorts. Keep the calendar on rotation forever.</div>
+          <p class="tiny">Promo loop: Instagram carousel with 3 sample captions → Email with 5-swipe story template → Bundle upsell on day 5.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>3) Productivity Planners</h2>
+      <div class="grid">
+        <div class="card">
+          <strong>Products (clone: students / parents / founders)</strong>
+          <table class="table">
+            <tr><th>Name</th><th>Format</th><th>Contents</th></tr>
+            <tr><td>Habit Tracker Grid</td><td>Notion + PDF</td><td>Monthly tracker + streak automation.</td></tr>
+            <tr><td>Chaos Reset Kit</td><td>PDF</td><td>90-minute reset script + room-by-room cards.</td></tr>
+            <tr><td>Weekly Ops Planner</td><td>Spreadsheet</td><td>Priority matrix, meetings, retros.</td></tr>
+            <tr><td>Meal & Routine Board</td><td>Canva + PDF</td><td>Drag-and-drop meal/routine tiles.</td></tr>
+            <tr><td>Deep Work Sprint Pack</td><td>PDF</td><td>10 scripts + timer links + rewards.</td></tr>
+          </table>
+        </div>
+        <div class="card">
+          <strong>Bundles & Upsells</strong>
+          <ul>
+            <li><b>Reset Weekend</b>: Chaos Reset + Meal/Routine + Habit Grid ($19).</li>
+            <li><b>Ops Command Center</b>: Everything + bonus Notion dashboard ($27).</li>
+            <li>Upsell: add Deep Work Pack for +$4.</li>
+          </ul>
+          <strong>Monthly Subscription Drop</strong>
+          <p>"Productivity Pulse" ($9/mo Stripe): New weekly planner + 2 routines + 1 reset script monthly. Deliver via Patreon.</p>
+        </div>
+        <div class="card">
+          <strong>Copy Block</strong>
+          <div class="copy-block">Stop context switching. Run your week from one command center: habit grid, chaos reset, ops planner, routines, and deep work scripts. Print or drop into Notion/Sheets. Takes 15 minutes to set up; saves hours every week.</div>
+          <p class="tiny">Promo loop: Before/after desk photo; 60-second setup video; bundle reminder on Sunday night.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>4) Finance Helpers</h2>
+      <div class="grid">
+        <div class="card">
+          <strong>Products (clone: freelancers / students / families)</strong>
+          <table class="table">
+            <tr><th>Name</th><th>Format</th><th>Contents</th></tr>
+            <tr><td>Zero-Sum Budget Sheet</td><td>Spreadsheet</td><td>Income allocation + auto charts.</td></tr>
+            <tr><td>Savings Ladder</td><td>PDF + Sheet</td><td>12-rung savings plan + tracker.</td></tr>
+            <tr><td>Debt Payoff Playbook</td><td>PDF + Sheet</td><td>Snowball/avalanche calculators.</td></tr>
+            <tr><td>Subscription Audit Kit</td><td>PDF</td><td>30-minute audit checklist + template.</td></tr>
+            <tr><td>Finance Dashboard</td><td>Notion</td><td>Income, expenses, goals widgets.</td></tr>
+          </table>
+        </div>
+        <div class="card">
+          <strong>Bundles & Upsells</strong>
+          <ul>
+            <li><b>Starter Finance Pack</b>: Budget Sheet + Savings Ladder + Subscription Audit ($18).</li>
+            <li><b>Debt-Free Sprint</b>: Everything + bonus payoff calculator ($25).</li>
+            <li>Upsell: Add Finance Dashboard for +$6.</li>
+          </ul>
+          <strong>Monthly Subscription Drop</strong>
+          <p>"Money Ops Monthly" ($10/mo Stripe): Fresh budget template + savings tracker + mini-audit checklist monthly. Delivered via Patreon + Stripe email.</p>
+        </div>
+        <div class="card">
+          <strong>Copy Block</strong>
+          <div class="copy-block">Simplify your money ops. Plug income, debts, and subscriptions into the sheets and watch the plan unfold. Zero-sum budgets, savings ladder, payoff planners, audits, and dashboards. No advice—just tools that keep you consistent.</div>
+          <p class="tiny">Promo loop: Share chart screenshot (blurred numbers); testimonial request on day 5; bundle upgrade on day 7.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Systemized Promotion + Cloning</h2>
+      <div class="grid">
+        <div class="card">
+          <strong>Landing Page Template</strong>
+          <div class="copy-block">Headline: "[Result] in 15 Minutes"
+Subhead: "Plug-and-play templates—use tonight."
+Buttons: Stripe (subscription) + Gumroad (one-time).
+Proof: 3 bullets, 1 screenshot, 1 guarantee line.
+Footer: Discord invite + bundle upsell link.</div>
+        </div>
+        <div class="card">
+          <strong>Discord + Blog Scheduler</strong>
+          <ul>
+            <li>Create #drops channel → schedule 4 posts per product (launch, use-case, bundle, testimonial).</li>
+            <li>Blog: 200-word SEO snippet per product; include Stripe + Gumroad links and bundle CTA.</li>
+            <li>Repurpose: turn blog intro into email #1, CTA into email #2, bundle into email #3.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <strong>Cloning Angles</strong>
+          <ul>
+            <li>RPG tools → sci-fi, cyberpunk, post-apoc skins (swap nouns/icons).</li>
+            <li>Creator tools → niches (fitness, finance, edu) with new hashtags.</li>
+            <li>Productivity → students, parents, founders; adjust routines.</li>
+            <li>Finance → freelancers, students, families; adjust income/expense presets.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Zero-Touch Operations Checklist</h2>
+      <div class="grid">
+        <div class="card">
+          <strong>Setup (do once)</strong>
+          <ul>
+            <li>Connect Gumroad ↔ Zapier (sale webhook) → Discord + Airtable log.</li>
+            <li>Patreon benefits: add monthly drop per category; connect Zap to email new patrons.</li>
+            <li>Stripe payment links saved in a Notion "Checkout Bank" table with bundle URLs.</li>
+            <li>Create Dropbox/Drive folder per category with versioned ZIPs.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <strong>Weekly (30 minutes)</strong>
+          <ul>
+            <li>Ship 1 new product or reskin; upload to Gumroad + Patreon; update Stripe link.</li>
+            <li>Schedule Discord + email promos; rotate thumbnail/title if sales are slow.</li>
+            <li>Add product to at least one bundle; post bundle reminder.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <strong>Metrics</strong>
+          <ul>
+            <li>Track: conversions per thumbnail, bundle attach rate, subscription retention.</li>
+            <li>If conversion <5%: swap title + cover first; adjust copy second; product last.</li>
+            <li>Never delete—recycle in bundles and seasonal promos.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    All payments route through your Stripe, Gumroad, or Patreon accounts. Everything above is legal, ethical, transparent, and ready to ship now.
+  </footer>
 </body>
 </html>
