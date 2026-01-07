@@ -1,0 +1,8 @@
+{
+  "DryRun": false,
+  "PreviewOnly": false,
+  "TestMode": false,
+  "MaxAlertsPerRun": 10,
+  "ArchiveEnabled": true,
+  "LogPath": "C:/BrownEyeCortex/Logs/Arbitrage_Bootstrap.log"
+}

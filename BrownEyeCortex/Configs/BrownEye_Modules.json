@@ -1,0 +1,11 @@
+{
+  "Modules": [
+    {
+      "Name": "Arbitrage",
+      "Enabled": true,
+      "PendingCsv": "C:/BrownEyeCortex/Pipelines/Arbitrage/Pending.csv",
+      "ArchiveDir": "C:/BrownEyeCortex/Pipelines/Arbitrage/Archive",
+      "Bootstrap": "C:/BrownEyeCortex/Bootstraps/Arbitrage_ClosedLoop_Bootstrap.ps1"
+    }
+  ]
+}
