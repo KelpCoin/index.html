@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Amplissa Receipt</title>
+  </head>
+  <body style="font-family: Arial, sans-serif; color: #1f2937;">
+    <h2>Thanks for your purchase from {{creatorName}}!</h2>
+    <p>Order ID: <strong>{{orderId}}</strong></p>
+    <p>Amount: <strong>{{amount}} {{currency}}</strong></p>
+    <p>Taxes: <strong>{{taxes}} {{currency}}</strong></p>
+    <p>Descriptor: <strong>{{descriptor}}</strong></p>
+    <p>Your download link (expires {{expiresAt}}):</p>
+    <p><a href="{{downloadUrl}}">Download your file</a></p>
+    <p style="font-size: 12px; color: #6b7280;">Refund policy: {{refundPolicy}}</p>
+  </body>
+</html>
