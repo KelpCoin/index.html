@@ -1,0 +1,24 @@
+{
+  "Enabled": true,
+  "PriceSource": "Scryfall",
+  "IncludedSites": [
+    "TCGPlayer",
+    "Cardmarket"
+  ],
+  "MinSpreadPct": 15.0,
+  "MinLiquidity": 1,
+  "MinCopies": 1,
+  "MaxCandidatesPerRun": 50,
+  "MaxApiCallsPerRun": 120,
+  "ApiCallDelayMs": 150,
+  "AssumedLiquidity": 1,
+  "AssumedCopies": 1,
+  "DedupeWindowHours": 72,
+  "CardNames": [
+    "Black Lotus",
+    "Sol Ring",
+    "Rhystic Study"
+  ],
+  "PendingCsv": "C:/BrownEyeCortex/Pipelines/Arbitrage/Pending.csv",
+  "DedupeStatePath": "C:/BrownEyeCortex/Pipelines/Arbitrage/State/Scanner_Dedupe.json"
+}
