@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Claim 500 KelpCoin</title>
+  <title>KelpCoin Claim + Portfolio Insights</title>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
@@ -17,11 +17,14 @@
     h1 {
       font-size: 2rem;
       margin-bottom: 0.5rem;
+      text-align: center;
     }
     p {
       font-size: 1rem;
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
       color: #555;
+      text-align: center;
+      max-width: 720px;
     }
     iframe {
       border: none;
@@ -30,6 +33,27 @@
       height: 800px;
       border-radius: 10px;
       box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      background: #fff;
+    }
+    .monetize {
+      max-width: 720px;
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+      margin-top: 24px;
+    }
+    .monetize h2 {
+      margin: 0 0 10px;
+      font-size: 1.25rem;
+    }
+    .monetize ul {
+      margin: 0 0 10px 20px;
+      color: #444;
+    }
+    .price {
+      font-weight: 600;
+      color: #1f7a4d;
     }
   </style>
 </head>
@@ -40,5 +64,16 @@
     src="https://docs.google.com/forms/d/e/1FAIpQLSclYfRXBxHoDBjpoHCoKM2_lm8VkxN8FjqmkOeK5kqxiOMW9A/viewform?embedded=true"
     allowfullscreen>
   </iframe>
+
+  <section class="monetize" aria-label="KelpCoin Insights">
+    <h2>Portfolio Insights (free + premium)</h2>
+    <p>Free includes a weekly KelpCoin balance snapshot and a simple performance summary. Upgrade to unlock a personalized optimization report with tax-aware moves and allocation suggestions tailored to your wallet history.</p>
+    <ul>
+      <li><strong>Primary revenue tap:</strong> Premium Portfolio Insights subscription at <span class="price">$12/month</span>.</li>
+      <li><strong>Upgrade path:</strong> Add “Priority Alerts” for <span class="price">+$5/month</span> to get real-time price and whale-move notifications.</li>
+      <li><strong>Retention loop:</strong> Weekly insights recap email with a “next best action” checklist and progress tracking.</li>
+    </ul>
+    <p>Most users recoup the subscription by catching one avoidable slippage event or improving their yield allocation once per quarter. Clear, data-backed insights help you make faster, higher-confidence decisions that protect upside and reduce costly mistakes.</p>
+  </section>
 </body>
 </html>
