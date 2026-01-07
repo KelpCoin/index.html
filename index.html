@@ -2,43 +2,207 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Claim 500 KelpCoin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BrownEye Cortex Critic</title>
   <style>
+    :root {
+      color-scheme: light;
+      --bg: #0f172a;
+      --panel: #111827;
+      --ink: #e2e8f0;
+      --muted: #94a3b8;
+      --accent: #f97316;
+      --accent-2: #22c55e;
+      --danger: #ef4444;
+      --border: rgba(148, 163, 184, 0.2);
+    }
+    * {
+      box-sizing: border-box;
+    }
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f0fdf4;
+      margin: 0;
+      font-family: "Inter", "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      padding: 48px 16px 64px;
+    }
+    main {
+      max-width: 960px;
+      margin: 0 auto;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      margin: 0;
-      padding: 40px;
+      gap: 32px;
+    }
+    header {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
     }
     h1 {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
+      font-size: clamp(2rem, 4vw, 3rem);
+      margin: 0;
+      letter-spacing: -0.03em;
     }
-    p {
-      font-size: 1rem;
-      margin-bottom: 2rem;
-      color: #555;
+    header p {
+      max-width: 720px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 1.05rem;
+      line-height: 1.6;
     }
-    iframe {
-      border: none;
-      width: 100%;
-      max-width: 700px;
-      height: 800px;
-      border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.25);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+    }
+    .score {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .score span {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+    .score strong {
+      font-size: 1.4rem;
+    }
+    .verdict {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: rgba(249, 115, 22, 0.15);
+      color: var(--accent);
+      border: 1px solid rgba(249, 115, 22, 0.4);
+    }
+    .section-title {
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+    .list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin: 0;
+      padding-left: 20px;
+    }
+    .callout {
+      border-left: 4px solid var(--accent-2);
+      padding-left: 16px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .artifact {
+      border: 1px dashed rgba(148, 163, 184, 0.4);
+      border-radius: 12px;
+      padding: 20px;
+      color: var(--muted);
+      line-height: 1.7;
+      background: rgba(148, 163, 184, 0.05);
+    }
+    .risk {
+      color: var(--danger);
+      font-weight: 600;
+    }
+    footer {
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-align: center;
+      margin-top: 16px;
     }
   </style>
 </head>
 <body>
-  <h1>🪙 Claim 500 KelpCoin</h1>
-  <p>Fill in your wallet address. Optional: enter a referrer’s wallet to earn bonus KELP.</p>
-  <iframe 
-    src="https://docs.google.com/forms/d/e/1FAIpQLSclYfRXBxHoDBjpoHCoKM2_lm8VkxN8FjqmkOeK5kqxiOMW9A/viewform?embedded=true"
-    allowfullscreen>
-  </iframe>
+  <main>
+    <header>
+      <h1>BrownEye Cortex Critic</h1>
+      <p>Use this report template to deliver blunt, monetization-focused feedback on any artifact. It enforces strict scoring, clear verdicts, and actionable fixes without rewriting the work.</p>
+    </header>
+
+    <section class="card">
+      <div class="section-title">Artifact Snapshot</div>
+      <div class="artifact">
+        Paste or summarize the artifact here. Keep it short and precise so the critic can diagnose gaps fast.
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="section-title">Verdict</div>
+      <div class="verdict">NEEDS-FIX</div>
+      <p class="callout">The idea is promising but the delivery fails to show a concrete product path or reusable structure.</p>
+    </section>
+
+    <section class="card">
+      <div class="section-title">Scores</div>
+      <div class="grid">
+        <div class="score">
+          <span>Clarity</span>
+          <strong>6 / 10</strong>
+        </div>
+        <div class="score">
+          <span>Practical Value</span>
+          <strong>5 / 10</strong>
+        </div>
+        <div class="score">
+          <span>Reusability</span>
+          <strong>4 / 10</strong>
+        </div>
+        <div class="score">
+          <span>Monetization Fit</span>
+          <strong>5 / 10</strong>
+        </div>
+        <div class="score">
+          <span>Structure</span>
+          <strong>6 / 10</strong>
+        </div>
+        <div class="score">
+          <span>Risk</span>
+          <strong class="risk">MEDIUM</strong>
+        </div>
+        <div class="score">
+          <span>Noise</span>
+          <strong>3 / 10</strong>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="section-title">Why</div>
+      <p class="callout">The artifact lacks a concrete output, proof, or checklist. Monetization is implied but not anchored to a buyer or pricing tier.</p>
+    </section>
+
+    <section class="card">
+      <div class="section-title">Fix-List</div>
+      <ul class="list">
+        <li>Define the target buyer and the exact decision they will make after reading the artifact.</li>
+        <li>Add one worked example that shows the artifact producing a measurable outcome.</li>
+        <li>List the packaging options: single-use, bundle, or retainer, with a price anchor.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <div class="section-title">Go-Forward Path</div>
+      <p class="callout">Convert the artifact into a reusable checklist + template, attach a distribution channel, and test it against three live prospects before scaling.</p>
+    </section>
+
+    <footer>Template output only — replace the placeholders with real scoring and fixes for each artifact.</footer>
+  </main>
 </body>
 </html>
