@@ -2,43 +2,285 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Claim 500 KelpCoin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KelpCoin Creator Inventory Kit</title>
   <style>
+    :root {
+      color-scheme: light;
+      --ink: #0f172a;
+      --muted: #475569;
+      --accent: #0ea5e9;
+      --accent-dark: #0284c7;
+      --surface: #f8fafc;
+      --card: #ffffff;
+      --border: #e2e8f0;
+    }
+    * {
+      box-sizing: border-box;
+    }
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f0fdf4;
+      margin: 0;
+      font-family: "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: linear-gradient(135deg, #e0f2fe 0%, #f0fdf4 100%);
+    }
+    main {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
       display: flex;
       flex-direction: column;
+      gap: 32px;
+    }
+    header {
+      display: grid;
+      gap: 16px;
+    }
+    .badge {
+      display: inline-flex;
       align-items: center;
-      margin: 0;
-      padding: 40px;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: #e0f2fe;
+      color: #0369a1;
+      font-weight: 600;
+      font-size: 0.85rem;
+      width: fit-content;
     }
     h1 {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
+      font-size: clamp(2.2rem, 4vw, 3.4rem);
+      margin: 0;
+      line-height: 1.1;
     }
-    p {
-      font-size: 1rem;
-      margin-bottom: 2rem;
-      color: #555;
+    .subtitle {
+      font-size: 1.1rem;
+      color: var(--muted);
+      max-width: 720px;
+      margin: 0;
     }
-    iframe {
-      border: none;
-      width: 100%;
-      max-width: 700px;
-      height: 800px;
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+    .button {
+      background: var(--accent);
+      color: white;
+      padding: 12px 22px;
       border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      text-decoration: none;
+      font-weight: 600;
+      transition: transform 0.2s ease, background 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .button:hover {
+      transform: translateY(-2px);
+      background: var(--accent-dark);
+    }
+    .button.secondary {
+      background: transparent;
+      color: var(--accent-dark);
+      border: 1px solid var(--accent-dark);
+    }
+    .card-grid {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+    .card {
+      background: var(--card);
+      padding: 20px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+    }
+    .card h3 {
+      margin-top: 0;
+      margin-bottom: 8px;
+      font-size: 1.1rem;
+    }
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+    .section-title {
+      font-size: 1.6rem;
+      margin: 0 0 12px;
+    }
+    .list {
+      margin: 0;
+      padding: 0 0 0 20px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .pricing {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    }
+    .price-card {
+      border: 2px solid #bae6fd;
+      background: #eff6ff;
+    }
+    .price {
+      font-size: 2.4rem;
+      margin: 12px 0 8px;
+      color: #0f172a;
+    }
+    .highlight {
+      font-weight: 600;
+      color: #0f172a;
+    }
+    .footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+    @media (max-width: 600px) {
+      main {
+        padding: 36px 18px 64px;
+      }
+      .cta-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>🪙 Claim 500 KelpCoin</h1>
-  <p>Fill in your wallet address. Optional: enter a referrer’s wallet to earn bonus KELP.</p>
-  <iframe 
-    src="https://docs.google.com/forms/d/e/1FAIpQLSclYfRXBxHoDBjpoHCoKM2_lm8VkxN8FjqmkOeK5kqxiOMW9A/viewform?embedded=true"
-    allowfullscreen>
-  </iframe>
+  <main>
+    <header>
+      <span class="badge">🧾 Digital Inventory • Instant Delivery</span>
+      <h1>KelpCoin Creator Inventory Kit</h1>
+      <p class="subtitle">
+        A resale-ready bundle that turns your community into a recurring revenue engine. Launch a tokenized
+        rewards funnel in one afternoon with complete copy, templates, and tracking sheets.
+      </p>
+      <div class="cta-row">
+        <a class="button" href="https://gumroad.com" aria-label="Buy the KelpCoin Creator Inventory Kit">Buy Now — $39</a>
+        <a class="button secondary" href="#contents" aria-label="Preview kit contents">Preview the Inventory</a>
+      </div>
+    </header>
+
+    <section class="card-grid">
+      <article class="card">
+        <h3>Buyer Outcome</h3>
+        <p>Ship a ready-made rewards campaign with polished brand voice, payout logic, and onboarding in under 60 minutes.</p>
+      </article>
+      <article class="card">
+        <h3>Resale License</h3>
+        <p>Commercial-ready with transferable usage rights so you can deploy across multiple communities or clients.</p>
+      </article>
+      <article class="card">
+        <h3>Format</h3>
+        <p>Editable Google Docs, Notion templates, and spreadsheet trackers in one compressed download.</p>
+      </article>
+    </section>
+
+    <section id="contents">
+      <h2 class="section-title">What’s Inside the Inventory</h2>
+      <div class="card-grid">
+        <article class="card">
+          <h3>Launch Scripts</h3>
+          <p>7-channel announcement kit (X, Discord, email, SMS, Telegram, in-app, and landing page copy).</p>
+        </article>
+        <article class="card">
+          <h3>Rewards Engine</h3>
+          <p>Tiered bonus logic, referral ladder, and payout schedule with prefilled examples.</p>
+        </article>
+        <article class="card">
+          <h3>Tracking Dashboard</h3>
+          <p>Spreadsheet with auto-calculations, fraud checks, and weekly KPI summaries.</p>
+        </article>
+        <article class="card">
+          <h3>Buyer FAQs</h3>
+          <p>Customer-ready support answers to reduce manual support volume and build trust.</p>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="section-title">Ideal For</h2>
+      <ul class="list">
+        <li>Creator economy founders who need a plug-and-play loyalty playbook.</li>
+        <li>Community managers running token or points-based engagement programs.</li>
+        <li>Agency operators delivering repeatable reward systems to clients.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2 class="section-title">Inventory Preview</h2>
+      <div class="card-grid">
+        <article class="card">
+          <h3>Landing Page Blueprint</h3>
+          <p>A full layout map with headline formulas, proof points, and conversion checklist.</p>
+        </article>
+        <article class="card">
+          <h3>Referral Accelerator</h3>
+          <p>Copy and incentive tiers engineered to increase invites and reduce churn.</p>
+        </article>
+        <article class="card">
+          <h3>Operational SOP</h3>
+          <p>Step-by-step launch guide, audit checklist, and weekly reporting cadence.</p>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="section-title">Pricing</h2>
+      <div class="pricing">
+        <article class="card price-card">
+          <h3>Creator Inventory Kit</h3>
+          <p class="price">$39</p>
+          <p class="highlight">Instant download + commercial license</p>
+          <ul class="list">
+            <li>All templates in editable formats.</li>
+            <li>Lifetime updates for new modules.</li>
+            <li>One-page launch checklist included.</li>
+          </ul>
+          <div class="cta-row" style="margin-top: 16px;">
+            <a class="button" href="https://gumroad.com">Secure Checkout</a>
+          </div>
+        </article>
+        <article class="card">
+          <h3>Agency Bundle</h3>
+          <p class="price">$99</p>
+          <p class="highlight">Deploy across unlimited clients</p>
+          <ul class="list">
+            <li>Includes client onboarding scripts.</li>
+            <li>White-label license addendum.</li>
+            <li>Priority support channel.</li>
+          </ul>
+          <div class="cta-row" style="margin-top: 16px;">
+            <a class="button secondary" href="https://patreon.com">Buy Agency Bundle</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="section-title">Guarantee</h2>
+      <p class="subtitle">
+        14-day launch guarantee: if you cannot ship a rewards funnel in two weeks, email support and get a full refund.
+      </p>
+    </section>
+
+    <section>
+      <h2 class="section-title">Delivery</h2>
+      <p class="subtitle">
+        Download link delivered instantly after purchase. You receive a ZIP with editable docs, templates, and a quick-start video.
+      </p>
+    </section>
+
+    <footer class="footer">
+      Built for resale-ready creator commerce. Questions? hello@kelpcoin.io
+    </footer>
+  </main>
 </body>
 </html>
