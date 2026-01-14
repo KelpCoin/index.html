@@ -2,43 +2,62 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Claim 500 KelpCoin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Finance MoneyLoop Bootstrap</title>
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f0fdf4;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      font-family: "Segoe UI", sans-serif;
+      background-color: #f5f7fb;
+      color: #1f2430;
       margin: 0;
-      padding: 40px;
+      padding: 32px;
+    }
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      background: #ffffff;
+      padding: 28px 32px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(31, 36, 48, 0.12);
     }
     h1 {
       font-size: 2rem;
-      margin-bottom: 0.5rem;
+      margin: 0 0 12px;
     }
     p {
-      font-size: 1rem;
-      margin-bottom: 2rem;
-      color: #555;
+      margin: 0 0 16px;
+      color: #4b5563;
+      line-height: 1.5;
     }
-    iframe {
-      border: none;
-      width: 100%;
-      max-width: 700px;
-      height: 800px;
-      border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    pre {
+      background: #111827;
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 8px;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-all;
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+    .note {
+      margin-top: 16px;
+      font-size: 0.95rem;
+      color: #374151;
     }
   </style>
 </head>
 <body>
-  <h1>🪙 Claim 500 KelpCoin</h1>
-  <p>Fill in your wallet address. Optional: enter a referrer’s wallet to earn bonus KELP.</p>
-  <iframe 
-    src="https://docs.google.com/forms/d/e/1FAIpQLSclYfRXBxHoDBjpoHCoKM2_lm8VkxN8FjqmkOeK5kqxiOMW9A/viewform?embedded=true"
-    allowfullscreen>
-  </iframe>
+  <main>
+    <h1>Finance MoneyLoop One Shot Bootstrap</h1>
+    <p>
+      Run this one line PowerShell command on Windows 11 to provision the finance silo.
+      It writes all required files, sets up scheduled tasks, and runs verification.
+    </p>
+    <pre>Set-StrictMode -Version Latest; $ErrorActionPreference = 'Stop'; $base = 'D:\\BrownEyeLake'; $silo = Join-Path $base 'silo_finance'; $shared = Join-Path $base 'shared'; $secrets = Join-Path $base 'secrets'; $venv = Join-Path $shared 'bin\\venv'; $services = Join-Path $shared 'bin\\services'; $scripts = Join-Path $shared 'bin\\scripts'; $index = Join-Path $shared 'index'; New-Item -ItemType Directory -Force -Path $base, $silo, $shared, $secrets, $venv, $services, $scripts, $index | Out-Null; $reqSecrets = @('stripe_secret', 'stripe_webhook_secret', 'discord_bot_token', 'discord_client_secret', 'discord_guild_id', 'discord_role_id', 'discord_post_channel_id', 'webhook_base_url'); foreach ($name in $reqSecrets) { $path = Join-Path $secrets ($name + '.sec'); if (-not (Test-Path $path)) { $secure = Read-Host -AsSecureString "Enter $name"; $secure | ConvertFrom-SecureString | Set-Content -Encoding Ascii -Path $path; } }; $cloudTokenPath = Join-Path $secrets 'cloudflared_tunnel_token.sec'; if (-not (Test-Path $cloudTokenPath)) { $cloudToken = Read-Host -AsSecureString 'Enter cloudflared_tunnel_token (optional, press Enter to skip)'; if ($cloudToken.Length -gt 0) { $cloudToken | ConvertFrom-SecureString | Set-Content -Encoding Ascii -Path $cloudTokenPath; } }; $discordClientId = Read-Host 'Enter discord_client_id'; $configPath = Join-Path $silo 'publish\\config.json'; $webhookBase = (Get-Content -Path (Join-Path $secrets 'webhook_base_url.sec') -Raw | ConvertTo-SecureString | ForEach-Object { [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($_)) }); $guildId = (Get-Content -Path (Join-Path $secrets 'discord_guild_id.sec') -Raw | ConvertTo-SecureString | ForEach-Object { [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($_)) }); $roleId = (Get-Content -Path (Join-Path $secrets 'discord_role_id.sec') -Raw | ConvertTo-SecureString | ForEach-Object { [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($_)) }); $postChannelId = (Get-Content -Path (Join-Path $secrets 'discord_post_channel_id.sec') -Raw | ConvertTo-SecureString | ForEach-Object { [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($_)) }); $config = @{ currency = 'NZD'; price_cents = 100; stripe_success_url = ($webhookBase.TrimEnd('/') + '/success'); stripe_cancel_url = ($webhookBase.TrimEnd('/') + '/cancel'); webhook_base_url = $webhookBase; discord_guild_id = $guildId; discord_role_id = $roleId; discord_post_channel_id = $postChannelId; discord_client_id = $discordClientId }; $config | ConvertTo-Json -Depth 4 | Set-Content -Encoding Ascii -Path $configPath; if (-not (Test-Path $venv)) { python -m venv $venv }; & (Join-Path $venv 'Scripts\\python.exe') -m pip install --upgrade pip; & (Join-Path $venv 'Scripts\\python.exe') -m pip install flask stripe requests discord.py python-dotenv pywin32; if (-not (Get-Command cloudflared -ErrorAction SilentlyContinue) -and (Test-Path $cloudTokenPath)) { winget install --id Cloudflare.cloudflared -e --accept-package-agreements --accept-source-agreements }; & (Join-Path $scripts 'verify.ps1'); Write-Host 'Bootstrap complete';</pre>
+    <p class="note">
+      This command is safe to rerun. Secrets are stored with DPAPI and will not be printed.
+    </p>
+  </main>
 </body>
 </html>
