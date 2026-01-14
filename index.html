@@ -1,44 +1,59 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Claim 500 KelpCoin</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f0fdf4;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin: 0;
-      padding: 40px;
-    }
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
-    }
-    p {
-      font-size: 1rem;
-      margin-bottom: 2rem;
-      color: #555;
-    }
-    iframe {
-      border: none;
-      width: 100%;
-      max-width: 700px;
-      height: 800px;
-      border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
-    }
-  </style>
-</head>
+powershell -NoProfile -ExecutionPolicy Bypass -Command "& { $ErrorActionPreference='Stop'; function Fail($m){Write-Host $m; exit 1}; if (-not $env:BROWNEYE_STRIPE_SECRET_KEY){Fail 'Missing env var BROWNEYE_STRIPE_SECRET_KEY'}; if (-not $env:BROWNEYE_STRIPE_WEBHOOK_SECRET){Fail 'Missing env var BROWNEYE_STRIPE_WEBHOOK_SECRET'}; if (-not $env:BROWNEYE_DISCORD_WEBHOOK_URL){Fail 'Missing env var BROWNEYE_DISCORD_WEBHOOK_URL'}; $brand = if ($env:BROWNEYE_BRAND){$env:BROWNEYE_BRAND}else{'BROWNEYE'}; $currency = if ($env:BROWNEYE_CURRENCY){$env:BROWNEYE_CURRENCY}else{'nzd'}; $publicBase = $env:BROWNEYE_PUBLIC_BASE_URL; $root='C:\BrownEyeCortex'; $base=Join-Path $root '_moneyfarm'; $tipBase=Join-Path $base 'TipJar'; $stateDir=Join-Path $tipBase 'state'; $siteDir=Join-Path $tipBase 'site'; $qrDir=Join-Path $siteDir 'qr'; $eventsDir=Join-Path $tipBase 'events'; $scriptsDir=Join-Path $tipBase 'scripts'; $receiverDir=Join-Path $tipBase 'receiver'; $logsDir=Join-Path $base 'logs'; $stamp=Get-Date -Format 'yyyyMMdd_HHmmss'; $log=Join-Path $logsDir "tipjar_bootstrap_$stamp.log"; New-Item -ItemType Directory -Force -Path $stateDir,$siteDir,$qrDir,$eventsDir,$scriptsDir,$receiverDir,$logsDir | Out-Null; function Log($m){$ts=Get-Date -Format s; Add-Content -Path $log -Value "$ts $m"}; Log 'bootstrap start'; $lockedCopy='Some people ask if there\'s a way to throw a dollar our way - there is, if you want. Totally optional. No expectations.'; $statePath=Join-Path $stateDir 'stripe_state.json'; $state=@{}; if (Test-Path $statePath){$state=Get-Content $statePath -Raw | ConvertFrom-Json}; function Save-State{($state | ConvertTo-Json -Depth 6) | Set-Content -Path $statePath -Encoding UTF8}; $headers=@{Authorization="Bearer $env:BROWNEYE_STRIPE_SECRET_KEY"}; function Stripe-Post($path,$body){Invoke-RestMethod -Method Post -Uri "https://api.stripe.com/v1/$path" -Headers $headers -Body $body}; function Stripe-Get($path){Invoke-RestMethod -Method Get -Uri "https://api.stripe.com/v1/$path" -Headers $headers}; if (-not $state.product_id){Log 'creating product'; $p=Stripe-Post 'products' @{name='Tip Jar'}; $state.product_id=$p.id; Save-State}; if (-not $state.price_1_id){Log 'creating price 1'; $pr=Stripe-Post 'prices' @{unit_amount=100; currency=$currency; product=$state.product_id}; $state.price_1_id=$pr.id; Save-State}; if (-not $state.price_5_id){Log 'creating price 5'; $pr=Stripe-Post 'prices' @{unit_amount=500; currency=$currency; product=$state.product_id}; $state.price_5_id=$pr.id; Save-State}; if (-not $state.link_1_id){Log 'creating payment link 1'; $pl=Stripe-Post 'payment_links' @{"line_items[0][price]"=$state.price_1_id; "line_items[0][quantity]"=1}; $state.link_1_id=$pl.id; $state.link_1_url=$pl.url; Save-State}; if (-not $state.link_5_id){Log 'creating payment link 5'; $pl=Stripe-Post 'payment_links' @{"line_items[0][price]"=$state.price_5_id; "line_items[0][quantity]"=1}; $state.link_5_id=$pl.id; $state.link_5_url=$pl.url; Save-State}; if (-not $state.link_1_url){$pl=Stripe-Get "payment_links/$($state.link_1_id)"; $state.link_1_url=$pl.url; Save-State}; if (-not $state.link_5_url){$pl=Stripe-Get "payment_links/$($state.link_5_id)"; $state.link_5_url=$pl.url; Save-State}; $link1=$state.link_1_url; $link5=$state.link_5_url; $qr1=Join-Path $qrDir 'tip_1nzd.png'; $qr5=Join-Path $qrDir 'tip_5nzd.png'; Invoke-WebRequest -Uri "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=$([uri]::EscapeDataString($link1))" -OutFile $qr1 | Out-Null; Invoke-WebRequest -Uri "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=$([uri]::EscapeDataString($link5))" -OutFile $qr5 | Out-Null; $landing=Join-Path $siteDir 'index.html'; $landingHtml=@"
+<!doctype html>
+<html lang=\"en\">
+<head><meta charset=\"utf-8\"><title>$brand Tip Jar</title></head>
 <body>
-  <h1>🪙 Claim 500 KelpCoin</h1>
-  <p>Fill in your wallet address. Optional: enter a referrer’s wallet to earn bonus KELP.</p>
-  <iframe 
-    src="https://docs.google.com/forms/d/e/1FAIpQLSclYfRXBxHoDBjpoHCoKM2_lm8VkxN8FjqmkOeK5kqxiOMW9A/viewform?embedded=true"
-    allowfullscreen>
-  </iframe>
+<h1>$brand Tip Jar</h1>
+<p>$lockedCopy</p>
+<ul>
+<li><a href=\"$link1\">Tip 1 NZD</a></li>
+<li><a href=\"$link5\">Tip 5 NZD</a></li>
+</ul>
+<img src=\"qr/tip_1nzd.png\" alt=\"QR 1 NZD\">
+<img src=\"qr/tip_5nzd.png\" alt=\"QR 5 NZD\">
 </body>
 </html>
+"@; $landingHtml | Set-Content -Path $landing -Encoding UTF8; $eventsPath=Join-Path $eventsDir 'events.jsonl'; if (-not (Test-Path $eventsPath)){New-Item -ItemType File -Path $eventsPath | Out-Null}; $publishScript=Join-Path $scriptsDir 'publish.ps1'; @"
+param([string]\$Reason='scheduled')
+\$ErrorActionPreference='Stop'
+function LogLine(\$m){\$ts=Get-Date -Format s; Add-Content -Path '$log' -Value "\$ts \$m"}
+\$payload=@{content="\$Reason`n$lockedCopy`nTip 1 NZD: $link1`nTip 5 NZD: $link5"} | ConvertTo-Json
+Invoke-RestMethod -Method Post -Uri '$env:BROWNEYE_DISCORD_WEBHOOK_URL' -ContentType 'application/json' -Body \$payload | Out-Null
+\$evt=@{type='publish'; reason=\$Reason; ts=(Get-Date).ToString('o'); link1='$link1'; link5='$link5'} | ConvertTo-Json -Compress
+Add-Content -Path '$eventsPath' -Value \$evt
+LogLine "publish \$Reason"
+"@ | Set-Content -Path $publishScript -Encoding UTF8; $receiverScript=Join-Path $scriptsDir 'receiver.ps1'; @"
+\$ErrorActionPreference='Stop'
+function LogLine(\$m){\$ts=Get-Date -Format s; Add-Content -Path '$log' -Value "\$ts \$m"}
+\$listener=New-Object System.Net.HttpListener
+\$listener.Prefixes.Add('http://127.0.0.1:8888/stripe/webhook/')
+\$listener.Start()
+LogLine 'receiver started'
+while (\$true){
+  \$context=\$listener.GetContext()
+  \$req=\$context.Request
+  \$bodyReader=New-Object System.IO.StreamReader(\$req.InputStream)
+  \$payload=\$bodyReader.ReadToEnd()
+  \$bodyReader.Close()
+  \$sigHeader=\$req.Headers['Stripe-Signature']
+  \$tsPart=($sigHeader -split ',') | Where-Object {\$_ -like 't=*'}
+  \$sigPart=($sigHeader -split ',') | Where-Object {\$_ -like 'v1=*'}
+  \$tsVal=\$tsPart -replace 't=',''
+  \$sigVal=\$sigPart -replace 'v1=',''
+  \$signed=\"\$tsVal.\$payload\"
+  \$hmac=New-Object System.Security.Cryptography.HMACSHA256([Text.Encoding]::UTF8.GetBytes('$env:BROWNEYE_STRIPE_WEBHOOK_SECRET'))
+  \$hash=\$hmac.ComputeHash([Text.Encoding]::UTF8.GetBytes(\$signed))
+  \$hex=([BitConverter]::ToString(\$hash)).Replace('-','').ToLower()
+  if (\$hex -ne \$sigVal){\$context.Response.StatusCode=400; \$context.Response.Close(); LogLine 'invalid signature'; continue}
+  \$evt=\$payload | ConvertFrom-Json
+  \$evtLine=@{type='stripe'; ts=(Get-Date).ToString('o'); event=\$evt.type; id=\$evt.id} | ConvertTo-Json -Compress
+  Add-Content -Path '$eventsPath' -Value \$evtLine
+  if (\$evt.type -eq 'checkout.session.completed' -or \$evt.type -eq 'payment_intent.succeeded'){
+    \$payloadOut=@{content="Thanks for the support. $lockedCopy"} | ConvertTo-Json
+    Invoke-RestMethod -Method Post -Uri '$env:BROWNEYE_DISCORD_WEBHOOK_URL' -ContentType 'application/json' -Body \$payloadOut | Out-Null
+    LogLine "thank you posted \$($evt.type)"
+  }
+  \$context.Response.StatusCode=200
+  \$context.Response.Close()
+}
+"@ | Set-Content -Path $receiverScript -Encoding UTF8; $receiverAction=New-ScheduledTaskAction -Execute 'powershell.exe' -Argument "-NoProfile -ExecutionPolicy Bypass -File `"$receiverScript`""; $receiverTrigger=New-ScheduledTaskTrigger -AtStartup; $receiverSettings=New-ScheduledTaskSettingsSet -RestartCount 999 -RestartInterval (New-TimeSpan -Minutes 1) -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries; $receiverPrincipal=New-ScheduledTaskPrincipal -UserId $env:USERNAME -LogonType S4U -RunLevel Highest; $receiverTaskName='BrownEye_TipJar_Receiver'; Register-ScheduledTask -TaskName $receiverTaskName -Action $receiverAction -Trigger $receiverTrigger -Settings $receiverSettings -Principal $receiverPrincipal -Force | Out-Null; $pubAction=New-ScheduledTaskAction -Execute 'powershell.exe' -Argument "-NoProfile -ExecutionPolicy Bypass -File `"$publishScript`" -Reason scheduled"; $pubTrigger=New-ScheduledTaskTrigger -Daily -At 09:00; $pubSettings=New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries; $pubPrincipal=New-ScheduledTaskPrincipal -UserId $env:USERNAME -LogonType S4U -RunLevel Highest; $pubTaskName='BrownEye_TipJar_DailyPublish'; Register-ScheduledTask -TaskName $pubTaskName -Action $pubAction -Trigger $pubTrigger -Settings $pubSettings -Principal $pubPrincipal -Force | Out-Null; Start-Process -WindowStyle Hidden -FilePath 'powershell.exe' -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$receiverScript`"" | Out-Null; & $publishScript -Reason manual | Out-Null; try {Stripe-Get 'balance' | Out-Null; Log 'stripe auth ok'} catch {Log 'stripe auth failed'; throw}; $testPayload='{"id":"evt_test","type":"checkout.session.completed"}'; $ts=[int][DateTimeOffset]::UtcNow.ToUnixTimeSeconds(); $signed="$ts.$testPayload"; $hmac=New-Object System.Security.Cryptography.HMACSHA256([Text.Encoding]::UTF8.GetBytes($env:BROWNEYE_STRIPE_WEBHOOK_SECRET)); $hash=$hmac.ComputeHash([Text.Encoding]::UTF8.GetBytes($signed)); $hex=([BitConverter]::ToString($hash)).Replace('-','').ToLower(); $sigHeader="t=$ts,v1=$hex"; Invoke-RestMethod -Method Post -Uri 'http://127.0.0.1:8888/stripe/webhook/' -Headers @{ 'Stripe-Signature'=$sigHeader } -Body $testPayload -ContentType 'application/json' | Out-Null; if (-not (Test-Path $log)){throw 'log missing'}; Write-Host 'TIPJAR READY'; Write-Host "PaymentLink_1NZD: $link1"; Write-Host "PaymentLink_5NZD: $link5"; Write-Host "LandingPage: $landing"; Write-Host "QR_1NZD: $qr1"; Write-Host "QR_5NZD: $qr5"; Write-Host "Task_Receiver: $receiverTaskName"; Write-Host "Task_DailyPublisher: $pubTaskName"; Write-Host "Log: $log" }
