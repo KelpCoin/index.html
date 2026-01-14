@@ -3,42 +3,220 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Claim 500 KelpCoin</title>
+  <title>Money-Now Loop — 1000x Revenue Sprint</title>
   <style>
+    :root {
+      color-scheme: dark;
+    }
     body {
       font-family: 'Segoe UI', sans-serif;
-      background-color: #f0fdf4;
+      background: radial-gradient(circle at top, #1d4ed8, transparent 55%),
+        linear-gradient(135deg, #0f172a, #1e293b 55%, #020617);
+      color: #e2e8f0;
       display: flex;
       flex-direction: column;
       align-items: center;
       margin: 0;
-      padding: 40px;
+      padding: 52px 20px 72px;
     }
     h1 {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
+      font-size: clamp(2.2rem, 3vw, 3.1rem);
+      margin-bottom: 0.25rem;
+      text-align: center;
+    }
+    h2 {
+      margin: 0 0 12px;
     }
     p {
       font-size: 1rem;
-      margin-bottom: 2rem;
-      color: #555;
+      margin: 0 0 1rem;
+      color: #cbd5f5;
+      text-align: center;
     }
-    iframe {
-      border: none;
-      width: 100%;
-      max-width: 700px;
-      height: 800px;
-      border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    .card {
+      width: min(980px, 100%);
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      border-radius: 20px;
+      padding: 32px;
+      box-shadow: 0 30px 70px rgba(2, 6, 23, 0.55);
+      backdrop-filter: blur(10px);
+      margin-top: 28px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin: 20px 0;
+    }
+    .pill {
+      background: rgba(59, 130, 246, 0.2);
+      border: 1px solid rgba(99, 102, 241, 0.7);
+      border-radius: 999px;
+      padding: 6px 16px;
+      font-size: 0.9rem;
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      justify-content: center;
+      color: #e0e7ff;
+    }
+    .hero {
+      font-size: 1.05rem;
+      line-height: 1.6;
+      margin: 12px 0 22px;
+    }
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin: 18px 0 26px;
+    }
+    .metric {
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      border-radius: 14px;
+      padding: 14px;
+      text-align: left;
+    }
+    .metric span {
+      display: block;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #38bdf8;
+    }
+    .section-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin: 0 0 12px;
+    }
+    pre {
+      white-space: pre-wrap;
+      background: #0b1120;
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      border-radius: 12px;
+      padding: 16px;
+      color: #e2e8f0;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      overflow-x: auto;
+    }
+    code {
+      font-family: "Cascadia Mono", "Fira Code", monospace;
+    }
+    .cta {
+      background: linear-gradient(90deg, #22c55e, #38bdf8);
+      color: #0b1120;
+      padding: 14px 20px;
+      border-radius: 12px;
+      font-weight: 800;
+      text-align: center;
+      margin-top: 18px;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+    .footer-note {
+      margin-top: 20px;
+      font-size: 0.85rem;
+      color: #94a3b8;
+      text-align: center;
+    }
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
     }
   </style>
 </head>
 <body>
-  <h1>🪙 Claim 500 KelpCoin</h1>
-  <p>Fill in your wallet address. Optional: enter a referrer’s wallet to earn bonus KELP.</p>
-  <iframe 
-    src="https://docs.google.com/forms/d/e/1FAIpQLSclYfRXBxHoDBjpoHCoKM2_lm8VkxN8FjqmkOeK5kqxiOMW9A/viewform?embedded=true"
-    allowfullscreen>
-  </iframe>
+  <div class="badge-row">
+    <div class="pill">SILO: A MTG / B Amplissa / C Markets</div>
+    <div class="pill">Revenue Target: 1000x Sprint</div>
+    <div class="pill">ChokePoint: Discord #money-now</div>
+  </div>
+  <h1>Money-Now Loop: 1000x Revenue Sprint</h1>
+  <p class="hero">All the speed, none of the chaos — a zero-fluff execution loop built to multiply your current revenue by 1000x with daily compounding actions, direct payment rails, and a single choke point that closes fast.</p>
+  <div class="card">
+    <h2 class="section-title">Offer (1 sentence)</h2>
+    <p>I sell the 10-day “1000x Revenue Sprint” that installs a compounding daily outbound system, a conversion-optimized offer page, and instant payment rails so you can close premium clients at scale.</p>
+
+    <div class="metrics">
+      <div class="metric">
+        <span>10 Days</span>
+        Sprint duration with daily ship targets.
+      </div>
+      <div class="metric">
+        <span>3 Channels</span>
+        Outbound loop, offer page, payments.
+      </div>
+      <div class="metric">
+        <span>1000x</span>
+        Revenue target through compounding closes.
+      </div>
+    </div>
+
+    <h2 class="section-title">PaymentRail (Wise / Stripe / PayPal)</h2>
+    <div class="grid">
+      <div class="pill">Wise: https://wise.com/pay/me/browneyecortex</div>
+      <div class="pill">Stripe: https://buy.stripe.com/browneyecortex</div>
+      <div class="pill">PayPal: https://paypal.me/browneyecortex</div>
+    </div>
+
+    <h2 class="section-title">ChokePoint</h2>
+    <p><strong>Discord channel:</strong> #money-now</p>
+
+    <h2 class="section-title">1) Final CTA Copy (for #money-now)</h2>
+    <pre><code>⚡ 1000x REVENUE SPRINT — 10 days to premium client velocity.
+-SILO: A MTG / B Amplissa / C Markets
+-Offer: I install your compounding outbound loop + offer page + instant payments so you can scale premium closes fast.
+-Pick your rail: Wise https://wise.com/pay/me/browneyecortex | Stripe https://buy.stripe.com/browneyecortex | PayPal https://paypal.me/browneyecortex
+-Then reply “PAID” + your email. I DM the intake + Day 1 execution stack in 10 minutes.</code></pre>
+
+    <h2 class="section-title">2) Pinned Discord Post</h2>
+    <pre><code>📌 START HERE: 1000x Revenue Sprint (10 days)
+What you get:
+1) Daily outbound scripts + lead list engine
+2) Premium offer page + checkout links
+3) Daily 15-min velocity review to remove blocks
+
+How to join:
+1) Pay: Wise https://wise.com/pay/me/browneyecortex | Stripe https://buy.stripe.com/browneyecortex | PayPal https://paypal.me/browneyecortex
+2) Post “PAID” + your email in #money-now
+3) I DM the intake + Day 1 execution stack within 10 minutes
+
+This is SILO: A MTG / B Amplissa / C Markets.
+First 10 spots only. Start today.</code></pre>
+
+    <h2 class="section-title">3) ONE-SHOT PowerShell Bootstrap</h2>
+    <pre><code>powershell -NoProfile -ExecutionPolicy Bypass -Command "$dir='C:\BrownEyeCortex'; New-Item -ItemType Directory -Force -Path $dir | Out-Null; @'
+CTA COPY (Discord #money-now)
+⚡ 1000x REVENUE SPRINT — 10 days to premium client velocity.
+-SILO: A MTG / B Amplissa / C Markets
+-Offer: I install your compounding outbound loop + offer page + instant payments so you can scale premium closes fast.
+-Pick your rail: Wise https://wise.com/pay/me/browneyecortex | Stripe https://buy.stripe.com/browneyecortex | PayPal https://paypal.me/browneyecortex
+-Then reply “PAID” + your email. I DM the intake + Day 1 execution stack in 10 minutes.
+'@ | Set-Content -Path (Join-Path $dir 'cta.txt'); @'
+PINNED DISCORD POST
+📌 START HERE: 1000x Revenue Sprint (10 days)
+What you get:
+1) Daily outbound scripts + lead list engine
+2) Premium offer page + checkout links
+3) Daily 15-min velocity review to remove blocks
+
+How to join:
+1) Pay: Wise https://wise.com/pay/me/browneyecortex | Stripe https://buy.stripe.com/browneyecortex | PayPal https://paypal.me/browneyecortex
+2) Post “PAID” + your email in #money-now
+3) I DM the intake + Day 1 execution stack within 10 minutes
+
+This is SILO: A MTG / B Amplissa / C Markets.
+First 10 spots only. Start today.
+'@ | Set-Content -Path (Join-Path $dir 'pinned.txt'); @'
+RUN COMMAND
+notepad C:\BrownEyeCortex\cta.txt
+'@ | Set-Content -Path (Join-Path $dir 'run.txt'); Write-Host 'Assets written to C:\BrownEyeCortex'; Write-Host 'Run: notepad C:\BrownEyeCortex\cta.txt'</code></pre>
+    <div class="cta">Ship it now: pin the post, drop the CTA, collect payment.</div>
+    <div class="footer-note">Assets are ready to paste into your Discord #money-now channel.</div>
+  </div>
 </body>
 </html>
