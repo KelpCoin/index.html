@@ -3,42 +3,211 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Claim 500 KelpCoin</title>
+  <title>Money-Now Prompt Pack</title>
   <style>
+    :root {
+      color-scheme: light;
+      --bg: #f7f6fb;
+      --card: #ffffff;
+      --text: #1f1f29;
+      --muted: #5d5d6e;
+      --accent: #5b21b6;
+      --accent-soft: #ede9fe;
+      --border: #e3e1ee;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f0fdf4;
+      margin: 0;
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .wrap {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 48px 20px 72px;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      margin: 0;
-      padding: 40px;
+      gap: 32px;
     }
+
+    header {
+      background: linear-gradient(135deg, #ede9fe 0%, #fdf4ff 100%);
+      border-radius: 20px;
+      padding: 32px;
+      box-shadow: 0 12px 30px rgba(91, 33, 182, 0.12);
+    }
+
     h1 {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
+      margin: 0 0 12px;
+      font-size: clamp(2rem, 2vw + 1.6rem, 2.8rem);
     }
-    p {
-      font-size: 1rem;
-      margin-bottom: 2rem;
-      color: #555;
+
+    header p {
+      margin: 0;
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 720px;
     }
-    iframe {
-      border: none;
-      width: 100%;
-      max-width: 700px;
-      height: 800px;
-      border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 28px;
+      box-shadow: 0 16px 32px rgba(31, 31, 41, 0.08);
+    }
+
+    h2 {
+      margin: 0 0 16px;
+      font-size: 1.4rem;
+    }
+
+    ol {
+      margin: 0;
+      padding-left: 24px;
+      display: grid;
+      gap: 12px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    ol li {
+      padding-left: 8px;
+    }
+
+    .action-plan {
+      display: grid;
+      gap: 20px;
+    }
+
+    .action-row {
+      display: grid;
+      gap: 8px;
+    }
+
+    .label {
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      background: var(--accent-soft);
+      border-radius: 999px;
+      color: var(--accent);
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .hint {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.98rem;
+      line-height: 1.6;
+    }
+
+    .cta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .cta span {
+      background: #111827;
+      color: #fff;
+      padding: 10px 16px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    @media (max-width: 640px) {
+      header,
+      .card {
+        padding: 22px;
+      }
+
+      .cta span {
+        width: 100%;
+        text-align: center;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>🪙 Claim 500 KelpCoin</h1>
-  <p>Fill in your wallet address. Optional: enter a referrer’s wallet to earn bonus KELP.</p>
-  <iframe 
-    src="https://docs.google.com/forms/d/e/1FAIpQLSclYfRXBxHoDBjpoHCoKM2_lm8VkxN8FjqmkOeK5kqxiOMW9A/viewform?embedded=true"
-    allowfullscreen>
-  </iframe>
+  <main class="wrap">
+    <header>
+      <h1>Money-Now Prompt Pack</h1>
+      <p>
+        Copy/paste prompts engineered to produce concrete deliverables, plus the exact action plan
+        to get the system live fast.
+      </p>
+    </header>
+
+    <section class="card">
+      <h2>20 Money-Now Prompts</h2>
+      <ol>
+        <li>Given SILO = (A MTG / B Amplissa / C Markets), pick ONE product I can sell in 24 hours and write the exact CTA copy + exact placement (Instagram bio / Discord welcome / pinned post). No options, just the best one.</li>
+        <li>Build me the ONE-SHOT PowerShell bootstrap that turns payments into automatic fulfillment for that product (Stripe/Wise/PayPal -&gt; deliverable/role). Output only the bootstrap and the run command.</li>
+        <li>Write the exact “what you get” deliverable template for the first sale (1 page max), and make it something I can generate repeatedly with minimal effort.</li>
+        <li>Tell me exactly what inputs you need from me to make this live in under 30 minutes. Limit to 5 items. If you need a link, say “paste link”.</li>
+        <li>Design the smallest closed loop where each sale creates a public proof artifact that increases conversion (receipt screenshot blur rules, testimonial DM capture, leaderboard, or auto-post). Give the automation plan.</li>
+        <li>Audit my current stack assumptions and list the top 3 missing links that prevent money landing today. Then output the ONE bootstrap that fixes the biggest one.</li>
+        <li>Make a “pinned message” that converts for Discord, using my canonical tip-jar phrasing, and include a single payment link/handle. Keep it silo-clean.</li>
+        <li>Write the exact onboarding flow: user sees CTA -&gt; pays -&gt; receives access -&gt; sees next upsell. No steps that require me to manually DM people.</li>
+        <li>Create a minimal dashboard spec: what files get written, what metrics get computed, what gets posted to Discord daily. Then output the script scaffold.</li>
+        <li>If you had to get me my first $100 NZD with what I already control (Instagram + Discord + Patreon), what would you ship today? Provide the concrete assets and bootstraps.</li>
+        <li>Turn my existing inventory/content into 10 micro-products priced $1-$5 that can be delivered automatically. Each must have a one-line fulfillment mechanism.</li>
+        <li>Give me the single most damaging thing I’m doing right now that kills conversion, and give me the replacement copy/process (not advice).</li>
+        <li>Assume I’m phone-only today. What is the plan that still works? Output the exact messages to post and where.</li>
+        <li>Assume Peggy contributes 15 minutes only. What should she do that increases revenue fastest without draining her?</li>
+        <li>Make a “no-thinking” daily routine for the system: what runs headless, what posts, what logs. No scheduling complexity, just one reliable cadence.</li>
+        <li>Give me a “proof pack” checklist: 10 screenshots/receipts I should collect that legally increase trust, and how to collect them passively.</li>
+        <li>Write the payment page text (Stripe product description / Wise note / PayPal note) that converts without making claims or guarantees.</li>
+        <li>Pick ONE place to put the permanent CTA forever. Tell me which one and why in one sentence. Then give me the exact final text.</li>
+        <li>Design the upsell ladder: $1 tip -&gt; $5 weekly -&gt; $20 monthly -&gt; $100 one-off. Give names, promises, and fulfillment for each.</li>
+        <li>What would you build if your only success metric was “money hits account this week” and you were allowed to ignore everything else? Ship it.</li>
+      </ol>
+    </section>
+
+    <section class="card action-plan">
+      <h2>Action Plan (Updated, Simple)</h2>
+      <div class="action-row">
+        <span class="label">Biggie</span>
+        <p class="hint">
+          Reply with just three things: (1) which silo (A/B/C), (2) which payment rail is live right now
+          (Stripe/Wise/PayPal) and the link/handle, (3) your single best distribution choke point (exact URL/channel).
+        </p>
+        <div class="cta">
+          <span>Silo: A / B / C</span>
+          <span>Payment rail + link</span>
+          <span>Choke point URL/channel</span>
+        </div>
+      </div>
+      <div class="action-row">
+        <span class="label">Peggy</span>
+        <p class="hint">
+          Reply with a binary: “15 minutes yes/no” and, if yes, which she can do: voice clip, short text post, or approve copy.
+        </p>
+        <div class="cta">
+          <span>15 minutes: Yes / No</span>
+          <span>Choose: voice clip / text post / approve copy</span>
+        </div>
+      </div>
+    </section>
+  </main>
 </body>
 </html>
