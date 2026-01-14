@@ -3,42 +3,1126 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Claim 500 KelpCoin</title>
+  <title>BrownEye MoneyLoops - Finance and Crypto Artifact Lake</title>
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f0fdf4;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      font-family: Consolas, "Courier New", monospace;
+      background-color: #0b1020;
+      color: #e6edf3;
       margin: 0;
-      padding: 40px;
+      padding: 32px;
+    }
+    h1, h2 {
+      font-family: "Segoe UI", Arial, sans-serif;
+      font-weight: 600;
     }
     h1 {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
+      font-size: 24px;
+      margin-bottom: 12px;
     }
-    p {
-      font-size: 1rem;
-      margin-bottom: 2rem;
-      color: #555;
+    h2 {
+      font-size: 18px;
+      margin-top: 28px;
     }
-    iframe {
-      border: none;
-      width: 100%;
-      max-width: 700px;
-      height: 800px;
-      border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    pre {
+      background: #111827;
+      border: 1px solid #1f2937;
+      padding: 16px;
+      border-radius: 8px;
+      overflow-x: auto;
+      white-space: pre-wrap;
+    }
+    .note {
+      color: #9ca3af;
+      font-size: 12px;
     }
   </style>
 </head>
 <body>
-  <h1>🪙 Claim 500 KelpCoin</h1>
-  <p>Fill in your wallet address. Optional: enter a referrer’s wallet to earn bonus KELP.</p>
-  <iframe 
-    src="https://docs.google.com/forms/d/e/1FAIpQLSclYfRXBxHoDBjpoHCoKM2_lm8VkxN8FjqmkOeK5kqxiOMW9A/viewform?embedded=true"
-    allowfullscreen>
-  </iframe>
+  <h1>BrownEye MoneyLoops - Finance and Crypto Artifact Lake</h1>
+  <div class="note">ASCII only output. No placeholders. One-shot bootstrap included.</div>
+
+  <h2>FILES TO BE WRITTEN</h2>
+  <pre>D:\BrownEyeLake\shared\index\lake.db
+D:\BrownEyeLake\shared\bin\scripts\lake_query.ps1
+D:\BrownEyeLake\shared\bin\scripts\lake_query.py
+D:\BrownEyeLake\shared\bin\scripts\verify.ps1
+D:\BrownEyeLake\shared\bin\scripts\start_cloudflared.ps1
+D:\BrownEyeLake\shared\bin\services\lake_lib.py
+D:\BrownEyeLake\shared\bin\services\revenue_sources.py
+D:\BrownEyeLake\shared\bin\services\stencil_generator.py
+D:\BrownEyeLake\shared\bin\services\stripe_create_links.py
+D:\BrownEyeLake\shared\bin\services\webhook_receiver.py
+D:\BrownEyeLake\shared\bin\services\discord_bot.py
+D:\BrownEyeLake\shared\bin\services\daily_publisher.py
+D:\BrownEyeLake\shared\bin\services\telemetry_scorer.py
+D:\BrownEyeLake\silo_finance\publish\config.json
+D:\BrownEyeLake\silo_finance\stencils\*.json (100 files)
+D:\BrownEyeLake\silo_finance\products\*.json (100 files)
+D:\BrownEyeLake\secrets\stripe_secret.sec
+D:\BrownEyeLake\secrets\stripe_webhook_secret.sec
+D:\BrownEyeLake\secrets\discord_bot_token.sec
+D:\BrownEyeLake\secrets\discord_client_secret.sec
+D:\BrownEyeLake\secrets\openai_api_key.sec
+D:\BrownEyeLake\secrets\cloudflared_tunnel_token.sec</pre>
+
+  <h2>ONE-SHOT BOOTSTRAP POWERSHELL</h2>
+  <pre>Set-StrictMode -Version Latest
+$ErrorActionPreference = "Stop"
+
+$Base = "D:\\BrownEyeLake"
+$Silo = Join-Path $Base "silo_finance"
+$Shared = Join-Path $Base "shared"
+$Secrets = Join-Path $Base "secrets"
+$Bin = Join-Path $Shared "bin"
+$Scripts = Join-Path $Bin "scripts"
+$Services = Join-Path $Bin "services"
+$Index = Join-Path $Shared "index"
+$Logs = Join-Path $Shared "logs"
+
+$Dirs = @(
+  $Base,
+  $Silo,
+  (Join-Path $Silo "incoming"),
+  (Join-Path $Silo "stencils"),
+  (Join-Path $Silo "products"),
+  (Join-Path $Silo "publish"),
+  (Join-Path $Silo "telemetry"),
+  (Join-Path $Silo "logs"),
+  (Join-Path $Silo "archive"),
+  $Shared,
+  $Bin,
+  $Scripts,
+  $Services,
+  $Index,
+  $Logs,
+  $Secrets
+)
+
+foreach ($d in $Dirs) { New-Item -ItemType Directory -Path $d -Force | Out-Null }
+
+function Write-File {
+  param([string]$Path, [string]$Content)
+  $parent = Split-Path $Path
+  if (-not (Test-Path $parent)) { New-Item -ItemType Directory -Path $parent -Force | Out-Null }
+  Set-Content -Path $Path -Value $Content -Encoding ASCII
+}
+
+function Get-SecretFile {
+  param([string]$Name, [string]$Prompt)
+  $path = Join-Path $Secrets ($Name + ".sec")
+  if (-not (Test-Path $path)) {
+    $sec = Read-Host $Prompt -AsSecureString
+    $enc = $sec | ConvertFrom-SecureString
+    Set-Content -Path $path -Value $enc -Encoding ASCII
+  }
+  return $path
+}
+
+function Get-SecretValue {
+  param([string]$Name)
+  $path = Join-Path $Secrets ($Name + ".sec")
+  if (-not (Test-Path $path)) { return "" }
+  $sec = Get-Content -Path $path | ConvertTo-SecureString
+  return [System.Net.NetworkCredential]::new("", $sec).Password
+}
+
+$null = Get-SecretFile -Name "stripe_secret" -Prompt "Enter Stripe Secret Key (sk_live or sk_test)"
+$null = Get-SecretFile -Name "stripe_webhook_secret" -Prompt "Enter Stripe Webhook Secret (whsec)"
+$null = Get-SecretFile -Name "discord_bot_token" -Prompt "Enter Discord Bot Token"
+$null = Get-SecretFile -Name "discord_client_secret" -Prompt "Enter Discord OAuth Client Secret"
+$null = Get-SecretFile -Name "openai_api_key" -Prompt "Enter OpenAI API Key (optional, press Enter to skip)"
+$null = Get-SecretFile -Name "cloudflared_tunnel_token" -Prompt "Enter Cloudflared Tunnel Token (optional, press Enter to skip)"
+
+$ConfigPath = Join-Path $Silo "publish\\config.json"
+if (-not (Test-Path $ConfigPath)) {
+  $config = @{
+    currency = "NZD"
+    price_cents = 100
+    discord_guild_id = (Read-Host "Enter Discord Guild ID")
+    discord_default_role_id = (Read-Host "Enter Discord Default Role ID for entitlements")
+    discord_paid_channel_id = (Read-Host "Enter Discord Paid Channel ID")
+    discord_client_id = (Read-Host "Enter Discord OAuth Client ID")
+    webhook_base_url = (Read-Host "Enter Webhook Base URL (https://yourdomain.example)")
+    stripe_success_url = (Read-Host "Enter Stripe Success URL (https://yourdomain.example/success)")
+    stripe_cancel_url = (Read-Host "Enter Stripe Cancel URL (https://yourdomain.example/cancel)")
+  } | ConvertTo-Json -Depth 6
+  Write-File -Path $ConfigPath -Content $config
+}
+
+$Venv = Join-Path $Bin "venv"
+if (-not (Test-Path $Venv)) {
+  python -m venv $Venv
+}
+$Pip = Join-Path $Venv "Scripts\\pip.exe"
+& $Pip install --upgrade pip
+& $Pip install stripe flask requests discord.py python-dotenv pywin32
+
+$LakeLib = @'
+import json
+import os
+import sqlite3
+import subprocess
+from datetime import datetime, timezone
+
+BASE = r"D:\\BrownEyeLake"
+SILO = os.path.join(BASE, "silo_finance")
+SECRETS = os.path.join(BASE, "secrets")
+INDEX_DB = os.path.join(BASE, "shared", "index", "lake.db")
+LOGS = os.path.join(BASE, "silo_finance", "logs")
+
+REQUIRED_FIELDS = [
+    "id",
+    "silo",
+    "type",
+    "title",
+    "created_utc",
+    "inputs",
+    "outputs",
+    "monetization_hook",
+    "publish_targets",
+    "rebuild_command",
+    "evidence_paths",
+    "confidence",
+    "owner",
+]
+
+os.makedirs(LOGS, exist_ok=True)
+
+
+def utc_now():
+    return datetime.now(timezone.utc).isoformat()
+
+
+def log_line(name, message):
+    ts = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+    path = os.path.join(LOGS, f"{name}.log")
+    with open(path, "a", encoding="ascii") as f:
+        f.write(f"{ts} {message}\n")
+
+
+def read_config():
+    path = os.path.join(SILO, "publish", "config.json")
+    with open(path, "r", encoding="ascii") as f:
+        return json.load(f)
+
+
+def secret_path(name):
+    return os.path.join(SECRETS, f"{name}.sec")
+
+
+def read_secret(name):
+    path = secret_path(name)
+    if not os.path.exists(path):
+        return ""
+    cmd = [
+        "powershell",
+        "-NoProfile",
+        "-Command",
+        f"Get-Content -Path '{path}' | ConvertTo-SecureString | "
+        f"ForEach-Object {{ [System.Net.NetworkCredential]::new('', $_).Password }}",
+    ]
+    result = subprocess.run(cmd, capture_output=True, text=True)
+    return result.stdout.strip()
+
+
+def ensure_db():
+    os.makedirs(os.path.dirname(INDEX_DB), exist_ok=True)
+    conn = sqlite3.connect(INDEX_DB)
+    cur = conn.cursor()
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS artifacts (
+            id TEXT PRIMARY KEY,
+            silo TEXT,
+            type TEXT,
+            title TEXT,
+            created_utc TEXT,
+            inputs TEXT,
+            outputs TEXT,
+            monetization_hook TEXT,
+            publish_targets TEXT,
+            rebuild_command TEXT,
+            evidence_paths TEXT,
+            confidence REAL,
+            owner TEXT,
+            raw_json TEXT
+        )
+    """)
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS stencils (
+            id TEXT PRIMARY KEY,
+            silo TEXT,
+            type TEXT,
+            title TEXT,
+            created_utc TEXT,
+            inputs TEXT,
+            outputs TEXT,
+            monetization_hook TEXT,
+            publish_targets TEXT,
+            rebuild_command TEXT,
+            evidence_paths TEXT,
+            confidence REAL,
+            owner TEXT,
+            raw_json TEXT
+        )
+    """)
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS products (
+            id TEXT PRIMARY KEY,
+            sku_id TEXT,
+            price_cents INTEGER,
+            currency TEXT,
+            entitlement TEXT,
+            fulfillment TEXT,
+            telemetry_hooks TEXT,
+            raw_json TEXT
+        )
+    """)
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS events (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            event_type TEXT,
+            event_ts TEXT,
+            payload TEXT
+        )
+    """)
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS identity_map (
+            stripe_customer_id TEXT PRIMARY KEY,
+            discord_user_id TEXT,
+            created_utc TEXT
+        )
+    """)
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS claims (
+            claim_token TEXT PRIMARY KEY,
+            stripe_customer_id TEXT,
+            created_utc TEXT,
+            used INTEGER
+        )
+    """)
+    conn.commit()
+    conn.close()
+
+
+def upsert_event(event_type, payload):
+    ensure_db()
+    conn = sqlite3.connect(INDEX_DB)
+    cur = conn.cursor()
+    cur.execute(
+        "INSERT INTO events (event_type, event_ts, payload) VALUES (?, ?, ?)",
+        (event_type, utc_now(), json.dumps(payload))
+    )
+    conn.commit()
+    conn.close()
+
+
+def upsert_table(table, row):
+    ensure_db()
+    conn = sqlite3.connect(INDEX_DB)
+    cur = conn.cursor()
+    if table in ("stencils", "artifacts"):
+        cur.execute(
+            f"INSERT OR REPLACE INTO {table} (id, silo, type, title, created_utc, inputs, outputs, monetization_hook, publish_targets, rebuild_command, evidence_paths, confidence, owner, raw_json) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            (
+                row["id"],
+                row["silo"],
+                row["type"],
+                row["title"],
+                row["created_utc"],
+                json.dumps(row["inputs"]),
+                json.dumps(row["outputs"]),
+                row["monetization_hook"],
+                json.dumps(row["publish_targets"]),
+                row["rebuild_command"],
+                json.dumps(row["evidence_paths"]),
+                float(row["confidence"]),
+                row["owner"],
+                json.dumps(row),
+            )
+        )
+    elif table == "products":
+        cur.execute(
+            "INSERT OR REPLACE INTO products (id, sku_id, price_cents, currency, entitlement, fulfillment, telemetry_hooks, raw_json) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+            (
+                row["id"],
+                row["sku_id"],
+                int(row["price_cents"]),
+                row["currency"],
+                json.dumps(row["entitlement"]),
+                json.dumps(row["fulfillment"]),
+                json.dumps(row["telemetry_hooks"]),
+                json.dumps(row),
+            )
+        )
+    conn.commit()
+    conn.close()
+'@
+Write-File -Path (Join-Path $Services "lake_lib.py") -Content $LakeLib
+
+$RevenueSources = @'
+SOURCES = [
+    "Alpha Spread Scanner",
+    "Arbitrage Ladder",
+    "Airdrop Claim Pack",
+    "Altcoin Momentum Grid",
+    "Anchored VWAP Alerts",
+    "Bond Yield Pulse",
+    "Breakout Tape Watch",
+    "Central Bank Calendar",
+    "Chain Fee Heatmap",
+    "Cross Exchange Basis",
+    "Crypto Funding Radar",
+    "Daily Macro Brief",
+    "DeFi Safety Score",
+    "Derivatives Open Interest",
+    "Dollar Strength Map",
+    "Earnings Drift Tracker",
+    "ETF Flow Monitor",
+    "Event Driven Playbook",
+    "Exchange Inflow Alerts",
+    "Execution Slippage Scan",
+    "Factor Tilt Report",
+    "Fibonacci Reclaim Sheet",
+    "Fixed Income Curve",
+    "Flash Crash Detector",
+    "Futures Carry Monitor",
+    "Gamma Exposure Pulse",
+    "Gas Token Optimizer",
+    "Global Liquidity Gauge",
+    "Governance Vote Digest",
+    "Hedge Fund Positioning",
+    "High Yield Tracker",
+    "ICO Screening Pack",
+    "Implied Vol Surface",
+    "Insider Trade Radar",
+    "IPO Allocation Notes",
+    "Macro Risk Dashboard",
+    "Market Breadth Heat",
+    "Market Maker Signals",
+    "Mean Reversion Setups",
+    "Microcap Liquidity",
+    "MVRV Cycle Lens",
+    "News Sentiment Pulse",
+    "NFT Liquidity Watch",
+    "Onchain Whales",
+    "Options Skew Monitor",
+    "Overnight Gap Sheet",
+    "P2P Lending Yield",
+    "Pairs Trade Matrix",
+    "Perps Liquidation Map",
+    "Portfolio Hedge Kit",
+    "Pre Market Movers",
+    "Protocol Revenue Scan",
+    "Rate Cut Odds",
+    "Rebalance Window",
+    "Regulatory Change Log",
+    "Relative Strength Sheet",
+    "Risk Parity Calculator",
+    "Sector Rotation Map",
+    "Smart Money Tracker",
+    "Stablecoin Flow",
+    "Staking Yield Finder",
+    "Stat Arb Signals",
+    "Stock Buyback Watch",
+    "Supply Squeeze Radar",
+    "Swing Trade Journal",
+    "Tax Loss Harvest",
+    "Term Structure Watch",
+    "Treasury Auction Guide",
+    "Trend Continuation",
+    "Value Gap Scanner",
+    "Variance Risk Premium",
+    "VC Deal Flow",
+    "Volatility Breakout",
+    "Volume Profile Sheet",
+    "Wallet Clustering",
+    "Weekly Options Play",
+    "Whale Accumulation",
+    "Yield Curve Steepener",
+    "Yield Farming Map",
+    "Zero DTE Planner",
+    "Crypto ETF Tracker",
+    "Stables Depeg Watch",
+    "DEX Volume Pulse",
+    "Cross Chain Bridge",
+    "Layer Two Fees",
+    "Liquidity Pool Health",
+    "Token Unlock Calendar",
+    "Perpetual Basis",
+    "Spot Premium Radar",
+    "Exchange Reserve",
+    "Mining Profit Guide",
+    "Hashrate Trend",
+    "OTC Desk Insight",
+    "Treasury Buyback",
+    "FX Vol Skew",
+    "Equity Index Breadth",
+    "Credit Spread Lens",
+    "Crypto Governance Inbox",
+    "Token Velocity",
+    "Network Activity Pulse"
+]
+'@
+Write-File -Path (Join-Path $Services "revenue_sources.py") -Content $RevenueSources
+
+$StencilGen = @'
+import json
+import os
+from lake_lib import SILO, utc_now, ensure_db, upsert_table, log_line
+from revenue_sources import SOURCES
+
+STENCILS_DIR = os.path.join(SILO, "stencils")
+PRODUCTS_DIR = os.path.join(SILO, "products")
+PUBLISH_DIR = os.path.join(SILO, "publish")
+
+SILO_NAME = "finance"
+OWNER = "browneye"
+
+os.makedirs(STENCILS_DIR, exist_ok=True)
+os.makedirs(PRODUCTS_DIR, exist_ok=True)
+
+
+def slugify(text):
+    return "".join(ch.lower() if ch.isalnum() else "-" for ch in text).strip("-")
+
+
+def build_records():
+    config_path = os.path.join(PUBLISH_DIR, "config.json")
+    with open(config_path, "r", encoding="ascii") as f:
+        cfg = json.load(f)
+
+    for idx, name in enumerate(SOURCES, start=1):
+        sku_id = f"FIN-{idx:03d}"
+        slug = slugify(name)
+        base = {
+            "id": f"stencil-{sku_id}",
+            "silo": SILO_NAME,
+            "type": "stencil",
+            "title": name,
+            "created_utc": utc_now(),
+            "inputs": {
+                "source": "finance-crypto",
+                "sku_id": sku_id,
+                "name": name
+            },
+            "outputs": {
+                "artifact": f"product-{sku_id}",
+                "stencil_file": f"{slug}.json"
+            },
+            "monetization_hook": "stripe_payment_link",
+            "publish_targets": ["discord", "direct"],
+            "rebuild_command": f"python {os.path.join(os.path.dirname(__file__), 'stencil_generator.py')}",
+            "evidence_paths": [f"{slug}.json"],
+            "confidence": 0.82,
+            "owner": OWNER
+        }
+        stencil_path = os.path.join(STENCILS_DIR, f"{slug}.json")
+        with open(stencil_path, "w", encoding="ascii") as f:
+            json.dump(base, f, indent=2)
+        upsert_table("stencils", base)
+
+        product = {
+            "id": f"product-{sku_id}",
+            "sku_id": sku_id,
+            "price_cents": cfg.get("price_cents", 100),
+            "currency": cfg.get("currency", "NZD"),
+            "entitlement": {
+                "type": "discord_role",
+                "guild_id": cfg["discord_guild_id"],
+                "role_id": cfg["discord_default_role_id"],
+                "channel_id": cfg["discord_paid_channel_id"]
+            },
+            "fulfillment": {
+                "type": "discord_dm",
+                "asset_path": f"{slug}.json",
+                "delivery": "automatic"
+            },
+            "telemetry_hooks": {
+                "on_sale": "event_sale",
+                "on_claim": "event_claim",
+                "on_delivery": "event_delivery"
+            }
+        }
+        product_path = os.path.join(PRODUCTS_DIR, f"{slug}.json")
+        with open(product_path, "w", encoding="ascii") as f:
+            json.dump(product, f, indent=2)
+        upsert_table("products", product)
+
+    log_line("stencil_generator", f"Generated {len(SOURCES)} stencils and products")
+
+
+if __name__ == "__main__":
+    ensure_db()
+    build_records()
+'@
+Write-File -Path (Join-Path $Services "stencil_generator.py") -Content $StencilGen
+
+$StripeLinks = @'
+import json
+import os
+import stripe
+from lake_lib import read_secret, read_config, log_line, upsert_event
+from revenue_sources import SOURCES
+
+
+def slugify(text):
+    return "".join(ch.lower() if ch.isalnum() else "-" for ch in text).strip("-")
+
+
+def main(dry_run=False):
+    cfg = read_config()
+    key = read_secret("stripe_secret")
+    if not key:
+        log_line("stripe_links", "Stripe secret missing")
+        if dry_run:
+            print("DRY-RUN: stripe key missing")
+            return
+        raise SystemExit("Stripe secret missing")
+    stripe.api_key = key
+
+    created = 0
+    for idx, name in enumerate(SOURCES, start=1):
+        sku_id = f"FIN-{idx:03d}"
+        slug = slugify(name)
+        if dry_run:
+            print(f"DRY-RUN: would create {sku_id} {slug}")
+            continue
+        product = stripe.Product.create(name=f"{sku_id} {name}", metadata={"sku_id": sku_id})
+        price = stripe.Price.create(
+            product=product.id,
+            unit_amount=int(cfg.get("price_cents", 100)),
+            currency=cfg.get("currency", "nzd")
+        )
+        link = stripe.PaymentLink.create(
+            line_items=[{"price": price.id, "quantity": 1}],
+            after_completion={
+                "type": "redirect",
+                "redirect": {"url": cfg["stripe_success_url"]}
+            },
+            metadata={"sku_id": sku_id, "slug": slug}
+        )
+        upsert_event("stripe_link", {"sku_id": sku_id, "link": link.url})
+        created += 1
+    log_line("stripe_links", f"Created {created} links")
+
+
+if __name__ == "__main__":
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--dry-run", action="store_true")
+    args = ap.parse_args()
+    main(dry_run=args.dry_run)
+'@
+Write-File -Path (Join-Path $Services "stripe_create_links.py") -Content $StripeLinks
+
+$Webhook = @'
+import json
+import os
+import secrets
+import sqlite3
+from flask import Flask, request, redirect
+import requests
+import stripe
+from lake_lib import read_secret, read_config, ensure_db, INDEX_DB, log_line, upsert_event
+
+app = Flask(__name__)
+
+
+def db_conn():
+    ensure_db()
+    return sqlite3.connect(INDEX_DB)
+
+
+def store_claim(stripe_customer_id):
+    token = secrets.token_urlsafe(24)
+    conn = db_conn()
+    cur = conn.cursor()
+    cur.execute(
+        "INSERT OR REPLACE INTO claims (claim_token, stripe_customer_id, created_utc, used) VALUES (?, ?, datetime('now'), 0)",
+        (token, stripe_customer_id),
+    )
+    conn.commit()
+    conn.close()
+    return token
+
+
+def mark_claim_used(token):
+    conn = db_conn()
+    cur = conn.cursor()
+    cur.execute("UPDATE claims SET used = 1 WHERE claim_token = ?", (token,))
+    conn.commit()
+    conn.close()
+
+
+def get_customer_for_claim(token):
+    conn = db_conn()
+    cur = conn.cursor()
+    cur.execute("SELECT stripe_customer_id, used FROM claims WHERE claim_token = ?", (token,))
+    row = cur.fetchone()
+    conn.close()
+    if not row:
+        return "", True
+    return row[0], bool(row[1])
+
+
+def set_identity(stripe_customer_id, discord_user_id):
+    conn = db_conn()
+    cur = conn.cursor()
+    cur.execute(
+        "INSERT OR REPLACE INTO identity_map (stripe_customer_id, discord_user_id, created_utc) VALUES (?, ?, datetime('now'))",
+        (stripe_customer_id, discord_user_id),
+    )
+    conn.commit()
+    conn.close()
+
+
+def assign_role(discord_user_id, guild_id, role_id, bot_token):
+    url = f"https://discord.com/api/v10/guilds/{guild_id}/members/{discord_user_id}/roles/{role_id}"
+    headers = {"Authorization": f"Bot {bot_token}", "Content-Type": "application/json"}
+    resp = requests.put(url, headers=headers)
+    return resp.status_code in (200, 204)
+
+
+@app.route("/health", methods=["GET"])
+def health():
+    return "ok", 200
+
+
+@app.route("/stripe/webhook", methods=["POST"])
+def stripe_webhook():
+    payload = request.data
+    sig = request.headers.get("Stripe-Signature", "")
+    whsec = read_secret("stripe_webhook_secret")
+    if not whsec:
+        return "missing webhook secret", 400
+    try:
+        event = stripe.Webhook.construct_event(payload, sig, whsec)
+    except Exception as exc:
+        log_line("webhook", f"stripe verify failed {exc}")
+        return "bad signature", 400
+
+    if event["type"] == "checkout.session.completed":
+        session = event["data"]["object"]
+        customer_id = session.get("customer", "")
+        if customer_id:
+            token = store_claim(customer_id)
+            cfg = read_config()
+            claim_url = f"{cfg['webhook_base_url']}/claim?token={token}"
+            upsert_event("claim_created", {"customer_id": customer_id, "claim_url": claim_url})
+            log_line("webhook", f"claim link {claim_url}")
+    return "ok", 200
+
+
+@app.route("/claim", methods=["GET"])
+def claim():
+    token = request.args.get("token", "")
+    customer_id, used = get_customer_for_claim(token)
+    if not customer_id or used:
+        return "invalid claim", 400
+    cfg = read_config()
+    redirect_uri = f"{cfg['webhook_base_url']}/oauth/callback"
+    client_id = cfg["discord_client_id"]
+    auth_url = (
+        "https://discord.com/api/oauth2/authorize"
+        f"?client_id={client_id}"
+        f"&redirect_uri={redirect_uri}"
+        "&response_type=code&scope=identify"
+        f"&state={token}"
+    )
+    return redirect(auth_url)
+
+
+@app.route("/oauth/callback", methods=["GET"])
+def oauth_callback():
+    code = request.args.get("code", "")
+    state = request.args.get("state", "")
+    customer_id, used = get_customer_for_claim(state)
+    if not customer_id or used:
+        return "invalid claim", 400
+    cfg = read_config()
+    redirect_uri = f"{cfg['webhook_base_url']}/oauth/callback"
+    data = {
+        "client_id": cfg["discord_client_id"],
+        "client_secret": read_secret("discord_client_secret"),
+        "grant_type": "authorization_code",
+        "code": code,
+        "redirect_uri": redirect_uri,
+        "scope": "identify",
+    }
+    headers = {"Content-Type": "application/x-www-form-urlencoded"}
+    token_resp = requests.post("https://discord.com/api/oauth2/token", data=data, headers=headers)
+    if token_resp.status_code != 200:
+        return "oauth failed", 400
+    access_token = token_resp.json().get("access_token", "")
+    user_resp = requests.get("https://discord.com/api/users/@me", headers={"Authorization": f"Bearer {access_token}"})
+    if user_resp.status_code != 200:
+        return "user fetch failed", 400
+    user_id = user_resp.json().get("id", "")
+    if not user_id:
+        return "user missing", 400
+    set_identity(customer_id, user_id)
+    mark_claim_used(state)
+    bot_token = read_secret("discord_bot_token")
+    ok = assign_role(user_id, cfg["discord_guild_id"], cfg["discord_default_role_id"], bot_token)
+    upsert_event("claim_bound", {"stripe_customer_id": customer_id, "discord_user_id": user_id, "role_assigned": ok})
+    return "claim complete", 200
+
+
+if __name__ == "__main__":
+    stripe.api_key = read_secret("stripe_secret")
+    port = int(os.environ.get("PORT", "8787"))
+    app.run(host="0.0.0.0", port=port)
+'@
+Write-File -Path (Join-Path $Services "webhook_receiver.py") -Content $Webhook
+
+$DiscordBot = @'
+import argparse
+import json
+import os
+from datetime import datetime
+import requests
+import discord
+from discord.ext import tasks
+from lake_lib import read_config, read_secret, log_line, upsert_event
+
+BASE = r"D:\\BrownEyeLake"
+cfg = read_config()
+TOKEN = read_secret("discord_bot_token")
+CHANNEL_ID = int(cfg["discord_paid_channel_id"])
+
+intents = discord.Intents.default()
+client = discord.Client(intents=intents)
+
+
+def load_products():
+    products_dir = os.path.join(BASE, "silo_finance", "products")
+    items = []
+    for name in os.listdir(products_dir):
+        if name.endswith(".json"):
+            path = os.path.join(products_dir, name)
+            with open(path, "r", encoding="ascii") as f:
+                items.append(json.load(f))
+    return items
+
+
+def dry_run_check():
+    if not TOKEN:
+        raise SystemExit("Discord bot token missing")
+    resp = requests.get(
+        "https://discord.com/api/v10/users/@me",
+        headers={"Authorization": f"Bot {TOKEN}"}
+    )
+    if resp.status_code != 200:
+        raise SystemExit("Discord auth failed")
+    print("Discord auth ok")
+
+
+@client.event
+async def on_ready():
+    log_line("discord_bot", f"Logged in as {client.user}")
+    if not daily_drop.is_running():
+        daily_drop.start()
+
+
+@tasks.loop(hours=24)
+async def daily_drop():
+    channel = client.get_channel(CHANNEL_ID)
+    if channel is None:
+        log_line("discord_bot", "Channel not found")
+        return
+    products = load_products()[:5]
+    lines = ["Daily finance drop is live:"]
+    for product in products:
+        lines.append(f"{product['sku_id']} - {product['id']}")
+    message = "\n".join(lines)
+    await channel.send(message)
+    upsert_event("daily_drop", {"ts": datetime.utcnow().isoformat(), "count": len(products)})
+
+
+if __name__ == "__main__":
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--dry-run", action="store_true")
+    args = ap.parse_args()
+    if args.dry_run:
+        dry_run_check()
+    else:
+        if not TOKEN:
+            raise SystemExit("Discord bot token missing")
+        client.run(TOKEN)
+'@
+Write-File -Path (Join-Path $Services "discord_bot.py") -Content $DiscordBot
+
+$DailyPublisher = @'
+import json
+import os
+from datetime import datetime
+from lake_lib import log_line, upsert_event
+
+BASE = r"D:\\BrownEyeLake"
+PUBLISH_DIR = os.path.join(BASE, "silo_finance", "publish")
+PRODUCTS_DIR = os.path.join(BASE, "silo_finance", "products")
+
+
+def main():
+    os.makedirs(PUBLISH_DIR, exist_ok=True)
+    products = []
+    for name in os.listdir(PRODUCTS_DIR):
+        if name.endswith(".json"):
+            with open(os.path.join(PRODUCTS_DIR, name), "r", encoding="ascii") as f:
+                products.append(json.load(f))
+    payload = {
+        "created_utc": datetime.utcnow().isoformat(),
+        "count": len(products),
+        "sample": products[:10]
+    }
+    out_path = os.path.join(PUBLISH_DIR, "daily_publish.json")
+    with open(out_path, "w", encoding="ascii") as f:
+        json.dump(payload, f, indent=2)
+    log_line("daily_publisher", f"Published {len(products)} products")
+    upsert_event("daily_publish", {"count": len(products)})
+
+
+if __name__ == "__main__":
+    main()
+'@
+Write-File -Path (Join-Path $Services "daily_publisher.py") -Content $DailyPublisher
+
+$Telemetry = @'
+import json
+import os
+import sqlite3
+from datetime import datetime
+from lake_lib import INDEX_DB, ensure_db, log_line, upsert_event, upsert_table
+
+BASE = r"D:\\BrownEyeLake"
+TELEMETRY_DIR = os.path.join(BASE, "silo_finance", "telemetry")
+PRODUCTS_DIR = os.path.join(BASE, "silo_finance", "products")
+
+
+def compute_sales():
+    ensure_db()
+    conn = sqlite3.connect(INDEX_DB)
+    cur = conn.cursor()
+    cur.execute("SELECT payload FROM events WHERE event_type = 'sale'")
+    sales = [json.loads(row[0]) for row in cur.fetchall()]
+    conn.close()
+    counts = {}
+    for item in sales:
+        sku = item.get("sku_id", "")
+        counts[sku] = counts.get(sku, 0) + 1
+    return counts
+
+
+def mark_cooldown(sales_counts):
+    for name in os.listdir(PRODUCTS_DIR):
+        if not name.endswith(".json"):
+            continue
+        path = os.path.join(PRODUCTS_DIR, name)
+        with open(path, "r", encoding="ascii") as f:
+            product = json.load(f)
+        sku = product.get("sku_id", "")
+        if sales_counts.get(sku, 0) == 0:
+            product["status"] = "cooldown"
+        else:
+            product["status"] = "active"
+        with open(path, "w", encoding="ascii") as f:
+            json.dump(product, f, indent=2)
+
+
+def create_variants(sales_counts):
+    winners = sorted(sales_counts.items(), key=lambda x: x[1], reverse=True)[:3]
+    for sku, count in winners:
+        if count <= 0:
+            continue
+        source_path = ""
+        for name in os.listdir(PRODUCTS_DIR):
+            if not name.endswith(".json"):
+                continue
+            path = os.path.join(PRODUCTS_DIR, name)
+            with open(path, "r", encoding="ascii") as f:
+                product = json.load(f)
+            if product.get("sku_id") == sku and not product.get("variant_of"):
+                source_path = path
+                base_product = product
+                break
+        if not source_path:
+            continue
+        for suffix in ["A", "B"]:
+            variant_sku = f"{sku}-{suffix}"
+            variant_file = os.path.join(PRODUCTS_DIR, f"{variant_sku}.json")
+            if os.path.exists(variant_file):
+                continue
+            variant = dict(base_product)
+            variant["id"] = f"product-{variant_sku}"
+            variant["sku_id"] = variant_sku
+            variant["variant_of"] = sku
+            variant["copy_variant"] = suffix
+            with open(variant_file, "w", encoding="ascii") as f:
+                json.dump(variant, f, indent=2)
+            upsert_table("products", variant)
+        log_line("telemetry", f"Variants generated for {sku}")
+        upsert_event("variant_generated", {"sku_id": sku})
+
+
+def main():
+    os.makedirs(TELEMETRY_DIR, exist_ok=True)
+    sales = compute_sales()
+    output = {
+        "created_utc": datetime.utcnow().isoformat(),
+        "sales": sales,
+        "low_performers": [k for k, v in sales.items() if v == 0]
+    }
+    out_path = os.path.join(TELEMETRY_DIR, "daily_telemetry.json")
+    with open(out_path, "w", encoding="ascii") as f:
+        json.dump(output, f, indent=2)
+    mark_cooldown(sales)
+    create_variants(sales)
+    log_line("telemetry", f"Telemetry computed for {len(sales)} skus")
+    upsert_event("telemetry", output)
+
+
+if __name__ == "__main__":
+    main()
+'@
+Write-File -Path (Join-Path $Services "telemetry_scorer.py") -Content $Telemetry
+
+$LakeQueryPS1 = @'
+param(
+  [string]$Query = "SELECT name FROM sqlite_master WHERE type='table'"
+)
+$Db = "D:\\BrownEyeLake\\shared\\index\\lake.db"
+python "D:\\BrownEyeLake\\shared\\bin\\scripts\\lake_query.py" --query $Query
+'@
+Write-File -Path (Join-Path $Scripts "lake_query.ps1") -Content $LakeQueryPS1
+
+$LakeQueryPy = @'
+import argparse
+import sqlite3
+
+DB = r"D:\\BrownEyeLake\\shared\\index\\lake.db"
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--query", required=True)
+    args = ap.parse_args()
+    conn = sqlite3.connect(DB)
+    cur = conn.cursor()
+    cur.execute(args.query)
+    rows = cur.fetchall()
+    for row in rows:
+        print("\t".join(str(col) for col in row))
+    conn.close()
+
+
+if __name__ == "__main__":
+    main()
+'@
+Write-File -Path (Join-Path $Scripts "lake_query.py") -Content $LakeQueryPy
+
+$Verify = @'
+$ErrorActionPreference = "Stop"
+$Base = "D:\\BrownEyeLake"
+$Silo = Join-Path $Base "silo_finance"
+$Secrets = Join-Path $Base "secrets"
+$Index = Join-Path $Base "shared\\index\\lake.db"
+$Config = Join-Path $Silo "publish\\config.json"
+
+function Assert-True($Condition, $Message) {
+  if (-not $Condition) { throw $Message }
+}
+
+Assert-True (Test-Path $Base) "Lake missing"
+Assert-True (Test-Path $Index) "Index missing"
+Assert-True ((Get-ChildItem (Join-Path $Silo "stencils") -Filter *.json).Count -eq 100) "Stencil count mismatch"
+Assert-True ((Get-ChildItem (Join-Path $Silo "products") -Filter *.json).Count -eq 100) "Product count mismatch"
+
+$secretFiles = @("stripe_secret.sec","stripe_webhook_secret.sec","discord_bot_token.sec","discord_client_secret.sec")
+foreach ($f in $secretFiles) {
+  $path = Join-Path $Secrets $f
+  Assert-True (Test-Path $path) "Secret missing $f"
+  $content = Get-Content $path -Raw
+  Assert-True ($content -match "^[0-9A-Fa-f]+" -or $content.Length -gt 20) "Secret not encrypted"
+}
+
+$python = "D:\\BrownEyeLake\\shared\\bin\\venv\\Scripts\\python.exe"
+Start-Process -FilePath $python -ArgumentList "D:\\BrownEyeLake\\shared\\bin\\services\\webhook_receiver.py" -PassThru | Out-Null
+Start-Sleep -Seconds 2
+try {
+  $resp = Invoke-WebRequest -UseBasicParsing -Uri "http://127.0.0.1:8787/health"
+  Assert-True ($resp.StatusCode -eq 200) "Webhook health failed"
+} finally {
+  Get-Process -Name python | Where-Object { $_.Path -like "*venv*" } | Stop-Process -Force
+}
+
+& $python "D:\\BrownEyeLake\\shared\\bin\\services\\stripe_create_links.py" --dry-run | Out-Null
+& $python "D:\\BrownEyeLake\\shared\\bin\\services\\discord_bot.py" --dry-run 2>$null
+
+if (Test-Path $Config) {
+  $cfg = Get-Content $Config -Raw | ConvertFrom-Json
+  $publicUrl = $cfg.webhook_base_url
+  if ($publicUrl -and ($publicUrl -notmatch "127.0.0.1") -and ($publicUrl -notmatch "localhost")) {
+    try {
+      $resp = Invoke-WebRequest -UseBasicParsing -Uri ($publicUrl + "/health")
+      Assert-True ($resp.StatusCode -eq 200) "Public webhook health failed"
+    } catch {
+      throw "public webhook not reachable"
+    }
+  }
+}
+
+"PASS"
+'@
+Write-File -Path (Join-Path $Scripts "verify.ps1") -Content $Verify
+
+$CloudflaredScript = @'
+$ErrorActionPreference = "Stop"
+$Secrets = "D:\\BrownEyeLake\\secrets"
+$tokenPath = Join-Path $Secrets "cloudflared_tunnel_token.sec"
+if (-not (Test-Path $tokenPath)) { exit 0 }
+$sec = Get-Content $tokenPath | ConvertTo-SecureString
+$token = [System.Net.NetworkCredential]::new("", $sec).Password
+if (-not $token) { exit 0 }
+cloudflared.exe tunnel run --token $token
+'@
+Write-File -Path (Join-Path $Scripts "start_cloudflared.ps1") -Content $CloudflaredScript
+
+& (Join-Path $Venv "Scripts\\python.exe") (Join-Path $Services "stencil_generator.py")
+
+$TaskDir = "BrownEyeFinance"
+$WebhookTask = "FinanceWebhookReceiver"
+$BotTask = "FinanceDiscordBot"
+$PublisherTask = "FinanceDailyPublisher"
+$TelemetryTask = "FinanceTelemetryScorer"
+$StencilTask = "FinanceStencilGenerator"
+
+schtasks /Create /F /TN $WebhookTask /TR "\"$Venv\\Scripts\\python.exe\" \"$Services\\webhook_receiver.py\"" /SC ONSTART /RL HIGHEST /RU "SYSTEM"
+schtasks /Create /F /TN $BotTask /TR "\"$Venv\\Scripts\\python.exe\" \"$Services\\discord_bot.py\"" /SC ONSTART /RL HIGHEST /RU "SYSTEM"
+schtasks /Create /F /TN $PublisherTask /TR "\"$Venv\\Scripts\\python.exe\" \"$Services\\daily_publisher.py\"" /SC DAILY /ST 04:00 /RL HIGHEST /RU "SYSTEM"
+schtasks /Create /F /TN $TelemetryTask /TR "\"$Venv\\Scripts\\python.exe\" \"$Services\\telemetry_scorer.py\"" /SC DAILY /ST 04:30 /RL HIGHEST /RU "SYSTEM"
+schtasks /Create /F /TN $StencilTask /TR "\"$Venv\\Scripts\\python.exe\" \"$Services\\stencil_generator.py\"" /SC DAILY /ST 05:00 /RL HIGHEST /RU "SYSTEM"
+
+$CloudToken = Get-SecretValue -Name "cloudflared_tunnel_token"
+if ($CloudToken) {
+  if (-not (Get-Command cloudflared -ErrorAction SilentlyContinue)) {
+    winget install --id Cloudflare.cloudflared -e --accept-source-agreements --accept-package-agreements
+  }
+  schtasks /Create /F /TN "FinanceCloudflared" /TR "\"powershell\" -NoProfile -ExecutionPolicy Bypass -File \"$Scripts\\start_cloudflared.ps1\"" /SC ONSTART /RL HIGHEST /RU "SYSTEM"
+}
+
+& (Join-Path $Scripts "verify.ps1") | Out-Host
+
+Write-Host "Bootstrap complete"
+</pre>
+
+  <h2>EXPECTED RESULTS</h2>
+  <pre>D:\BrownEyeLake\silo_finance\stencils\ contains 100 JSON stencils
+D:\BrownEyeLake\silo_finance\products\ contains 100 JSON products
+D:\BrownEyeLake\shared\index\lake.db contains artifacts, stencils, products, events, identity_map, claims
+D:\BrownEyeLake\shared\bin\venv created and packages installed
+D:\BrownEyeLake\secrets\ contains DPAPI encrypted secret files
+D:\BrownEyeLake\silo_finance\telemetry\daily_telemetry.json created after telemetry job
+D:\BrownEyeLake\silo_finance\publish\daily_publish.json created after publisher job</pre>
 </body>
 </html>
