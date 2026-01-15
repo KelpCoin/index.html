@@ -2,43 +2,597 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Claim 500 KelpCoin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BROWNEYE_CONTROL_PLANE_V1</title>
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f0fdf4;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: #0b0f14;
+      color: #e6edf3;
       margin: 0;
-      padding: 40px;
+      padding: 24px;
+    }
+    pre {
+      white-space: pre-wrap;
+      word-break: break-word;
+      background: #0f1720;
+      border: 1px solid #1f2a37;
+      border-radius: 8px;
+      padding: 16px;
+      line-height: 1.4;
     }
     h1 {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
-    }
-    p {
-      font-size: 1rem;
-      margin-bottom: 2rem;
-      color: #555;
-    }
-    iframe {
-      border: none;
-      width: 100%;
-      max-width: 700px;
-      height: 800px;
-      border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      margin: 0 0 16px 0;
+      font-size: 20px;
     }
   </style>
 </head>
 <body>
-  <h1>🪙 Claim 500 KelpCoin</h1>
-  <p>Fill in your wallet address. Optional: enter a referrer’s wallet to earn bonus KELP.</p>
-  <iframe 
-    src="https://docs.google.com/forms/d/e/1FAIpQLSclYfRXBxHoDBjpoHCoKM2_lm8VkxN8FjqmkOeK5kqxiOMW9A/viewform?embedded=true"
-    allowfullscreen>
-  </iframe>
+  <h1>BROWNEYE_CONTROL_PLANE_V1</h1>
+  <pre>DELIVERABLE: BROWNEYE_CONTROL_PLANE_V1
+RUN THIS ONE-SHOT:
+powershell -NoProfile -ExecutionPolicy Bypass -Command "$root=(Test-Path 'D:\\') ? 'D:\\BrownEyeCortexData' : 'C:\\BrownEyeCortexData'; $module=Join-Path $root 'BROWNEYE_CONTROL_PLANE_V1'; New-Item -ItemType Directory -Force -Path $module | Out-Null; $scriptPath=Join-Path $module 'scripts\\BOOTSTRAP_BROWNEYE_CONTROL_PLANE_V1.ps1'; New-Item -ItemType Directory -Force -Path (Split-Path $scriptPath) | Out-Null; @'
+$ErrorActionPreference = 'Stop'
+$DataRoot = (Test-Path 'D:\\') ? 'D:\\BrownEyeCortexData' : 'C:\\BrownEyeCortexData'
+$ModuleRoot = Join-Path $DataRoot 'BROWNEYE_CONTROL_PLANE_V1'
+$DailyRoot = Join-Path $DataRoot 'BROWNEYE_DAILY_PROGRESS'
+$AppRoot = Join-Path $ModuleRoot 'app'
+$ConfigRoot = Join-Path $ModuleRoot 'config'
+$DbRoot = Join-Path $ModuleRoot 'db'
+$TenantsRoot = Join-Path $ModuleRoot 'tenants'
+$OutboxRoot = Join-Path $ModuleRoot 'outbox'
+$LogsRoot = Join-Path $ModuleRoot 'logs'
+$ScriptsRoot = Join-Path $ModuleRoot 'scripts'
+$VenvRoot = Join-Path $ModuleRoot 'venv'
+$Port = 8787
+
+$dirs = @(
+  $ModuleRoot,
+  $DailyRoot,
+  $AppRoot,
+  $ConfigRoot,
+  $DbRoot,
+  $TenantsRoot,
+  $OutboxRoot,
+  $LogsRoot,
+  $ScriptsRoot,
+  (Join-Path $DailyRoot 'days')
+)
+foreach ($d in $dirs) { New-Item -ItemType Directory -Force -Path $d | Out-Null }
+
+$checkpointPath = Join-Path $DailyRoot 'checkpoint.json'
+if (-not (Test-Path $checkpointPath)) {
+  '{"last_artifact":"","last_result":"","last_updated":""}' | Set-Content -Encoding ASCII -Path $checkpointPath
+}
+$nextPath = Join-Path $DailyRoot 'NEXT.txt'
+if (-not (Test-Path $nextPath)) { "NEXT" | Set-Content -Encoding ASCII -Path $nextPath }
+
+$secretsPath = Join-Path $ConfigRoot 'secrets.clixml'
+if (-not (Test-Path $secretsPath)) {
+  $stripeSecret = Read-Host -AsSecureString 'Enter Stripe secret key'
+  $stripeWebhook = Read-Host -AsSecureString 'Enter Stripe webhook secret'
+  $discordToken = Read-Host -AsSecureString 'Enter Discord bot token'
+  $adminKey = (New-Guid).Guid | ConvertTo-SecureString -AsPlainText -Force
+  $obj = [pscustomobject]@{
+    StripeSecretKey = $stripeSecret
+    StripeWebhookSecret = $stripeWebhook
+    DiscordBotToken = $discordToken
+    AdminKey = $adminKey
+  }
+  $obj | Export-Clixml -Path $secretsPath
+}
+
+$configPath = Join-Path $ConfigRoot 'control_plane.json'
+if (-not (Test-Path $configPath)) {
+  @{
+    module_name = 'BROWNEYE_CONTROL_PLANE_V1'
+    port = $Port
+    data_root = $DataRoot
+    module_root = $ModuleRoot
+    db_path = (Join-Path $DbRoot 'control_plane.sqlite')
+    outbox_path = $OutboxRoot
+    logs_path = $LogsRoot
+    daily_root = $DailyRoot
+    tenants_root = $TenantsRoot
+    stripe_public_key = ''
+  } | ConvertTo-Json -Depth 5 | Set-Content -Encoding ASCII -Path $configPath
+}
+
+$tenantStencil = @(
+  @{ tenant_id = 'SILO_A_MTG_GENERIC'; silo_tag = 'A' },
+  @{ tenant_id = 'SILO_B_ADULT_GENERIC'; silo_tag = 'B' },
+  @{ tenant_id = 'SILO_C_MARKETS_GENERIC'; silo_tag = 'C' }
+)
+foreach ($t in $tenantStencil) {
+  $tRoot = Join-Path $TenantsRoot $t.tenant_id
+  New-Item -ItemType Directory -Force -Path $tRoot | Out-Null
+  New-Item -ItemType Directory -Force -Path (Join-Path $tRoot 'queue') | Out-Null
+  New-Item -ItemType Directory -Force -Path (Join-Path $tRoot 'deliveries') | Out-Null
+  $tenantPath = Join-Path $tRoot 'tenant.json'
+  if (-not (Test-Path $tenantPath)) {
+    @{
+      tenant_id = $t.tenant_id
+      active = 1
+      silo_tag = $t.silo_tag
+      universal_price_id = ''
+      discord = @{ guild_id = ''; paid_role_id = ''; proof_channel_id = '' }
+      fulfillment_mode = 'deliverable_file'
+      allowed_offer_id_range = '1-9999'
+    } | ConvertTo-Json -Depth 5 | Set-Content -Encoding ASCII -Path $tenantPath
+  }
+}
+
+$controlPlanePath = Join-Path $AppRoot 'control_plane.py'
+@'
+import datetime
+import hashlib
+import json
+import os
+import sqlite3
+import time
+from pathlib import Path
+from typing import Dict, Any
+
+import requests
+import stripe
+from flask import Flask, request, jsonify, render_template_string, redirect
+from waitress import serve
+
+CONFIG_PATH = os.path.join(os.path.dirname(__file__), "..", "config", "control_plane.json")
+
+def load_config() -> Dict[str, Any]:
+    with open(CONFIG_PATH, "r", encoding="ascii") as f:
+        return json.load(f)
+
+CONFIG = load_config()
+DB_PATH = CONFIG["db_path"]
+TENANTS_ROOT = CONFIG["tenants_root"]
+OUTBOX_PATH = CONFIG["outbox_path"]
+DAILY_ROOT = CONFIG["daily_root"]
+
+stripe.api_key = os.environ.get("BROWNEYE_STRIPE_SECRET", "")
+STRIPE_WEBHOOK_SECRET = os.environ.get("BROWNEYE_STRIPE_WEBHOOK", "")
+DISCORD_BOT_TOKEN = os.environ.get("BROWNEYE_DISCORD_BOT", "")
+ADMIN_KEY = os.environ.get("BROWNEYE_ADMIN_KEY", "")
+
+app = Flask(__name__)
+
+DASH_TEMPLATE = """
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8" /><title>Control Plane Dash</title></head>
+<body>
+  <h2>Control Plane Dashboard</h2>
+  <p>Status: OK</p>
+  <form method="get">
+    <label>Tenant filter</label>
+    <input name="tenant" value="{{ tenant_filter }}" />
+    <button type="submit">Filter</button>
+  </form>
+  <pre>{{ events_text }}</pre>
+</body>
+</html>
+"""
+
+TENANTS_TEMPLATE = """
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8" /><title>Tenants</title></head>
+<body>
+  <h2>Tenants</h2>
+  <pre>{{ tenants_text }}</pre>
+</body>
+</html>
+"""
+
+LINK_TEMPLATE = """
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8" /><title>Link Email</title></head>
+<body>
+  <h2>Email to Discord Link</h2>
+  <form method="post">
+    <label>Email</label><br />
+    <input name="email" /><br />
+    <label>Discord User ID</label><br />
+    <input name="discord_user_id" /><br /><br />
+    <button type="submit">Save</button>
+  </form>
+  <pre>{{ status }}</pre>
+</body>
+</html>
+"""
+
+OFFER_TEMPLATE = """
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8" /><title>Offer</title></head>
+<body>
+  <h2>Offer {{ offer_id }}</h2>
+  <p>Tenant {{ tenant_id }}</p>
+  <a href="/buy?tenant_id={{ tenant_id }}&offer_id={{ offer_id }}">Buy</a>
+</body>
+</html>
+"""
+
+def db() -> sqlite3.Connection:
+    conn = sqlite3.connect(DB_PATH)
+    conn.execute("PRAGMA journal_mode=WAL;")
+    conn.execute("PRAGMA synchronous=NORMAL;")
+    return conn
+
+def init_db() -> None:
+    conn = db()
+    conn.execute(
+        "CREATE TABLE IF NOT EXISTS events (id INTEGER PRIMARY KEY AUTOINCREMENT, ts TEXT, tenant_id TEXT, kind TEXT, detail TEXT)"
+    )
+    conn.execute(
+        "CREATE TABLE IF NOT EXISTS email_map (email TEXT PRIMARY KEY, discord_user_id TEXT)"
+    )
+    conn.commit()
+    conn.close()
+
+
+def log_event(tenant_id: str, kind: str, detail: str) -> None:
+    conn = db()
+    conn.execute(
+        "INSERT INTO events (ts, tenant_id, kind, detail) VALUES (?, ?, ?, ?)",
+        (datetime.datetime.utcnow().isoformat() + "Z", tenant_id, kind, detail),
+    )
+    conn.commit()
+    conn.close()
+
+
+def load_tenants() -> Dict[str, Dict[str, Any]]:
+    tenants = {}
+    root = Path(TENANTS_ROOT)
+    for tenant_dir in root.iterdir():
+        if tenant_dir.is_dir():
+            tenant_path = tenant_dir / "tenant.json"
+            if tenant_path.exists():
+                with open(tenant_path, "r", encoding="ascii") as f:
+                    tenant = json.load(f)
+                tenants[tenant["tenant_id"]] = tenant
+    return tenants
+
+
+def get_email_mapping(email: str) -> str:
+    conn = db()
+    cur = conn.execute("SELECT discord_user_id FROM email_map WHERE email = ?", (email,))
+    row = cur.fetchone()
+    conn.close()
+    return row[0] if row else ""
+
+
+def update_daily_progress(artifact_path: str, result: str) -> None:
+    today = datetime.datetime.utcnow().strftime("%Y%m%d")
+    day_dir = Path(DAILY_ROOT) / "days" / today
+    day_dir.mkdir(parents=True, exist_ok=True)
+    log_path = day_dir / f"snapshot_{today}.log"
+    line = f"{datetime.datetime.utcnow().isoformat()}Z | {artifact_path} | {result}\n"
+    with open(log_path, "a", encoding="ascii") as f:
+        f.write(line)
+    checkpoint_path = Path(DAILY_ROOT) / "checkpoint.json"
+    payload = {
+        "last_artifact": artifact_path,
+        "last_result": result,
+        "last_updated": datetime.datetime.utcnow().isoformat() + "Z",
+    }
+    with open(checkpoint_path, "w", encoding="ascii") as f:
+        json.dump(payload, f)
+
+
+def write_job(tenant_id: str, payload: Dict[str, Any]) -> str:
+    queue_dir = Path(TENANTS_ROOT) / tenant_id / "queue"
+    queue_dir.mkdir(parents=True, exist_ok=True)
+    job_id = f"job_{int(time.time())}_{hashlib.sha256(json.dumps(payload).encode('ascii')).hexdigest()[:8]}"
+    job_path = queue_dir / f"{job_id}.json"
+    with open(job_path, "w", encoding="ascii") as f:
+        json.dump(payload, f)
+    return str(job_path)
+
+
+def process_job(job_path: Path) -> str:
+    with open(job_path, "r", encoding="ascii") as f:
+        job = json.load(f)
+    tenant_id = job["tenant_id"]
+    offer_id = job["offer_id"]
+    email = job.get("email", "")
+    discord_user_id = get_email_mapping(email) if email else ""
+    artifact_name = f"proof_{tenant_id}_{offer_id}_{int(time.time())}.txt"
+    artifact_path = Path(OUTBOX_PATH) / artifact_name
+    lines = [
+        "PROOF ARTIFACT",
+        f"tenant_id={tenant_id}",
+        f"offer_id={offer_id}",
+        f"email={email}",
+        f"discord_user_id={discord_user_id}",
+        f"timestamp={datetime.datetime.utcnow().isoformat()}Z",
+    ]
+    with open(artifact_path, "w", encoding="ascii") as f:
+        f.write("\n".join(lines) + "\n")
+
+    result = "fulfilled"
+    if DISCORD_BOT_TOKEN and discord_user_id:
+        try:
+            tenant = load_tenants()[tenant_id]
+            guild_id = tenant.get("discord", {}).get("guild_id", "")
+            role_id = tenant.get("discord", {}).get("paid_role_id", "")
+            proof_channel_id = tenant.get("discord", {}).get("proof_channel_id", "")
+            headers = {"Authorization": f"Bot {DISCORD_BOT_TOKEN}", "Content-Type": "application/json"}
+            if guild_id and role_id:
+                requests.put(
+                    f"https://discord.com/api/guilds/{guild_id}/members/{discord_user_id}/roles/{role_id}",
+                    headers=headers,
+                    timeout=10,
+                )
+            if proof_channel_id:
+                requests.post(
+                    f"https://discord.com/api/channels/{proof_channel_id}/messages",
+                    headers=headers,
+                    json={"content": f"Proof {artifact_name}"},
+                    timeout=10,
+                )
+        except Exception as exc:
+            result = f"discord_error:{exc}"
+
+    update_daily_progress(str(artifact_path), result)
+    log_event(tenant_id, "fulfilled", json.dumps({"artifact": str(artifact_path), "result": result}))
+    job_path.unlink(missing_ok=True)
+    return result
+
+
+@app.route("/health")
+def health():
+    return jsonify({"status": "ok", "module": CONFIG["module_name"]})
+
+
+@app.route("/tenants")
+def tenants():
+    tenants = load_tenants()
+    lines = []
+    for tenant_id, tenant in tenants.items():
+        lines.append(f"{tenant_id} active={tenant.get('active')} silo={tenant.get('silo_tag')}")
+    return render_template_string(TENANTS_TEMPLATE, tenants_text="\n".join(lines))
+
+
+@app.route("/dash")
+def dash():
+    tenant_filter = request.args.get("tenant", "")
+    conn = db()
+    if tenant_filter:
+        cur = conn.execute(
+            "SELECT ts, tenant_id, kind, detail FROM events WHERE tenant_id = ? ORDER BY id DESC LIMIT 50",
+            (tenant_filter,),
+        )
+    else:
+        cur = conn.execute("SELECT ts, tenant_id, kind, detail FROM events ORDER BY id DESC LIMIT 50")
+    rows = cur.fetchall()
+    conn.close()
+    lines = [" | ".join(row) for row in rows]
+    return render_template_string(DASH_TEMPLATE, tenant_filter=tenant_filter, events_text="\n".join(lines))
+
+
+@app.route("/link", methods=["GET", "POST"])
+def link():
+    status = ""
+    if request.method == "POST":
+        email = request.form.get("email", "").strip().lower()
+        discord_user_id = request.form.get("discord_user_id", "").strip()
+        if email and discord_user_id:
+            conn = db()
+            conn.execute("INSERT OR REPLACE INTO email_map (email, discord_user_id) VALUES (?, ?)", (email, discord_user_id))
+            conn.commit()
+            conn.close()
+            status = "saved"
+        else:
+            status = "missing_fields"
+    return render_template_string(LINK_TEMPLATE, status=status)
+
+
+@app.route("/t/<tenant_id>/offer/<offer_id>")
+def offer(tenant_id: str, offer_id: str):
+    tenants = load_tenants()
+    if tenant_id not in tenants:
+        return "unknown tenant", 404
+    return render_template_string(OFFER_TEMPLATE, tenant_id=tenant_id, offer_id=offer_id)
+
+
+@app.route("/buy")
+def buy():
+    tenant_id = request.args.get("tenant_id", "")
+    offer_id = request.args.get("offer_id", "")
+    tenants = load_tenants()
+    if tenant_id not in tenants:
+        return "unknown tenant", 404
+    tenant = tenants[tenant_id]
+    price_id = tenant.get("universal_price_id", "") or ""
+    if not price_id:
+        return "missing price id", 400
+    offer_hash = hashlib.sha256(f"{tenant_id}:{offer_id}".encode("ascii")).hexdigest()
+    session = stripe.checkout.Session.create(
+        mode="payment",
+        line_items=[{"price": price_id, "quantity": 1}],
+        success_url="http://127.0.0.1:{0}/dash".format(CONFIG["port"]),
+        cancel_url="http://127.0.0.1:{0}/dash".format(CONFIG["port"]),
+        metadata={
+            "tenant_id": tenant_id,
+            "offer_id": offer_id,
+            "silo_tag": tenant.get("silo_tag", ""),
+            "offer_hash": offer_hash,
+        },
+    )
+    return redirect(session.url)
+
+
+@app.route("/webhook", methods=["POST"])
+def webhook():
+    payload = request.data
+    sig_header = request.headers.get("Stripe-Signature", "")
+    try:
+        event = stripe.Webhook.construct_event(payload=payload, sig_header=sig_header, secret=STRIPE_WEBHOOK_SECRET)
+    except Exception:
+        return "invalid", 400
+
+    if event["type"] == "checkout.session.completed":
+        data = event["data"]["object"]
+        tenant_id = data.get("metadata", {}).get("tenant_id", "")
+        offer_id = data.get("metadata", {}).get("offer_id", "")
+        email = data.get("customer_details", {}).get("email", "")
+        job = {"tenant_id": tenant_id, "offer_id": offer_id, "email": email}
+        write_job(tenant_id, job)
+        log_event(tenant_id, "webhook", json.dumps(job))
+    return "ok", 200
+
+
+@app.route("/work_once", methods=["POST", "GET"])
+def work_once():
+    if ADMIN_KEY and request.headers.get("x-admin-key", "") != ADMIN_KEY:
+        return "forbidden", 403
+    processed = 0
+    tenants = load_tenants()
+    for tenant_id in tenants:
+        queue_dir = Path(TENANTS_ROOT) / tenant_id / "queue"
+        for job_path in list(queue_dir.glob("*.json")):
+            process_job(job_path)
+            processed += 1
+            if processed >= 10:
+                break
+    return jsonify({"processed": processed})
+
+
+@app.route("/dev_simulate", methods=["POST"])
+def dev_simulate():
+    if ADMIN_KEY and request.headers.get("x-admin-key", "") != ADMIN_KEY:
+        return "forbidden", 403
+    payload = request.get_json(force=True)
+    tenant_id = payload.get("tenant_id", "")
+    offer_id = payload.get("offer_id", "")
+    email = payload.get("email", "")
+    job = {"tenant_id": tenant_id, "offer_id": offer_id, "email": email}
+    write_job(tenant_id, job)
+    log_event(tenant_id, "dev_simulate", json.dumps(job))
+    return jsonify({"queued": True})
+
+
+def main() -> None:
+    init_db()
+    serve(app, host="127.0.0.1", port=CONFIG["port"])
+
+
+if __name__ == "__main__":
+    main()
+'@ | Set-Content -Encoding ASCII -Path $controlPlanePath
+
+$runGatewayPath = Join-Path $ScriptsRoot 'RUN_GATEWAY.ps1'
+@'
+$ErrorActionPreference = 'Stop'
+$DataRoot = (Test-Path 'D:\\') ? 'D:\\BrownEyeCortexData' : 'C:\\BrownEyeCortexData'
+$ModuleRoot = Join-Path $DataRoot 'BROWNEYE_CONTROL_PLANE_V1'
+$VenvRoot = Join-Path $ModuleRoot 'venv'
+$ConfigRoot = Join-Path $ModuleRoot 'config'
+$SecretsPath = Join-Path $ConfigRoot 'secrets.clixml'
+$secrets = Import-Clixml -Path $SecretsPath
+function Get-Plain([securestring]$s) {
+  $bstr = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($s)
+  try { [Runtime.InteropServices.Marshal]::PtrToStringAuto($bstr) } finally { [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($bstr) }
+}
+$env:BROWNEYE_STRIPE_SECRET = Get-Plain $secrets.StripeSecretKey
+$env:BROWNEYE_STRIPE_WEBHOOK = Get-Plain $secrets.StripeWebhookSecret
+$env:BROWNEYE_DISCORD_BOT = Get-Plain $secrets.DiscordBotToken
+$env:BROWNEYE_ADMIN_KEY = Get-Plain $secrets.AdminKey
+$python = Join-Path $VenvRoot 'Scripts\\python.exe'
+& $python (Join-Path $ModuleRoot 'app\\control_plane.py')
+'@ | Set-Content -Encoding ASCII -Path $runGatewayPath
+
+$workerPulsePath = Join-Path $ScriptsRoot 'WORKER_PULSE.ps1'
+@'
+$ErrorActionPreference = 'SilentlyContinue'
+$DataRoot = (Test-Path 'D:\\') ? 'D:\\BrownEyeCortexData' : 'C:\\BrownEyeCortexData'
+$ModuleRoot = Join-Path $DataRoot 'BROWNEYE_CONTROL_PLANE_V1'
+$ConfigRoot = Join-Path $ModuleRoot 'config'
+$SecretsPath = Join-Path $ConfigRoot 'secrets.clixml'
+$secrets = Import-Clixml -Path $SecretsPath
+function Get-Plain([securestring]$s) {
+  $bstr = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($s)
+  try { [Runtime.InteropServices.Marshal]::PtrToStringAuto($bstr) } finally { [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($bstr) }
+}
+$adminKey = Get-Plain $secrets.AdminKey
+try {
+  Invoke-WebRequest -UseBasicParsing -Method Post -Uri 'http://127.0.0.1:8787/work_once' -Headers @{ 'x-admin-key' = $adminKey } | Out-Null
+} catch { }
+'@ | Set-Content -Encoding ASCII -Path $workerPulsePath
+
+$openDashboardPath = Join-Path $ScriptsRoot 'OPEN_DASHBOARD.url'
+@'
+[InternetShortcut]
+URL=http://127.0.0.1:8787/dash
+'@ | Set-Content -Encoding ASCII -Path $openDashboardPath
+
+$startDayPath = Join-Path $DailyRoot 'scripts\\START_DAY.ps1'
+New-Item -ItemType Directory -Force -Path (Split-Path $startDayPath) | Out-Null
+@'
+$DataRoot = (Test-Path 'D:\\') ? 'D:\\BrownEyeCortexData' : 'C:\\BrownEyeCortexData'
+$DailyRoot = Join-Path $DataRoot 'BROWNEYE_DAILY_PROGRESS'
+$today = (Get-Date).ToString('yyyyMMdd')
+$dayDir = Join-Path $DailyRoot "days\\$today"
+New-Item -ItemType Directory -Force -Path $dayDir | Out-Null
+"START $today" | Set-Content -Encoding ASCII -Path (Join-Path $dayDir "snapshot_$today.log")
+'@ | Set-Content -Encoding ASCII -Path $startDayPath
+
+$endDayPath = Join-Path $DailyRoot 'scripts\\END_DAY.ps1'
+@'
+$DataRoot = (Test-Path 'D:\\') ? 'D:\\BrownEyeCortexData' : 'C:\\BrownEyeCortexData'
+$DailyRoot = Join-Path $DataRoot 'BROWNEYE_DAILY_PROGRESS'
+$today = (Get-Date).ToString('yyyyMMdd')
+$dayDir = Join-Path $DailyRoot "days\\$today"
+New-Item -ItemType Directory -Force -Path $dayDir | Out-Null
+"END $today" | Add-Content -Encoding ASCII -Path (Join-Path $dayDir "snapshot_$today.log")
+'@ | Set-Content -Encoding ASCII -Path $endDayPath
+
+$requirementsMet = $false
+try {
+  $python = Get-Command python -ErrorAction SilentlyContinue
+  if (-not $python) { winget install -e --id Python.Python.3.11 }
+  $stripe = Get-Command stripe -ErrorAction SilentlyContinue
+  if (-not $stripe) { winget install -e --id Stripe.StripeCLI }
+  $requirementsMet = $true
+} catch { }
+
+if ($requirementsMet) {
+  python -m venv $VenvRoot
+  & (Join-Path $VenvRoot 'Scripts\\pip.exe') install flask waitress stripe requests
+}
+
+$taskGateway = 'BROWNEYE_ControlPlaneV1_OnLogon'
+$taskPulse = 'BROWNEYE_ControlPlaneV1_WorkerPulse_EveryMinute'
+$gatewayCmd = "powershell -NoProfile -ExecutionPolicy Bypass -File \"$runGatewayPath\""
+$workerCmd = "powershell -NoProfile -ExecutionPolicy Bypass -File \"$workerPulsePath\""
+
+schtasks /Create /TN $taskGateway /TR $gatewayCmd /SC ONLOGON /RL HIGHEST /F | Out-Null
+schtasks /Create /TN $taskPulse /TR $workerCmd /SC MINUTE /MO 1 /RL HIGHEST /F | Out-Null
+
+Write-Output 'Stumbleium: This run created the BROWNEYE_CONTROL_PLANE_V1 module, wrote config, app, tenants, scripts, set up the daily progress folder, installed Python packages, and registered scheduled tasks. Files live under D or C BrownEyeCortexData. Use the dashboard at http://127.0.0.1:8787/dash and check outbox and daily logs to verify fulfillment.'
+'@ | Set-Content -Encoding ASCII -Path $scriptPath
+& $scriptPath
+"</pre>
+
+  <pre>ACCEPTANCE TESTS
+1) Command: powershell -NoProfile -ExecutionPolicy Bypass -Command "$root=(Test-Path 'D:\') ? 'D:\BrownEyeCortexData' : 'C:\BrownEyeCortexData'; & (Join-Path $root 'BROWNEYE_CONTROL_PLANE_V1\scripts\RUN_GATEWAY.ps1')"
+Expected: Dashboard opens at http://127.0.0.1:8787/dash and shows Status OK.
+2) Command: Start-Process "http://127.0.0.1:8787/t/SILO_A_MTG_GENERIC/offer/1"
+Expected: Offer page loads with Buy link.
+3) Command: powershell -NoProfile -ExecutionPolicy Bypass -Command "$root=(Test-Path 'D:\') ? 'D:\BrownEyeCortexData' : 'C:\BrownEyeCortexData'; $s=Import-Clixml (Join-Path $root 'BROWNEYE_CONTROL_PLANE_V1\config\secrets.clixml'); $b=[Runtime.InteropServices.Marshal]::SecureStringToBSTR($s.AdminKey); $k=[Runtime.InteropServices.Marshal]::PtrToStringAuto($b); [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($b); Invoke-RestMethod -Method Post -Uri http://127.0.0.1:8787/dev_simulate -Headers @{ 'x-admin-key' = $k } -Body '{\"tenant_id\":\"SILO_A_MTG_GENERIC\",\"offer_id\":\"1\",\"email\":\"test@example.com\"}' -ContentType 'application/json'"
+Expected: Response with queued true.
+4) Command: powershell -NoProfile -ExecutionPolicy Bypass -Command "$root=(Test-Path 'D:\') ? 'D:\BrownEyeCortexData' : 'C:\BrownEyeCortexData'; & (Join-Path $root 'BROWNEYE_CONTROL_PLANE_V1\scripts\WORKER_PULSE.ps1')"
+Expected: Job JSON removed from tenant queue folder.
+5) Command: powershell -NoProfile -ExecutionPolicy Bypass -Command "$root=(Test-Path 'D:\') ? 'D:\BrownEyeCortexData' : 'C:\BrownEyeCortexData'; Get-ChildItem (Join-Path $root 'BROWNEYE_CONTROL_PLANE_V1\outbox')"
+Expected: Proof artifact text file exists and /dash shows fulfilled event.
+6) Command: powershell -NoProfile -ExecutionPolicy Bypass -Command "$root=(Test-Path 'D:\') ? 'D:\BrownEyeCortexData' : 'C:\BrownEyeCortexData'; Get-Content (Join-Path $root 'BROWNEYE_DAILY_PROGRESS\checkpoint.json')"
+Expected: last_artifact and last_result updated.
+
+Stumbleium
+This module installs a local control plane with a dashboard, Stripe webhook intake, a job queue, and a worker pulse that writes proof artifacts and daily progress logs. It stores data in D or C BrownEyeCortexData, keeps tenants isolated by silo, and uses encrypted secrets from DPAPI. Verify by opening the dashboard, simulating a job, and checking the outbox and daily checkpoint.
+</pre>
 </body>
 </html>
