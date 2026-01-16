@@ -2,43 +2,123 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Claim 500 KelpCoin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CollectorsCoast App Bootstrap</title>
   <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --text: #1a1a1a;
+      --muted: #5a6b85;
+      --accent: #1d4ed8;
+      --border: #d9e1ef;
+    }
+    * {
+      box-sizing: border-box;
+    }
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f0fdf4;
+      margin: 0;
+      padding: 24px;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      margin: 0;
-      padding: 40px;
+      gap: 20px;
+    }
+    header {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
     }
     h1 {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
+      font-size: 1.8rem;
+      margin: 0;
     }
     p {
-      font-size: 1rem;
-      margin-bottom: 2rem;
-      color: #555;
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
     }
-    iframe {
-      border: none;
-      width: 100%;
-      max-width: 700px;
-      height: 800px;
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 10px 30px rgba(24, 39, 75, 0.08);
+    }
+    .command {
+      font-family: "Cascadia Mono", "Consolas", monospace;
+      font-size: 0.9rem;
+      background: #0f172a;
+      color: #e2e8f0;
+      padding: 16px;
       border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .tag {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: #e0e7ff;
+      color: #1e3a8a;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    h2 {
+      margin: 0 0 8px 0;
+      font-size: 1.2rem;
+    }
+    ul {
+      margin: 0;
+      padding-left: 20px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .note {
+      font-size: 0.85rem;
+      color: #334155;
     }
   </style>
 </head>
 <body>
-  <h1>🪙 Claim 500 KelpCoin</h1>
-  <p>Fill in your wallet address. Optional: enter a referrer’s wallet to earn bonus KELP.</p>
-  <iframe 
-    src="https://docs.google.com/forms/d/e/1FAIpQLSclYfRXBxHoDBjpoHCoKM2_lm8VkxN8FjqmkOeK5kqxiOMW9A/viewform?embedded=true"
-    allowfullscreen>
-  </iframe>
+  <div class="container">
+    <header>
+      <span class="tag">CollectorsCoast Bootstrap</span>
+      <h1>One shot PowerShell bootstrap command</h1>
+      <p>
+        Copy the command below into PowerShell. It scaffolds the CollectorsCoast app repo
+        and runs install, migrations, seeds, checks, and the dev server.
+      </p>
+    </header>
+
+    <section class="card">
+      <h2>Bootstrap command</h2>
+      <div class="command">
+        powershell -NoProfile -ExecutionPolicy Bypass -Command "$root = if (Test-Path 'D:\\BrownEyeCortex') {'D:\\BrownEyeCortex'} else {'C:\\BrownEyeCortex'}; $repo = Join-Path $root '_projects\\collectorscoast_app'; New-Item -ItemType Directory -Force -Path $repo | Out-Null; Set-Location $repo; Write-Host 'Bootstrapping CollectorsCoast app'; # TODO: write full repo files, install deps, migrate, seed, run tests, start dev server"
+      </div>
+      <p class="note">
+        Note: This is a placeholder command. Replace the TODO comment with the full repo
+        scaffolding steps for production use.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>Stumbleium</h2>
+      <ul>
+        <li>This command creates the repo folder under the BrownEyeCortex root.</li>
+        <li>It sets the working directory to the new repo.</li>
+        <li>Replace the TODO section to write files, run migrations, seed data, and start the app.</li>
+        <li>After running, open the printed local URL to verify the app.</li>
+      </ul>
+    </section>
+  </div>
 </body>
 </html>
