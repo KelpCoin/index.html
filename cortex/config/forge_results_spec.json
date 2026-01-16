@@ -1,0 +1,18 @@
+{
+  "forge_path": "string",
+  "deck_path": "string",
+  "simulation_count": "integer",
+  "created_at": "ISO-8601 timestamp",
+  "wins": "integer",
+  "losses": "integer",
+  "mulligan_pct": "float",
+  "matchup_notes": "string",
+  "marketing_blurb": "string",
+  "win_rate": "float",
+  "runner": {
+    "command": "string",
+    "returncode": "integer",
+    "stdout": "string",
+    "stderr": "string"
+  }
+}

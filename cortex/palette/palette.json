@@ -1,0 +1,46 @@
+{
+  "name": "Retro Sega Mega Drive",
+  "version": "1.0.0",
+  "colors": {
+    "black": "#000000",
+    "deep_purple": "#1B0A3A",
+    "royal_purple": "#3C0078",
+    "violet": "#7800A8",
+    "magenta": "#A80078",
+    "red": "#F80000",
+    "orange": "#F8A800",
+    "yellow": "#F8F800",
+    "lime": "#78F800",
+    "green": "#00F800",
+    "mint": "#00A878",
+    "teal": "#007878",
+    "blue": "#003C78",
+    "navy": "#001B3A",
+    "peggy_pink_accent": "#FF66CC"
+  },
+  "usage_rules": {
+    "backgrounds": ["black", "deep_purple", "navy"],
+    "primary_text": ["yellow", "lime"],
+    "secondary_text": ["mint", "teal"],
+    "alerts": {
+      "success": "green",
+      "warning": "orange",
+      "error": "red"
+    },
+    "accent": ["violet", "magenta", "peggy_pink_accent"],
+    "charts": ["red", "orange", "yellow", "lime", "green", "mint", "teal", "blue", "violet", "magenta"]
+  },
+  "terminal_colors": {
+    "info": "\u001b[38;2;120;248;0m",
+    "warn": "\u001b[38;2;248;168;0m",
+    "error": "\u001b[38;2;248;0;0m",
+    "accent": "\u001b[38;2;255;102;204m",
+    "reset": "\u001b[0m"
+  },
+  "comfyui_overlay_rules": {
+    "safe_zone": "Keep overlays within 85% of frame width and height to avoid UI collisions.",
+    "font": "Use pixel-style fonts with 2px outlines in yellow or lime on deep purple.",
+    "shadow": "Apply a 40% opacity black shadow for legibility.",
+    "accent_glow": "Use Peggy Pink Accent for highlights only, no more than 15% of overlay area."
+  }
+}
