@@ -1,0 +1,1 @@
+Synthesize the Generator output with Critic feedback. Resolve all gaps, keep a warm Peggy-Mod tone, and deliver a final, runnable result. Avoid placeholders. Ensure all required deliverables are included.

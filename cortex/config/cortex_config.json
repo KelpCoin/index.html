@@ -1,0 +1,52 @@
+{
+  "app_name": "Biggie BrownEye Cortex",
+  "version": "1.0.0",
+  "loop_interval_seconds": 180,
+  "log_path": "../logs/cortex.log",
+  "data_dir": "../data",
+  "palette_path": "../cortex/palette/palette.json",
+  "discord_webhook_url": "",
+  "llm": {
+    "provider": "ollama",
+    "model": "llama3.1",
+    "api_base": "http://localhost:11434",
+    "api_key_env": "OPENAI_API_KEY",
+    "timeout_seconds": 90
+  },
+  "modules": {
+    "mtg_arbitrage": {
+      "enabled": true,
+      "db_path": "../data/mtg_arbitrage.sqlite",
+      "eur_buy_threshold": 50,
+      "nzd_to_aud": 0.92,
+      "aud_to_usd": 0.66,
+      "spike_window_hours": 24,
+      "daily_summary_hour": 9
+    },
+    "forge_simulation": {
+      "enabled": true,
+      "forge_install_paths": [
+        "C:/Forge",
+        "D:/Forge",
+        "C:/Program Files/Forge",
+        "D:/Program Files/Forge"
+      ],
+      "decklist_path": "../data/decklist.dck",
+      "simulation_count": 40,
+      "output_json": "../data/forge_results.json"
+    },
+    "deck_pricing": {
+      "enabled": true,
+      "decklist_path": "../data/decklist.txt",
+      "output_json": "../data/deck_pricing.json"
+    },
+    "comfyui_automation": {
+      "enabled": true,
+      "comfyui_root": "D:/ComfyUI",
+      "launch_port": 8188
+    }
+  },
+  "seed_tasks": [
+    "Develop a long-term, high-precision plan for Biggie to break into the Australian MTG market. Prioritise brand identity, authenticity, friendliness, trust, and accessible pricing. Assume NZD pricing with $10 subsidised shipping. Build 30-day, 60-day, and 90-day plans with KPIs and automation triggers."
+  ]
+}
