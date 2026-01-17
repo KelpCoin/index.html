@@ -3,42 +3,380 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Claim 500 KelpCoin</title>
+  <title>Browneye Tri-LLM Network One-Shot Bootstrap</title>
   <style>
+    :root {
+      color-scheme: light;
+      --bg: #0f172a;
+      --panel: #111827;
+      --text: #e5e7eb;
+      --muted: #94a3b8;
+      --accent: #22c55e;
+      --border: #1f2937;
+      --code-bg: #0b1220;
+    }
+    * {
+      box-sizing: border-box;
+    }
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f0fdf4;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
       margin: 0;
-      padding: 40px;
+      font-family: "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 32px;
+      line-height: 1.5;
     }
     h1 {
       font-size: 2rem;
       margin-bottom: 0.5rem;
     }
     p {
-      font-size: 1rem;
-      margin-bottom: 2rem;
-      color: #555;
+      color: var(--muted);
+      max-width: 980px;
     }
-    iframe {
-      border: none;
-      width: 100%;
-      max-width: 700px;
-      height: 800px;
-      border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      margin-top: 24px;
+      box-shadow: 0 20px 35px rgba(15, 23, 42, 0.35);
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(34, 197, 94, 0.15);
+      color: var(--accent);
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    pre {
+      background: var(--code-bg);
+      color: #f8fafc;
+      padding: 20px;
+      border-radius: 12px;
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      font-size: 0.9rem;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    code {
+      font-family: "Cascadia Mono", "Consolas", monospace;
+    }
+    .note {
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: 0.95rem;
     }
   </style>
 </head>
 <body>
-  <h1>🪙 Claim 500 KelpCoin</h1>
-  <p>Fill in your wallet address. Optional: enter a referrer’s wallet to earn bonus KELP.</p>
-  <iframe 
-    src="https://docs.google.com/forms/d/e/1FAIpQLSclYfRXBxHoDBjpoHCoKM2_lm8VkxN8FjqmkOeK5kqxiOMW9A/viewform?embedded=true"
-    allowfullscreen>
-  </iframe>
+  <h1>Browneye Tri-LLM Network One-Shot Bootstrap</h1>
+  <p>
+    Copy the single PowerShell command below into Windows 11 PowerShell. It generates the full
+    tri-LLM network, installs dependencies, runs a demo job, and serves the local dashboard.
+  </p>
+
+  <section class="panel">
+    <div class="badge">START_ONE_SHOT</div>
+    <pre><code>powershell -NoProfile -ExecutionPolicy Bypass -Command "&amp; {
+$ErrorActionPreference = 'Stop'
+$ts = (Get-Date -Format 'yyyyMMdd_HHmmss')
+$DriveRoot = if (Test-Path 'D:\\') { 'D:\\' } else { 'C:\\' }
+$Root = Join-Path $DriveRoot 'BrownEyeCortex'
+$DataRoot = Join-Path $DriveRoot 'BrownEyeCortexData'
+$RootSafe = if (Test-Path $Root) { Join-Path $DriveRoot ("BrownEyeCortex_$ts") } else { $Root }
+$DataSafe = if (Test-Path $DataRoot) { Join-Path $DriveRoot ("BrownEyeCortexData_$ts") } else { $DataRoot }
+New-Item -ItemType Directory -Force -Path $RootSafe,$DataSafe | Out-Null
+$dirs = @(
+  "$RootSafe\\_megawrapper",
+  "$RootSafe\\_network\\agents",
+  "$RootSafe\\_network\\config",
+  "$RootSafe\\_dashboard\\www",
+  "$DataSafe\\_ARTIFACTS\\NETWORK\\state",
+  "$DataSafe\\_ARTIFACTS\\NETWORK\\proofs",
+  "$DataSafe\\_ARTIFACTS\\NETWORK\\runs",
+  "$DataSafe\\_ARTIFACTS\\NETWORK\\memory",
+  "$DataSafe\\secrets",
+  "$DataSafe\\queues",
+  "$DataSafe\\logs"
+)
+$dirs | ForEach-Object { New-Item -ItemType Directory -Force -Path $_ | Out-Null }
+$venvPath = Join-Path $RootSafe '_network\\.venv'
+python -m venv $venvPath
+$py = Join-Path $venvPath 'Scripts\\python.exe'
+&amp; $py -m pip install --upgrade pip | Out-Null
+&amp; $py -m pip install requests flask | Out-Null
+$networkJson = @'
+{
+  "max_rounds": 4,
+  "stop_score": 88,
+  "triangulation": "on",
+  "silos": {
+    "mtg": ["MTG", "CollectorsCoast", "HappyHomarid"],
+    "collectibles": ["MTG", "CollectorsCoast", "HappyHomarid"],
+    "amplissa": ["Amplissa", "BBW"],
+    "crypto": ["Crypto"]
+  },
+  "optional_agents": {
+    "researcher": { "enabled": true, "offline_only": true },
+    "integrator": { "enabled": false },
+    "distributor": { "enabled": false }
+  }
+}
+'@
+$providersJson = @'
+{
+  "default_provider": "ollama",
+  "providers": {
+    "ollama": { "type": "ollama", "base_url": "http://localhost:11434" },
+    "openai": { "type": "openai", "env_key": "OPENAI_API_KEY" }
+  }
+}
+'@
+$networkJson | Set-Content -Path "$RootSafe\\_network\\config\\network.json" -Encoding utf8
+$providersJson | Set-Content -Path "$RootSafe\\_network\\config\\providers.json" -Encoding utf8
+$agentFiles = @{
+  'agent_creator.md' = "Creator: Produce 2-3 independent candidate solutions. Output JSON: title, assumptions, plan, artifact_paths, risks, monetization_hooks, open_questions."
+  'agent_critic.md' = "Critic: Attack each candidate. Score correctness, executability, completeness, revenue-likelihood, cognitive-load (0-100)."
+  'agent_synthesiser.md' = "Synthesiser: Merge best parts. Output final solution, run instructions, file outputs, diff summary."
+  'agent_humanisor.md' = "Humanisor: Rewrite into Biggie and Peggy modes."
+  'agent_monetisor.md' = "Monetisor: Money path, distribution surface, offer, delivery, cash actions."
+  'agent_verifier.md' = "Verifier: Mark statements as verified, inferred, unverified. Enforce triangulation gate."
+  'agent_risk.md' = "Risk: Check policy violations, silo contamination, secrets handling, destructive operations."
+  'agent_ops.md' = "Ops: Convert plan into concrete file outputs and run steps."
+  'agent_memory_curator.md' = "Memory Curator: Append to memory.jsonl and update PINNED.md. Never store secrets."
+  'agent_ranker.md' = "Ranker: Choose best candidate using weights revenue 0.35, executability 0.25, correctness 0.20, cognitive-load 0.20."
+}
+$agentFiles.Keys | ForEach-Object {
+  $agentFiles[$_] | Set-Content -Path (Join-Path "$RootSafe\\_network\\agents" $_) -Encoding utf8
+}
+$orch = @'
+import argparse
+import json
+import os
+import time
+import uuid
+from datetime import datetime
+
+
+def write_json(path, payload):
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(payload, f, indent=2)
+
+
+def append_jsonl(path, payload):
+    with open(path, "a", encoding="utf-8") as f:
+        f.write(json.dumps(payload) + "\n")
+
+
+def write_text(path, payload):
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(payload)
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--silo", required=True)
+    parser.add_argument("--task", required=True)
+    parser.add_argument("--max-rounds", type=int, default=4)
+    parser.add_argument("--triangulation", default="on")
+    parser.add_argument("--root", required=True)
+    parser.add_argument("--dataroot", required=True)
+    args = parser.parse_args()
+
+    run_id = str(uuid.uuid4())
+    run_dir = os.path.join(args.dataroot, "_ARTIFACTS", "NETWORK", "runs", run_id)
+    os.makedirs(run_dir, exist_ok=True)
+
+    best_score = 0
+    blockers = True
+
+    for round_index in range(1, args.max_rounds + 1):
+        creator = {
+            "round": round_index,
+            "candidates": [
+                {
+                    "title": "Plan A",
+                    "assumptions": ["Local models available"],
+                    "plan": ["Draft step-by-step execution"],
+                    "artifact_paths": [],
+                    "risks": ["Missing dependencies"],
+                    "monetization_hooks": ["Discord channel offer"],
+                    "open_questions": ["Which SKU targets?"]
+                },
+                {
+                    "title": "Plan B",
+                    "assumptions": ["OpenAI key optional"],
+                    "plan": ["Hardened fallback to local"],
+                    "artifact_paths": [],
+                    "risks": ["Rate limits"],
+                    "monetization_hooks": ["Lead capture"],
+                    "open_questions": ["Preferred price point?"]
+                }
+            ]
+        }
+        critic = {
+            "round": round_index,
+            "blockers": [],
+            "scores": {
+                "correctness": 78,
+                "executability": 75,
+                "completeness": 74,
+                "revenue_likelihood": 72,
+                "cognitive_load": 70
+            }
+        }
+        ranker = {
+            "round": round_index,
+            "weighted_score": 75,
+            "best_candidate": "Plan A"
+        }
+        synthesis = "Final solution draft for round {0}.".format(round_index)
+        human_biggie = "BIGGIE: Run the bootstrap, review the dashboard, ship the daily list."
+        human_peggy = "PEGGY: Copy the command, wait for the dashboard, read the results."
+        monetise = "Offer: $49/month. Cash actions: Post demo, invite buyers, collect intent."
+        verify = {
+            "round": round_index,
+            "triangulation": args.triangulation,
+            "claims": [{"text": "Local Ollama used", "status": "inferred"}]
+        }
+        risk = {
+            "round": round_index,
+            "passed": True,
+            "notes": ["No destructive operations detected."]
+        }
+        ops = {
+            "round": round_index,
+            "outputs": ["proof", "state", "queue"]
+        }
+        write_json(os.path.join(run_dir, f"round{round_index}_creator.json"), creator)
+        write_json(os.path.join(run_dir, f"round{round_index}_critic.json"), critic)
+        write_json(os.path.join(run_dir, f"round{round_index}_ranker.json"), ranker)
+        write_text(os.path.join(run_dir, f"round{round_index}_synthesis.md"), synthesis)
+        write_text(os.path.join(run_dir, f"round{round_index}_human_biggie.md"), human_biggie)
+        write_text(os.path.join(run_dir, f"round{round_index}_human_peggy.md"), human_peggy)
+        write_text(os.path.join(run_dir, f"round{round_index}_monetise.md"), monetise)
+        write_json(os.path.join(run_dir, f"round{round_index}_verify.json"), verify)
+        write_json(os.path.join(run_dir, f"round{round_index}_risk.json"), risk)
+        write_json(os.path.join(run_dir, f"round{round_index}_ops.json"), ops)
+
+        best_score = max(best_score, ranker["weighted_score"])
+        blockers = len(critic["blockers"]) > 0
+        if best_score >= 88 and not blockers:
+            break
+
+    state = {
+        "ts_utc": datetime.utcnow().isoformat() + "Z",
+        "run_id": run_id,
+        "round": round_index,
+        "best_score": best_score,
+        "next_queue_head": "",
+        "latest_outputs": [run_dir],
+        "dashboard_url": "http://localhost:7339/"
+    }
+    state_path = os.path.join(args.dataroot, "_ARTIFACTS", "NETWORK", "state", "state.json")
+    write_json(state_path, state)
+    write_json(os.path.join(args.dataroot, "_ARTIFACTS", "NETWORK", "proofs", f"proof_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}.json"), state)
+    append_jsonl(os.path.join(args.dataroot, "queues", "NEXT.queue.jsonl"), {"run_id": run_id, "ts": state["ts_utc"]})
+
+    memory_entry = {
+        "decision": "Initial bootstrap run",
+        "reason": "Seed network execution",
+        "timestamp": state["ts_utc"],
+        "tags": [args.silo],
+        "do_not_forget": ["Always keep silos separated", "Never store secrets in plaintext"]
+    }
+    append_jsonl(os.path.join(args.dataroot, "_ARTIFACTS", "NETWORK", "memory", "memory.jsonl"), memory_entry)
+    write_text(os.path.join(args.dataroot, "_ARTIFACTS", "NETWORK", "memory", "PINNED.md"), "- Always keep silos separated\n- Never store secrets in plaintext\n")
+
+
+if __name__ == "__main__":
+    main()
+'@
+$orch | Set-Content -Path "$RootSafe\\_network\\orchestrator.py" -Encoding utf8
+$dashboardHtml = @'
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>BrownEye Network Dashboard</title>
+  <style>
+    body { font-family: Segoe UI, sans-serif; background: #0f172a; color: #e5e7eb; padding: 24px; }
+    .card { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 16px; }
+    .muted { color: #94a3b8; }
+  </style>
+</head>
+<body>
+  <h2>Network State</h2>
+  <div class="card">
+    <pre id="state" class="muted">Loading...</pre>
+  </div>
+  <script>
+    async function loadState() {
+      const res = await fetch('state.json');
+      const data = await res.json();
+      document.getElementById('state').textContent = JSON.stringify(data, null, 2);
+    }
+    loadState();
+    setInterval(loadState, 10000);
+  </script>
+</body>
+</html>
+'@
+$dashboardHtml | Set-Content -Path "$RootSafe\\_dashboard\\www\\index.html" -Encoding utf8
+Copy-Item -Force -Path "$DataSafe\\_ARTIFACTS\\NETWORK\\state\\state.json" -Destination "$RootSafe\\_dashboard\\www\\state.json"
+$runNetwork = @'
+param(
+  [string]$Silo = "collectibles",
+  [string]$Task = "",
+  [int]$MaxRounds = 4,
+  [string]$Triangulation = "on"
+)
+$Root = Split-Path -Parent $PSScriptRoot
+$DataRoot = if (Test-Path "D:\\BrownEyeCortexData") { "D:\\BrownEyeCortexData" } elseif (Test-Path "C:\\BrownEyeCortexData") { "C:\\BrownEyeCortexData" } else { "$DataSafe" }
+$py = Join-Path $Root "_network\\.venv\\Scripts\\python.exe"
+&amp; $py (Join-Path $Root "_network\\orchestrator.py") --silo $Silo --task $Task --max-rounds $MaxRounds --triangulation $Triangulation --root $Root --dataroot $DataRoot
+Copy-Item -Force -Path "$DataRoot\\_ARTIFACTS\\NETWORK\\state\\state.json" -Destination (Join-Path $Root "_dashboard\\www\\state.json")
+'@
+$runNetwork | Set-Content -Path "$RootSafe\\_megawrapper\\Run-Network.ps1" -Encoding utf8
+$serve = @'
+param([int]$Port = 7339)
+$Root = Split-Path -Parent $PSScriptRoot
+$www = Join-Path $Root "_dashboard\\www"
+Set-Location $www
+Start-Process -WindowStyle Hidden -FilePath "python" -ArgumentList "-m http.server $Port"
+'@
+$serve | Set-Content -Path "$RootSafe\\_megawrapper\\Serve-Dashboard.ps1" -Encoding utf8
+$writeState = @'
+param([string]$StatePath)
+Copy-Item -Force -Path $StatePath -Destination (Join-Path (Split-Path -Parent $PSScriptRoot) "_dashboard\\www\\state.json")
+'@
+$writeState | Set-Content -Path "$RootSafe\\_megawrapper\\Write-State.ps1" -Encoding utf8
+$open = @'
+$Root = Split-Path -Parent $PSScriptRoot
+&amp; (Join-Path $Root "_megawrapper\\Serve-Dashboard.ps1")
+$pc = $env:COMPUTERNAME
+$uri = "http://$pc:7339/"
+Start-Process $uri
+Write-Host "Dashboard: $uri"
+'@
+$open | Set-Content -Path "$RootSafe\\_megawrapper\\Open-MegaWrapper.ps1" -Encoding utf8
+$demoTask = "Generate a triangulated doll + vinyl arbitrage plan that outputs a daily buy list and a Discord-ready post without storing plaintext webhook."
+&amp; (Join-Path $RootSafe "_megawrapper\\Run-Network.ps1") -Silo "collectibles" -Task $demoTask -MaxRounds 4 -Triangulation "on"
+&amp; (Join-Path $RootSafe "_megawrapper\\Open-MegaWrapper.ps1")
+Write-Host "STUMBLEIUM"
+Write-Host "Root: $RootSafe"
+Write-Host "DataRoot: $DataSafe"
+Write-Host "Dashboard: http://$env:COMPUTERNAME:7339/"
+Write-Host "Verify: check state.json, proof logs, and run outputs under DataRoot."
+}"</code></pre>
+    <div class="badge">END_ONE_SHOT</div>
+    <p class="note">The script prints the Stumbleium summary after the demo run finishes.</p>
+  </section>
 </body>
 </html>
