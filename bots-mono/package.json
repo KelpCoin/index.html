@@ -1,0 +1,10 @@
+{
+  "name": "bots-mono",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "shared-infra",
+    "mtg-arbitrage-bot",
+    "adult-creator-bot"
+  ]
+}
