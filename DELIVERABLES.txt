@@ -1,0 +1,359 @@
+Deliverables:
+
+This file records the one-shot bootstrap command for the Windows environment.
+
+One-shot command:
+powershell -NoProfile -ExecutionPolicy Bypass -Command "& { $ErrorActionPreference = 'Stop'; function Ensure-Dir { param([string]$Path) if (-not (Test-Path -LiteralPath $Path)) { New-Item -ItemType Directory -Path $Path -Force | Out-Null } }; function Write-File { param([string]$Path,[string]$Content) Ensure-Dir -Path (Split-Path -Parent $Path); Set-Content -LiteralPath $Path -Value $Content -Encoding ASCII }; $Root = 'C:\BrownEyeCortex'; $Plans = Join-Path $Root 'Plans'; $HappyRoot = Join-Path $Plans 'HappyHomarid'; $Logs = Join-Path $Root 'Logs\HappyHomarid'; $Signal = Join-Path $Root 'SignalLayer'; $GpuSignal = Join-Path $Signal 'GPU'; $PublishGate = Join-Path $Signal 'PublishingGate'; $Factory = Join-Path $Root 'FactoryUI'; $FactoryBin = Join-Path $Factory 'bin'; $FactoryLogs = Join-Path $Factory 'logs'; $QueueIncoming = Join-Path $Factory 'queue\incoming'; $QueueProcessing = Join-Path $Factory 'queue\processing'; $QueueDone = Join-Path $Factory 'queue\done'; $QueueArchive = Join-Path $Factory 'queue\archive'; $ArtifactRoot = if (Test-Path -LiteralPath 'D:\') { 'D:\BrownEye\BROWNEYE_ARTIFACTS' } else { 'C:\BrownEye\BROWNEYE_ARTIFACTS' }; Ensure-Dir -Path $HappyRoot; Ensure-Dir -Path $Logs; Ensure-Dir -Path $GpuSignal; Ensure-Dir -Path $PublishGate; Ensure-Dir -Path $FactoryBin; Ensure-Dir -Path $FactoryLogs; Ensure-Dir -Path $QueueIncoming; Ensure-Dir -Path $QueueProcessing; Ensure-Dir -Path $QueueDone; Ensure-Dir -Path $QueueArchive; Ensure-Dir -Path $ArtifactRoot; $taskRegistry = @'
+{
+  "tasks": [
+    {
+      "name": "HH_Health",
+      "enabled": true,
+      "schedule_hint": "manual",
+      "type": "cpu",
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File C:\\BrownEyeCortex\\Plans\\HappyHomarid\\HH_Health.ps1",
+      "working_dir": "C:\\BrownEyeCortex\\Plans\\HappyHomarid",
+      "timeout_seconds": 120,
+      "on_success": {
+        "log": true,
+        "proof": true,
+        "queue_emit": false
+      },
+      "on_fail": {
+        "log": true,
+        "proof": true,
+        "queue_emit": false
+      },
+      "required_env": []
+    }
+  ]
+}
+'@; Write-File -Path 'C:\BrownEyeCortex\Plans\HappyHomarid\task_registry.json' -Content $taskRegistry; $gpuGate = @'
+param()
+$ErrorActionPreference = "Stop"
+
+function Write-GpuGateLog {
+  param([string]$Message)
+  $logPath = "C:\BrownEyeCortex\Logs\HappyHomarid\GPU_Gate.log"
+  $ts = (Get-Date).ToString("s")
+  $line = "$ts | $Message"
+  Add-Content -LiteralPath $logPath -Value $line -Encoding ASCII
+}
+
+function Confirm-GpuProven {
+  $proofPath = "C:\BrownEyeCortex\SignalLayer\GPU\GPU_PROVEN.json"
+  if (-not (Test-Path -LiteralPath $proofPath)) {
+    Write-GpuGateLog "GPU proof missing at $proofPath"
+    return $false
+  }
+  try {
+    $raw = Get-Content -LiteralPath $proofPath -Raw -ErrorAction Stop
+    $data = $raw | ConvertFrom-Json
+    if (-not $data.gpu_proven) {
+      Write-GpuGateLog "GPU proof present but gpu_proven is false"
+      return $false
+    }
+    $testedAt = [DateTime]::Parse($data.tested_at).ToUniversalTime()
+    $fresh = (Get-Date).ToUniversalTime().AddDays(-7)
+    if ($testedAt -lt $fresh) {
+      Write-GpuGateLog "GPU proof stale: tested_at $($data.tested_at)"
+      return $false
+    }
+    Write-GpuGateLog "GPU proof valid: method $($data.method) tested_at $($data.tested_at)"
+    return $true
+  } catch {
+    Write-GpuGateLog "GPU proof parse error: $($_.Exception.Message)"
+    return $false
+  }
+}
+'@; Write-File -Path 'C:\BrownEyeCortex\Plans\HappyHomarid\GPU_Proven_Gate.ps1' -Content $gpuGate; $setGpu = @'
+param(
+  [Parameter(Mandatory=$true)][string]$Method,
+  [string]$Details = ""
+)
+$ErrorActionPreference = "Stop"
+$proofPath = "C:\BrownEyeCortex\SignalLayer\GPU\GPU_PROVEN.json"
+if (-not (Test-Path -LiteralPath (Split-Path -Parent $proofPath))) {
+  New-Item -ItemType Directory -Path (Split-Path -Parent $proofPath) -Force | Out-Null
+}
+$obj = [pscustomobject]@{
+  gpu_proven = $true
+  method = $Method
+  tested_at = (Get-Date).ToUniversalTime().ToString("s") + "Z"
+  details = $Details
+}
+$obj | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath $proofPath -Encoding ASCII
+Write-Output "GPU proven set at $proofPath"
+
+Write-Output "Stumbleium: This script writes GPU_PROVEN.json with a new timestamp and method. It changes only the GPU proof file. Verify by checking C:\\BrownEyeCortex\\SignalLayer\\GPU\\GPU_PROVEN.json."
+'@; Write-File -Path 'C:\BrownEyeCortex\Plans\HappyHomarid\Set-GPUProven.ps1' -Content $setGpu; $hhHealth = @'
+param()
+$ErrorActionPreference = "Stop"
+$root = "C:\BrownEyeCortex"
+$logs = "C:\BrownEyeCortex\Logs\HappyHomarid"
+$signal = "C:\BrownEyeCortex\SignalLayer"
+$factory = "C:\BrownEyeCortex\FactoryUI"
+$artifactRoot = if (Test-Path -LiteralPath "D:\") { "D:\BrownEye\BROWNEYE_ARTIFACTS" } else { "C:\BrownEye\BROWNEYE_ARTIFACTS" }
+if (-not (Test-Path -LiteralPath $artifactRoot)) { New-Item -ItemType Directory -Path $artifactRoot -Force | Out-Null }
+$ts = Get-Date -Format "yyyyMMdd_HHmmss"
+$artifact = Join-Path $artifactRoot ("artifact_" + $ts + "_.md")
+$content = @()
+$content += "# HappyHomarid Health"
+$content += ""
+$content += "timestamp: " + (Get-Date).ToString("s")
+$content += "root_exists: " + (Test-Path -LiteralPath $root)
+$content += "logs_exists: " + (Test-Path -LiteralPath $logs)
+$content += "signal_exists: " + (Test-Path -LiteralPath $signal)
+$content += "factory_exists: " + (Test-Path -LiteralPath $factory)
+$content | Set-Content -LiteralPath $artifact -Encoding ASCII
+Write-Output "Health artifact: $artifact"
+
+Write-Output "Stumbleium: This script writes a health artifact with basic path checks. Verify by opening the new artifact file."
+'@; Write-File -Path 'C:\BrownEyeCortex\Plans\HappyHomarid\HH_Health.ps1' -Content $hhHealth; $executor = @'
+param()
+$ErrorActionPreference = "Stop"
+
+. "C:\BrownEyeCortex\Plans\HappyHomarid\GPU_Proven_Gate.ps1"
+
+$logPath = "C:\BrownEyeCortex\Logs\HappyHomarid\HH_Executor.log"
+$registryPath = "C:\BrownEyeCortex\Plans\HappyHomarid\task_registry.json"
+$statePath = "C:\BrownEyeCortex\Plans\HappyHomarid\task_state.json"
+$artifactRoot = if (Test-Path -LiteralPath "D:\") { "D:\BrownEye\BROWNEYE_ARTIFACTS" } else { "C:\BrownEye\BROWNEYE_ARTIFACTS" }
+if (-not (Test-Path -LiteralPath $artifactRoot)) { New-Item -ItemType Directory -Path $artifactRoot -Force | Out-Null }
+
+function Write-ExecutorLog {
+  param([string]$Message)
+  $ts = (Get-Date).ToString("s")
+  Add-Content -LiteralPath $logPath -Value "$ts | $Message" -Encoding ASCII
+}
+
+function New-ProofArtifact {
+  param([string[]]$Lines)
+  $ts = Get-Date -Format "yyyyMMdd_HHmmss"
+  $artifact = Join-Path $artifactRoot ("artifact_" + $ts + "_.md")
+  $Lines | Set-Content -LiteralPath $artifact -Encoding ASCII
+  return $artifact
+}
+
+function Load-State {
+  if (Test-Path -LiteralPath $statePath) {
+    try {
+      return (Get-Content -LiteralPath $statePath -Raw | ConvertFrom-Json)
+    } catch {
+      return [pscustomobject]@{ tasks = @{} }
+    }
+  }
+  return [pscustomobject]@{ tasks = @{} }
+}
+
+function Save-State {
+  param($State)
+  $State | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath $statePath -Encoding ASCII
+}
+
+function Confirm-PublishingApproved {
+  $gatePath = "C:\BrownEyeCortex\SignalLayer\PublishingGate\APPROVED.json"
+  if (-not (Test-Path -LiteralPath $gatePath)) { return $false }
+  try {
+    $data = Get-Content -LiteralPath $gatePath -Raw | ConvertFrom-Json
+    return [bool]$data.approved
+  } catch { return $false }
+}
+
+if (-not (Test-Path -LiteralPath $registryPath)) {
+  Write-ExecutorLog "Task registry missing at $registryPath"
+  return
+}
+
+$registry = Get-Content -LiteralPath $registryPath -Raw | ConvertFrom-Json
+$state = Load-State
+
+$evaluated = @()
+$executed = @()
+$blocked = @()
+
+foreach ($task in $registry.tasks) {
+  $evaluated += $task.name
+  if (-not $task.enabled) {
+    $blocked += "$($task.name): disabled"
+    continue
+  }
+
+  if ($task.type -eq "gpu") {
+    if (-not (Confirm-GpuProven)) {
+      $blocked += "$($task.name): GPU not proven"
+      continue
+    }
+  }
+
+  if ($task.PSObject.Properties.Name -contains "requires_publishing_approval") {
+    if ($task.requires_publishing_approval -and (-not (Confirm-PublishingApproved))) {
+      $blocked += "$($task.name): publishing not approved"
+      continue
+    }
+  }
+
+  $missing = @()
+  if (-not (Test-Path -LiteralPath $task.working_dir)) { $missing += "working_dir" }
+  foreach ($envName in $task.required_env) {
+    if (-not $env:$envName) { $missing += "env:$envName" }
+  }
+  if ($missing.Count -gt 0) {
+    $blocked += "$($task.name): missing " + ($missing -join ",")
+    continue
+  }
+
+  if (-not $state.tasks.ContainsKey($task.name)) {
+    $state.tasks[$task.name] = @{ fail_count = 0; next_allowed_at = "" }
+  }
+  $tstate = $state.tasks[$task.name]
+  if ($tstate.next_allowed_at -and ([DateTime]::Parse($tstate.next_allowed_at) -gt (Get-Date))) {
+    $blocked += "$($task.name): cooldown until $($tstate.next_allowed_at)"
+    continue
+  }
+
+  Write-ExecutorLog "Executing $($task.name)"
+  $executed += $task.name
+  $startInfo = @{
+    FilePath = "powershell"
+    ArgumentList = "-NoProfile -ExecutionPolicy Bypass -Command", $task.command
+    WorkingDirectory = $task.working_dir
+    PassThru = $true
+    WindowStyle = "Hidden"
+  }
+  $proc = Start-Process @startInfo
+  $timeout = [int]$task.timeout_seconds
+  $exited = $proc.WaitForExit($timeout * 1000)
+  if (-not $exited) {
+    try { $proc.Kill() } catch {}
+    $tstate.fail_count = [int]$tstate.fail_count + 1
+    $cooldown = [Math]::Min(3600, 60 * $tstate.fail_count)
+    $tstate.next_allowed_at = (Get-Date).AddSeconds($cooldown).ToString("s")
+    Write-ExecutorLog "Task $($task.name) timed out, cooldown $cooldown seconds"
+    $blocked += "$($task.name): timeout"
+    continue
+  }
+  if ($proc.ExitCode -ne 0) {
+    $tstate.fail_count = [int]$tstate.fail_count + 1
+    $cooldown = [Math]::Min(3600, 60 * $tstate.fail_count)
+    $tstate.next_allowed_at = (Get-Date).AddSeconds($cooldown).ToString("s")
+    Write-ExecutorLog "Task $($task.name) failed exit code $($proc.ExitCode), cooldown $cooldown seconds"
+    $blocked += "$($task.name): failed exit $($proc.ExitCode)"
+    continue
+  }
+  $tstate.fail_count = 0
+  $tstate.next_allowed_at = ""
+  Write-ExecutorLog "Task $($task.name) succeeded"
+}
+
+$artifactLines = @()
+$artifactLines += "# HappyHomarid Executor Proof"
+$artifactLines += ""
+$artifactLines += "timestamp: " + (Get-Date).ToString("s")
+$artifactLines += "tasks_evaluated: " + ($evaluated -join ", ")
+$artifactLines += "tasks_executed: " + ($executed -join ", ")
+$artifactLines += "tasks_blocked: " + ($blocked -join " | ")
+$artifact = New-ProofArtifact -Lines $artifactLines
+Write-ExecutorLog "Proof artifact $artifact"
+
+Save-State -State $state
+
+Write-Output "Stumbleium: This executor reads the task registry, runs enabled tasks, enforces GPU and publishing gates, and writes logs plus a proof artifact. Verify by checking HH_Executor.log and the latest artifact in the artifacts folder."
+'@; Write-File -Path 'C:\BrownEyeCortex\Plans\HappyHomarid_Executor.ps1' -Content $executor; $approved = @'
+{ "approved": false, "approved_by": "", "approved_at": "" }
+'@; Write-File -Path 'C:\BrownEyeCortex\SignalLayer\PublishingGate\APPROVED.json' -Content $approved; $wrapper = @'
+param()
+$ErrorActionPreference = "Stop"
+
+. "C:\BrownEyeCortex\Plans\HappyHomarid\GPU_Proven_Gate.ps1"
+
+$logPath = "C:\BrownEyeCortex\FactoryUI\logs\elohim.log"
+$incoming = "C:\BrownEyeCortex\FactoryUI\queue\incoming"
+$processing = "C:\BrownEyeCortex\FactoryUI\queue\processing"
+$done = "C:\BrownEyeCortex\FactoryUI\queue\done"
+$archive = "C:\BrownEyeCortex\FactoryUI\queue\archive"
+$artifactRoot = if (Test-Path -LiteralPath "D:\") { "D:\BrownEye\BROWNEYE_ARTIFACTS" } else { "C:\BrownEye\BROWNEYE_ARTIFACTS" }
+if (-not (Test-Path -LiteralPath $artifactRoot)) { New-Item -ItemType Directory -Path $artifactRoot -Force | Out-Null }
+
+function Write-FactoryLog {
+  param([string]$Message)
+  $ts = (Get-Date).ToString("s")
+  Add-Content -LiteralPath $logPath -Value "$ts | $Message" -Encoding ASCII
+}
+
+function New-FactoryArtifact {
+  param([string[]]$Lines)
+  $ts = Get-Date -Format "yyyyMMdd_HHmmss"
+  $artifact = Join-Path $artifactRoot ("artifact_" + $ts + "_.md")
+  $Lines | Set-Content -LiteralPath $artifact -Encoding ASCII
+  return $artifact
+}
+
+if (-not (Test-Path -LiteralPath $incoming)) { New-Item -ItemType Directory -Path $incoming -Force | Out-Null }
+if (-not (Test-Path -LiteralPath $processing)) { New-Item -ItemType Directory -Path $processing -Force | Out-Null }
+if (-not (Test-Path -LiteralPath $done)) { New-Item -ItemType Directory -Path $done -Force | Out-Null }
+if (-not (Test-Path -LiteralPath $archive)) { New-Item -ItemType Directory -Path $archive -Force | Out-Null }
+
+Get-ChildItem -LiteralPath $processing -Filter *.json -ErrorAction SilentlyContinue | ForEach-Object {
+  if ($_.LastWriteTime -lt (Get-Date).AddHours(-24)) {
+    $dest = Join-Path $done $_.Name
+    Move-Item -LiteralPath $_.FullName -Destination $dest -Force
+    $statusPath = $dest + ".status.txt"
+    "status: archived_from_processing_due_to_age" | Set-Content -LiteralPath $statusPath -Encoding ASCII
+    Write-FactoryLog "Archived stale job $($_.Name)"
+  }
+}
+
+Get-ChildItem -LiteralPath $incoming -Filter *.json -ErrorAction SilentlyContinue | ForEach-Object {
+  $jobPath = $_.FullName
+  $jobName = $_.Name
+  $requiresGpu = $false
+  try {
+    $raw = Get-Content -LiteralPath $jobPath -Raw
+    $job = $raw | ConvertFrom-Json
+    if ($job.PSObject.Properties.Name -contains "requires_gpu") {
+      $requiresGpu = [bool]$job.requires_gpu
+    }
+  } catch {
+    $requiresGpu = $false
+  }
+  if ($requiresGpu -and (-not (Confirm-GpuProven))) {
+    $dest = Join-Path $done $jobName
+    Move-Item -LiteralPath $jobPath -Destination $dest -Force
+    $statusPath = $dest + ".status.txt"
+    "status: blocked_gpu_not_proven" | Set-Content -LiteralPath $statusPath -Encoding ASCII
+    $artifact = New-FactoryArtifact -Lines @(
+      "# FactoryUI GPU Blocked",
+      "",
+      "timestamp: " + (Get-Date).ToString("s"),
+      "job: " + $jobName,
+      "reason: gpu_not_proven"
+    )
+    Write-FactoryLog "Blocked GPU job $jobName and wrote $artifact"
+  }
+}
+
+$healthArtifact = New-FactoryArtifact -Lines @(
+  "# FactoryUI Health Report",
+  "",
+  "timestamp: " + (Get-Date).ToString("s"),
+  "incoming_count: " + (Get-ChildItem -LiteralPath $incoming -Filter *.json -ErrorAction SilentlyContinue).Count,
+  "processing_count: " + (Get-ChildItem -LiteralPath $processing -Filter *.json -ErrorAction SilentlyContinue).Count,
+  "done_count: " + (Get-ChildItem -LiteralPath $done -Filter *.json -ErrorAction SilentlyContinue).Count
+)
+Write-FactoryLog "Health artifact $healthArtifact"
+
+$logInfo = Get-Item -LiteralPath $logPath -ErrorAction SilentlyContinue
+if ($logInfo -and $logInfo.Length -gt 5242880) {
+  $archiveLog = Join-Path (Split-Path -Parent $logPath) ("elohim_" + (Get-Date -Format "yyyyMMdd_HHmmss") + ".log")
+  Move-Item -LiteralPath $logPath -Destination $archiveLog -Force
+  Write-FactoryLog "Rotated log to $archiveLog"
+}
+
+$worker = "C:\BrownEyeCortex\FactoryUI\bin\Elohim.ps1"
+if (Test-Path -LiteralPath $worker) {
+  & $worker
+} else {
+  Write-FactoryLog "Worker missing at $worker"
+}
+'@; Write-File -Path 'C:\BrownEyeCortex\FactoryUI\bin\Elohim.GpuGuard.ps1' -Content $wrapper; $taskName = "HAPPYHOMARID_Executor_5min"; $taskAction = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-NoProfile -ExecutionPolicy Bypass -File C:\BrownEyeCortex\Plans\HappyHomarid_Executor.ps1"; $taskTrigger = New-ScheduledTaskTrigger -Once -At (Get-Date).AddMinutes(1) -RepetitionInterval (New-TimeSpan -Minutes 5) -RepetitionDuration ([TimeSpan]::MaxValue); if (Get-ScheduledTask -TaskName $taskName -ErrorAction SilentlyContinue) { Set-ScheduledTask -TaskName $taskName -Action $taskAction -Trigger $taskTrigger | Out-Null } else { Register-ScheduledTask -TaskName $taskName -Action $taskAction -Trigger $taskTrigger -RunLevel Highest -User $env:USERNAME | Out-Null }; $factoryTask = Get-ScheduledTask -TaskName "BrownEye_Elohim_1min" -ErrorAction SilentlyContinue; if ($factoryTask) { $factoryAction = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-NoProfile -ExecutionPolicy Bypass -File C:\BrownEyeCortex\FactoryUI\bin\Elohim.GpuGuard.ps1"; Set-ScheduledTask -TaskName "BrownEye_Elohim_1min" -Action $factoryAction | Out-Null }; $bootstrapArtifact = Join-Path $ArtifactRoot ("artifact_" + (Get-Date -Format "yyyyMMdd_HHmmss") + "_.md"); @("bootstrap_timestamp: " + (Get-Date).ToString("s"), "changes: wrote core files and scheduled task", "artifact_root: " + $ArtifactRoot) | Set-Content -LiteralPath $bootstrapArtifact -Encoding ASCII; Write-Output "Stumbleium: Bootstrap complete. Verify task HAPPYHOMARID_Executor_5min, logs in C:\\BrownEyeCortex\\Logs\\HappyHomarid, and artifacts in " + $ArtifactRoot + "." }"
