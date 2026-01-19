@@ -1,0 +1,17 @@
+{
+  "overallScore": 78,
+  "matrixScores": {
+    "artifact_scoring": { "score": 82, "reason": "Clear summary and metadata" },
+    "risk": { "score": 90, "reason": "No secrets detected" },
+    "kill": { "score": 88, "reason": "No disqualifying signals" },
+    "entropy": { "score": 72, "reason": "Moderate change risk" }
+  },
+  "nextActions": [
+    "Review summary and confirm metadata accuracy",
+    "Queue SKU alignment checks",
+    "Add missing inputs if needed"
+  ],
+  "suggestedSkuFit": "GEN-OPS",
+  "needsHumanReview": false,
+  "silo": "OTHER"
+}

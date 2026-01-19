@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Artifact Index",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": [
+      "artifactId",
+      "path",
+      "name",
+      "extension",
+      "sizeBytes",
+      "createdUtc",
+      "modifiedUtc",
+      "detectedSilo",
+      "contentType"
+    ],
+    "properties": {
+      "artifactId": { "type": "string" },
+      "path": { "type": "string" },
+      "name": { "type": "string" },
+      "extension": { "type": "string" },
+      "sizeBytes": { "type": "integer" },
+      "createdUtc": { "type": "string" },
+      "modifiedUtc": { "type": "string" },
+      "detectedSilo": { "type": "string" },
+      "contentType": { "type": "string" }
+    }
+  }
+}
