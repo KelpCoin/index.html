@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Artifact Extract",
+  "type": "object",
+  "required": [
+    "one_liner",
+    "short_summary",
+    "key_points",
+    "entities",
+    "snippet"
+  ],
+  "properties": {
+    "one_liner": { "type": "string", "maxLength": 140 },
+    "short_summary": { "type": "string", "maxLength": 600 },
+    "key_points": { "type": "array", "items": { "type": "string" } },
+    "entities": { "type": "array", "items": { "type": "string" } },
+    "snippet": { "type": "string" }
+  }
+}

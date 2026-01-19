@@ -1,0 +1,2 @@
+artifact_id,path,name,extension,size_bytes,created_utc,modified_utc,detected_silo,content_type
+abc123,/source/ArtifactHarvester/README.txt,README.txt,.txt,512,2024-01-01T00:00:00Z,2024-01-01T00:00:00Z,OTHER,text

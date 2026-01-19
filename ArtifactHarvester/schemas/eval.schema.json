@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Artifact Evaluation",
+  "type": "object",
+  "required": [
+    "overall_score",
+    "matrix_scores",
+    "next_actions",
+    "suggested_sku_fit",
+    "needs_human_review",
+    "silo"
+  ],
+  "properties": {
+    "overall_score": { "type": "integer", "minimum": 0, "maximum": 100 },
+    "matrix_scores": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["score", "reason"],
+        "properties": {
+          "score": { "type": "integer", "minimum": 0, "maximum": 100 },
+          "reason": { "type": "string" }
+        }
+      }
+    },
+    "next_actions": { "type": "array", "items": { "type": "string" } },
+    "suggested_sku_fit": { "type": "string" },
+    "needs_human_review": { "type": "boolean" },
+    "silo": { "type": "string" }
+  }
+}
