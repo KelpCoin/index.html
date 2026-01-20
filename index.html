@@ -3,42 +3,630 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Claim 500 KelpCoin</title>
+  <title>StencilForge Dash - Private Control Room</title>
   <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0c111b;
+      --panel: #141b2d;
+      --panel-alt: #0f172a;
+      --accent: #47b3ff;
+      --accent-strong: #5eead4;
+      --warning: #fbbf24;
+      --danger: #f87171;
+      --success: #34d399;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --border: rgba(148, 163, 184, 0.2);
+      --shadow: 0 18px 40px rgba(2, 6, 23, 0.55);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f0fdf4;
+      font-family: "Inter", "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #1b243d, var(--bg));
+      color: var(--text);
+      min-height: 100vh;
+      padding: 32px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 28px;
+      gap: 20px;
+    }
+
+    header h1 {
+      font-size: 2rem;
+      letter-spacing: 0.02em;
+    }
+
+    header p {
+      color: var(--muted);
+      max-width: 520px;
+      line-height: 1.5;
+    }
+
+    .badges {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(71, 179, 255, 0.15);
+      border: 1px solid rgba(71, 179, 255, 0.4);
+      color: var(--accent);
+      font-size: 0.85rem;
+    }
+
+    .badge strong {
+      color: var(--text);
+    }
+
+    .grid {
+      display: grid;
+      gap: 20px;
+    }
+
+    .grid.two {
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+
+    .grid.three {
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    }
+
+    .card {
+      background: var(--panel);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+    }
+
+    .card h2 {
+      font-size: 1.2rem;
+      margin-bottom: 14px;
+    }
+
+    .card h3 {
+      font-size: 1rem;
+      margin-bottom: 8px;
+      color: var(--accent-strong);
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+    }
+
+    .status-pill::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: currentColor;
+    }
+
+    .status-ok {
+      color: var(--success);
+      border-color: rgba(52, 211, 153, 0.4);
+      background: rgba(52, 211, 153, 0.1);
+    }
+
+    .status-warn {
+      color: var(--warning);
+      border-color: rgba(251, 191, 36, 0.4);
+      background: rgba(251, 191, 36, 0.1);
+    }
+
+    .status-down {
+      color: var(--danger);
+      border-color: rgba(248, 113, 113, 0.35);
+      background: rgba(248, 113, 113, 0.1);
+    }
+
+    .module-tile {
       display: flex;
       flex-direction: column;
-      align-items: center;
-      margin: 0;
-      padding: 40px;
+      gap: 10px;
+      padding: 16px;
+      background: var(--panel-alt);
+      border-radius: 14px;
+      border: 1px solid var(--border);
     }
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
-    }
-    p {
-      font-size: 1rem;
-      margin-bottom: 2rem;
-      color: #555;
-    }
-    iframe {
-      border: none;
-      width: 100%;
-      max-width: 700px;
-      height: 800px;
+
+    .module-tile button {
+      background: transparent;
+      border: 1px solid rgba(71, 179, 255, 0.4);
+      color: var(--accent);
+      padding: 8px 12px;
       border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .module-tile button:hover {
+      background: rgba(71, 179, 255, 0.15);
+    }
+
+    .section-title {
+      margin: 34px 0 16px;
+      font-size: 1.4rem;
+    }
+
+    .list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .queue {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background: var(--panel-alt);
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .queue-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding: 8px 10px;
+      background: rgba(15, 23, 42, 0.7);
+      border-radius: 10px;
+    }
+
+    .queue-item span {
+      font-size: 0.9rem;
+    }
+
+    .queue-item .tag {
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      background: rgba(148, 163, 184, 0.15);
+      color: var(--muted);
+    }
+
+    form {
+      display: grid;
+      gap: 14px;
+    }
+
+    label {
+      display: grid;
+      gap: 6px;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    input, select, textarea {
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      background: rgba(15, 23, 42, 0.8);
+      color: var(--text);
+      font-size: 0.95rem;
+    }
+
+    textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    .button-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .primary {
+      background: linear-gradient(135deg, rgba(71, 179, 255, 0.4), rgba(94, 234, 212, 0.4));
+      border: 1px solid rgba(94, 234, 212, 0.7);
+      color: #e0f2fe;
+      padding: 10px 18px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .ghost {
+      background: transparent;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      color: var(--muted);
+      padding: 10px 18px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .approval-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      border-radius: 12px;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--border);
+    }
+
+    .approval-row .actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .approval-row button {
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .approve {
+      background: rgba(52, 211, 153, 0.2);
+      color: var(--success);
+      border: 1px solid rgba(52, 211, 153, 0.5);
+    }
+
+    .deny {
+      background: rgba(248, 113, 113, 0.2);
+      color: var(--danger);
+      border: 1px solid rgba(248, 113, 113, 0.5);
+    }
+
+    .artifact {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 12px;
+      background: rgba(15, 23, 42, 0.8);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    footer {
+      margin-top: 36px;
+      color: var(--muted);
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+
+    .json-output {
+      background: rgba(15, 23, 42, 0.8);
+      border-radius: 12px;
+      padding: 12px;
+      border: 1px solid var(--border);
+      font-family: "JetBrains Mono", "SFMono-Regular", monospace;
+      font-size: 0.8rem;
+      color: #cbd5f5;
+      white-space: pre-wrap;
+    }
+
+    .notice {
+      border-left: 4px solid rgba(94, 234, 212, 0.7);
+      padding-left: 12px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.5;
     }
   </style>
 </head>
 <body>
-  <h1>🪙 Claim 500 KelpCoin</h1>
-  <p>Fill in your wallet address. Optional: enter a referrer’s wallet to earn bonus KELP.</p>
-  <iframe 
-    src="https://docs.google.com/forms/d/e/1FAIpQLSclYfRXBxHoDBjpoHCoKM2_lm8VkxN8FjqmkOeK5kqxiOMW9A/viewform?embedded=true"
-    allowfullscreen>
-  </iframe>
+  <header>
+    <div>
+      <h1>StencilForge Dash: Private Control Room</h1>
+      <p>LAN-only operations center for module health, queued work, approvals, and artifacts. External posting always requires explicit approval.</p>
+    </div>
+    <div class="badges">
+      <span class="badge">Mode: <strong>LAN Only</strong></span>
+      <span class="badge">Exposure: <strong>127.0.0.1</strong></span>
+      <span class="badge">External Actions: <strong>Approval Required</strong></span>
+    </div>
+  </header>
+
+  <section class="card">
+    <h2>System Health</h2>
+    <div class="grid three">
+      <div class="module-tile">
+        <h3>Orchestrator</h3>
+        <span class="status-pill status-ok">Healthy</span>
+        <p class="list">Tick: 34ms · Latency: 8ms · Queue Depth: 3</p>
+        <button type="button">View Runbook</button>
+      </div>
+      <div class="module-tile">
+        <h3>Ingest Gateway</h3>
+        <span class="status-pill status-warn">Degraded</span>
+        <p class="list">Packet Loss: 1.2% · Retries: 4</p>
+        <button type="button">Open Diagnostics</button>
+      </div>
+      <div class="module-tile">
+        <h3>Renderer</h3>
+        <span class="status-pill status-ok">Healthy</span>
+        <p class="list">GPU Load: 43% · Frames: 58/s</p>
+        <button type="button">Launch Inspector</button>
+      </div>
+      <div class="module-tile">
+        <h3>Artifact Vault</h3>
+        <span class="status-pill status-ok">Healthy</span>
+        <p class="list">Disk: 68% · Sync: 2m ago</p>
+        <button type="button">Browse Vault</button>
+      </div>
+      <div class="module-tile">
+        <h3>Notifier</h3>
+        <span class="status-pill status-warn">Rate Limited</span>
+        <p class="list">Outbound: 12/min · Approval Queue: 5</p>
+        <button type="button">Throttle Rules</button>
+      </div>
+      <div class="module-tile">
+        <h3>Compliance Guard</h3>
+        <span class="status-pill status-ok">Healthy</span>
+        <p class="list">Policy Sync: Current · Blocks: 0</p>
+        <button type="button">View Policies</button>
+      </div>
+    </div>
+  </section>
+
+  <h2 class="section-title">Queues</h2>
+  <div class="grid three">
+    <div class="card">
+      <h3>Incoming</h3>
+      <div class="queue">
+        <div class="queue-item">
+          <span>job-4219: ingest-lan-feed</span>
+          <span class="tag">awaiting approval</span>
+        </div>
+        <div class="queue-item">
+          <span>job-4220: render-daily-pack</span>
+          <span class="tag">ready</span>
+        </div>
+        <div class="queue-item">
+          <span>job-4221: compile-archive</span>
+          <span class="tag">ready</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Processing</h3>
+      <div class="queue">
+        <div class="queue-item">
+          <span>job-4212: assemble-index</span>
+          <span class="tag">67%</span>
+        </div>
+        <div class="queue-item">
+          <span>job-4217: render-preview</span>
+          <span class="tag">42%</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Done</h3>
+      <div class="queue">
+        <div class="queue-item">
+          <span>job-4209: batch-export</span>
+          <span class="tag">complete</span>
+        </div>
+        <div class="queue-item">
+          <span>job-4210: clean-vault</span>
+          <span class="tag">complete</span>
+        </div>
+        <div class="queue-item">
+          <span>job-4211: audit-pack</span>
+          <span class="tag">complete</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="section-title">Approval Queue</h2>
+  <div class="grid two">
+    <div class="card">
+      <h3>External Action Requests</h3>
+      <div class="list">
+        <div class="approval-row">
+          <div>
+            <strong>job-4219</strong>
+            <p>Post summary to external partner endpoint.</p>
+          </div>
+          <div class="actions">
+            <button class="approve" type="button">Approve</button>
+            <button class="deny" type="button">Deny</button>
+          </div>
+        </div>
+        <div class="approval-row">
+          <div>
+            <strong>job-4223</strong>
+            <p>Send artifact digest to outbound relay.</p>
+          </div>
+          <div class="actions">
+            <button class="approve" type="button">Approve</button>
+            <button class="deny" type="button">Deny</button>
+          </div>
+        </div>
+        <div class="approval-row">
+          <div>
+            <strong>job-4224</strong>
+            <p>Notify public channel about daily render.</p>
+          </div>
+          <div class="actions">
+            <button class="approve" type="button">Approve</button>
+            <button class="deny" type="button">Deny</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Approval Policy</h3>
+      <p class="notice">All actions that post to external systems are blocked by default. Approvals must be granted per job before any outbound call is executed.</p>
+      <div class="list">
+        <span>Last policy sync: 2 minutes ago</span>
+        <span>Approver group: SForge-LAN-Admins</span>
+        <span>Escalation window: 30 minutes</span>
+        <span>Audit trail: Enabled</span>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="section-title">Create Job</h2>
+  <div class="grid two">
+    <div class="card">
+      <form id="job-form">
+        <label>
+          Job Name
+          <input type="text" name="name" placeholder="render-nightly-pack" required />
+        </label>
+        <label>
+          Module
+          <select name="module" required>
+            <option value="ingest">Ingest Gateway</option>
+            <option value="render">Renderer</option>
+            <option value="artifact">Artifact Vault</option>
+            <option value="notify">Notifier</option>
+            <option value="compliance">Compliance Guard</option>
+          </select>
+        </label>
+        <label>
+          Priority
+          <select name="priority" required>
+            <option value="low">Low</option>
+            <option value="standard" selected>Standard</option>
+            <option value="high">High</option>
+          </select>
+        </label>
+        <label>
+          Payload (JSON)
+          <textarea name="payload" placeholder='{"batch":"nightly","external":false}' required></textarea>
+        </label>
+        <label>
+          External Posting Required
+          <select name="external">
+            <option value="false" selected>No</option>
+            <option value="true">Yes (requires approval)</option>
+          </select>
+        </label>
+        <div class="button-row">
+          <button class="primary" type="submit">Create Job</button>
+          <button class="ghost" type="button" id="download-job">Save JSON to queue/incoming</button>
+        </div>
+      </form>
+    </div>
+    <div class="card">
+      <h3>Queue Writeout</h3>
+      <p class="notice">Jobs are serialized as JSON and written into <strong>queue/incoming</strong>. The control plane ingests files from this directory. LAN-only mode ensures no public exposure.</p>
+      <div class="json-output" id="job-output">Fill the form to preview the JSON payload.</div>
+    </div>
+  </div>
+
+  <h2 class="section-title">Artifacts Viewer</h2>
+  <div class="grid three">
+    <div class="artifact">
+      <strong>render-nightly-pack.tar</strong>
+      <span>Size: 1.2GB · Created: 18m ago</span>
+      <span class="status-pill status-ok">Verified</span>
+    </div>
+    <div class="artifact">
+      <strong>ingest-lan-feed.json</strong>
+      <span>Size: 82MB · Created: 42m ago</span>
+      <span class="status-pill status-warn">Pending Approval</span>
+    </div>
+    <div class="artifact">
+      <strong>audit-report-0422.pdf</strong>
+      <span>Size: 6MB · Created: 2h ago</span>
+      <span class="status-pill status-ok">Archived</span>
+    </div>
+  </div>
+
+  <footer>
+    <p>Constraints: LAN-only access, no reboot/shutdown controls, and all external posting actions gated by approval.</p>
+  </footer>
+
+  <script>
+    const form = document.getElementById("job-form");
+    const output = document.getElementById("job-output");
+    const downloadButton = document.getElementById("download-job");
+    let lastJob = null;
+
+    const buildJob = (data) => {
+      let parsedPayload = {};
+      try {
+        parsedPayload = JSON.parse(data.payload);
+      } catch (error) {
+        parsedPayload = { raw: data.payload };
+      }
+
+      return {
+        id: `job-${Math.floor(Math.random() * 9000 + 1000)}`,
+        name: data.name,
+        module: data.module,
+        priority: data.priority,
+        createdAt: new Date().toISOString(),
+        externalPostingRequired: data.external === "true",
+        status: "queued",
+        payload: parsedPayload
+      };
+    };
+
+    const renderJob = (job) => {
+      output.textContent = JSON.stringify(job, null, 2);
+    };
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+      lastJob = buildJob(data);
+      renderJob(lastJob);
+
+      fetch("http://localhost:8080/queue/incoming", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(lastJob)
+      }).catch(() => {
+        // Queue handler may be offline; download option remains available.
+      });
+    });
+
+    downloadButton.addEventListener("click", () => {
+      if (!lastJob) {
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+        lastJob = buildJob(data);
+      }
+      renderJob(lastJob);
+      const blob = new Blob([JSON.stringify(lastJob, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `${lastJob.id}.json`;
+      link.click();
+      URL.revokeObjectURL(url);
+    });
+  </script>
 </body>
 </html>
