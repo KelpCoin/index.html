@@ -1,44 +1,242 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Claim 500 KelpCoin</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f0fdf4;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin: 0;
-      padding: 40px;
+# PowerShell mega-bootstrap: artifact evaluation pipeline
+Set-StrictMode -Version Latest
+$ErrorActionPreference = 'Stop'
+
+function Get-NowUtcIso {
+    return (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
+}
+
+function Ensure-Directory([string]$Path) {
+    if (-not (Test-Path -LiteralPath $Path)) {
+        New-Item -ItemType Directory -Path $Path | Out-Null
     }
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
+}
+
+function Read-JsonFile([string]$Path, [hashtable]$Default) {
+    if (Test-Path -LiteralPath $Path) {
+        $raw = Get-Content -LiteralPath $Path -Raw
+        if ($raw.Trim().Length -gt 0) {
+            return $raw | ConvertFrom-Json
+        }
     }
-    p {
-      font-size: 1rem;
-      margin-bottom: 2rem;
-      color: #555;
+    return $Default
+}
+
+function Write-JsonFile([string]$Path, $Object) {
+    $json = $Object | ConvertTo-Json -Depth 10
+    Set-Content -LiteralPath $Path -Value $json
+}
+
+function Get-DeterministicScore([string]$Seed, [int]$Min, [int]$Max) {
+    $bytes = [System.Text.Encoding]::UTF8.GetBytes($Seed)
+    $hash = [System.Security.Cryptography.SHA256]::Create().ComputeHash($bytes)
+    $value = [BitConverter]::ToUInt32($hash, 0)
+    $range = $Max - $Min
+    if ($range -le 0) { return $Min }
+    return $Min + ($value % ($range + 1))
+}
+
+function Get-ArtifactScoreMatrix($Artifact) {
+    $id = $Artifact.id
+    $completeness = Get-DeterministicScore "$id|completeness" 5 25
+    $novelty = Get-DeterministicScore "$id|novelty" 5 25
+    $impact = Get-DeterministicScore "$id|impact" 5 25
+    $feasibility = Get-DeterministicScore "$id|feasibility" 5 25
+    $total = $completeness + $novelty + $impact + $feasibility
+    return [pscustomobject]@{
+        completeness = $completeness
+        novelty = $novelty
+        impact = $impact
+        feasibility = $feasibility
+        total = $total
     }
-    iframe {
-      border: none;
-      width: 100%;
-      max-width: 700px;
-      height: 800px;
-      border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+}
+
+function Get-RiskMatrix($Artifact) {
+    $id = $Artifact.id
+    $riskScore = Get-DeterministicScore "$id|risk" 0 100
+    $flags = @()
+    if (-not $Artifact.title) { $flags += 'missing_title' }
+    if (-not $Artifact.summary) { $flags += 'missing_summary' }
+    if ($riskScore -ge 70) { $flags += 'high_risk' }
+    return [pscustomobject]@{
+        risk_score = $riskScore
+        flags = $flags
     }
-  </style>
-</head>
-<body>
-  <h1>🪙 Claim 500 KelpCoin</h1>
-  <p>Fill in your wallet address. Optional: enter a referrer’s wallet to earn bonus KELP.</p>
-  <iframe 
-    src="https://docs.google.com/forms/d/e/1FAIpQLSclYfRXBxHoDBjpoHCoKM2_lm8VkxN8FjqmkOeK5kqxiOMW9A/viewform?embedded=true"
-    allowfullscreen>
-  </iframe>
-</body>
-</html>
+}
+
+function Get-KillMatrix($Artifact, $RiskMatrix) {
+    $reasons = @()
+    if (-not $Artifact.title) { $reasons += 'no_title' }
+    if (-not $Artifact.summary) { $reasons += 'no_summary' }
+    if ($RiskMatrix.risk_score -ge 85) { $reasons += 'risk_threshold_exceeded' }
+    $killed = $reasons.Count -gt 0
+    return [pscustomobject]@{
+        killed = $killed
+        reasons = $reasons
+    }
+}
+
+function Get-EntropyMatrix($Artifact) {
+    $summaryLength = 0
+    if ($Artifact.summary) { $summaryLength = $Artifact.summary.Length }
+    $entropyScore = [Math]::Min(100, 10 + ($summaryLength * 2))
+    $createdAt = Get-Date $Artifact.created_at
+    $ageDays = [Math]::Max(0, ((Get-Date).ToUniversalTime() - $createdAt.ToUniversalTime()).TotalDays)
+    $driftScore = [Math]::Min(100, [Math]::Floor($ageDays * 5))
+    return [pscustomobject]@{
+        entropy_score = $entropyScore
+        drift_score = $driftScore
+    }
+}
+
+$baseDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+$artifactsDir = Join-Path $baseDir 'artifacts'
+$reportsDir = Join-Path $baseDir 'reports'
+$jobsDir = Join-Path $baseDir 'jobs'
+$statePath = Join-Path $baseDir 'last_scored_cursor.json'
+
+Ensure-Directory $artifactsDir
+Ensure-Directory $reportsDir
+Ensure-Directory $jobsDir
+
+$stateDefault = @{
+    last_scored_at = '1970-01-01T00:00:00Z'
+    scored_ids = @()
+}
+$state = Read-JsonFile $statePath $stateDefault
+
+$artifactFiles = Get-ChildItem -LiteralPath $artifactsDir -Filter '*.json' -File
+$artifacts = @()
+foreach ($file in $artifactFiles) {
+    $artifact = Get-Content -LiteralPath $file.FullName -Raw | ConvertFrom-Json
+    if ($artifact.id) { $artifacts += $artifact }
+}
+
+if ($artifacts.Count -lt 5) {
+    $needed = 5 - $artifacts.Count
+    for ($i = 1; $i -le $needed; $i++) {
+        $id = "dummy-$((Get-Date).ToUniversalTime().ToString('yyyyMMddHHmmss'))-$i"
+        $artifact = [pscustomobject]@{
+            id = $id
+            title = "Dummy artifact $i"
+            summary = "Auto-generated bootstrap artifact for scoring matrix validation."
+            created_at = Get-NowUtcIso
+            source = 'bootstrap'
+            tags = @('dummy', 'bootstrap')
+        }
+        $path = Join-Path $artifactsDir "$id.json"
+        Write-JsonFile $path $artifact
+        $artifacts += $artifact
+    }
+}
+
+$lastScoredAt = Get-Date $state.last_scored_at
+$newArtifacts = @()
+foreach ($artifact in $artifacts) {
+    $createdAt = Get-Date $artifact.created_at
+    if ($createdAt -gt $lastScoredAt -and -not ($state.scored_ids -contains $artifact.id)) {
+        $newArtifacts += $artifact
+    }
+}
+
+$scoredResults = @()
+foreach ($artifact in ($newArtifacts | Sort-Object { $_.created_at })) {
+    $artifactMatrix = Get-ArtifactScoreMatrix $artifact
+    $riskMatrix = Get-RiskMatrix $artifact
+    $killMatrix = Get-KillMatrix $artifact $riskMatrix
+    $entropyMatrix = Get-EntropyMatrix $artifact
+
+    $totalScore = [Math]::Max(0, [Math]::Min(100, $artifactMatrix.total - [Math]::Floor($riskMatrix.risk_score / 2) - [Math]::Floor($entropyMatrix.drift_score / 4)))
+    if ($killMatrix.killed) { $totalScore = 0 }
+
+    $result = [pscustomobject]@{
+        id = $artifact.id
+        scored_at = Get-NowUtcIso
+        matrices = [pscustomobject]@{
+            artifact_scoring = $artifactMatrix
+            failure_risk = $riskMatrix
+            kill = $killMatrix
+            entropy_drift = $entropyMatrix
+        }
+        total_score = $totalScore
+        killed = $killMatrix.killed
+        kill_reasons = $killMatrix.reasons
+    }
+
+    $sidecarPath = Join-Path $artifactsDir "$($artifact.id).score.json"
+    Write-JsonFile $sidecarPath $result
+
+    $scoredResults += $result
+    $state.scored_ids += $artifact.id
+}
+
+if ($scoredResults.Count -gt 0) {
+    $latestScored = $newArtifacts | Sort-Object { $_.created_at } | Select-Object -Last 1
+    $state.last_scored_at = $latestScored.created_at
+}
+
+Write-JsonFile $statePath $state
+
+$reportDate = (Get-Date).ToString('yyyy-MM-dd')
+$reportPath = Join-Path $reportsDir "report-$reportDate.md"
+
+$reportLines = @()
+$reportLines += "# Daily Artifact Scoring Report ($reportDate)"
+$reportLines += ""
+$reportLines += "## Scored Items"
+if ($scoredResults.Count -eq 0) {
+    $reportLines += "No new artifacts scored in this run."
+} else {
+    $reportLines += "| ID | Score | Killed |"
+    $reportLines += "| --- | --- | --- |"
+    foreach ($result in $scoredResults) {
+        $reportLines += "| $($result.id) | $($result.total_score) | $($result.killed) |"
+    }
+}
+
+$reportLines += ""
+$reportLines += "## Top 10"
+$topResults = $scoredResults | Where-Object { -not $_.killed } | Sort-Object total_score -Descending | Select-Object -First 10
+if ($topResults.Count -eq 0) {
+    $reportLines += "No eligible items for top 10."
+} else {
+    $reportLines += "| Rank | ID | Score |"
+    $reportLines += "| --- | --- | --- |"
+    $rank = 1
+    foreach ($result in $topResults) {
+        $reportLines += "| $rank | $($result.id) | $($result.total_score) |"
+        $rank++
+    }
+}
+
+$reportLines += ""
+$reportLines += "## Killed Items"
+$killedResults = $scoredResults | Where-Object { $_.killed }
+if ($killedResults.Count -eq 0) {
+    $reportLines += "No killed items."
+} else {
+    foreach ($result in $killedResults) {
+        $reasons = $result.kill_reasons -join ', '
+        $reportLines += "- $($result.id): $reasons"
+    }
+}
+
+Set-Content -LiteralPath $reportPath -Value $reportLines
+
+foreach ($result in $topResults | Select-Object -First 3) {
+    $job = [pscustomobject]@{
+        job_id = "followup-$($result.id)"
+        artifact_id = $result.id
+        priority = 'high'
+        created_at = Get-NowUtcIso
+        action = 'schedule_review'
+        score = $result.total_score
+    }
+    $jobPath = Join-Path $jobsDir "$($job.job_id).json"
+    if (-not (Test-Path -LiteralPath $jobPath)) {
+        Write-JsonFile $jobPath $job
+    }
+}
+
+Write-Output "Scored $($scoredResults.Count) new artifacts. Report: $reportPath"
