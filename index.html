@@ -2,43 +2,428 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Claim 500 KelpCoin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BIGGIE+PEGGY Conversion Engine v3.1</title>
   <style>
+    :root {
+      color-scheme: light;
+      --bg: #0f172a;
+      --card: #111827;
+      --accent: #f472b6;
+      --accent-2: #38bdf8;
+      --text: #f8fafc;
+      --muted: #cbd5f5;
+      --soft: #1f2937;
+      --border: rgba(148, 163, 184, 0.2);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f0fdf4;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
       margin: 0;
-      padding: 40px;
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      background: linear-gradient(160deg, #0f172a 0%, #111827 50%, #0f172a 100%);
+      color: var(--text);
+      padding: 32px 20px 48px;
     }
+
+    header {
+      max-width: 1100px;
+      margin: 0 auto 32px;
+      text-align: center;
+    }
+
+    header p {
+      color: var(--muted);
+      margin: 8px 0 0;
+    }
+
     h1 {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
+      margin: 0;
+      font-size: clamp(1.8rem, 2.6vw, 3rem);
     }
-    p {
-      font-size: 1rem;
-      margin-bottom: 2rem;
-      color: #555;
+
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      gap: 24px;
     }
-    iframe {
-      border: none;
-      width: 100%;
-      max-width: 700px;
-      height: 800px;
-      border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+
+    section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 16px 30px rgba(15, 23, 42, 0.35);
+    }
+
+    section h2 {
+      margin: 0 0 16px;
+      font-size: 1.4rem;
+      color: var(--accent);
+    }
+
+    h3 {
+      margin: 16px 0 8px;
+      font-size: 1.1rem;
+      color: var(--accent-2);
+    }
+
+    ul {
+      margin: 0;
+      padding-left: 20px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .grid-2 {
+      display: grid;
+      gap: 16px;
+    }
+
+    .grid-3 {
+      display: grid;
+      gap: 16px;
+    }
+
+    @media (min-width: 860px) {
+      .grid-2 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .grid-3 {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .tag {
+      display: inline-flex;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(244, 114, 182, 0.2);
+      color: #fbcfe8;
+      font-size: 0.8rem;
+      margin-bottom: 10px;
+    }
+
+    .callout {
+      border-left: 3px solid var(--accent);
+      padding-left: 12px;
+      color: var(--muted);
+    }
+
+    .soft {
+      background: var(--soft);
+      border-radius: 12px;
+      padding: 16px;
+      color: var(--muted);
+    }
+
+    .stop {
+      background: rgba(248, 113, 113, 0.18);
+      border: 1px solid rgba(248, 113, 113, 0.4);
+      color: #fee2e2;
+      padding: 12px 16px;
+      border-radius: 12px;
+      margin-top: 12px;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 32px;
+      color: var(--muted);
+      font-size: 0.9rem;
     }
   </style>
 </head>
 <body>
-  <h1>🪙 Claim 500 KelpCoin</h1>
-  <p>Fill in your wallet address. Optional: enter a referrer’s wallet to earn bonus KELP.</p>
-  <iframe 
-    src="https://docs.google.com/forms/d/e/1FAIpQLSclYfRXBxHoDBjpoHCoKM2_lm8VkxN8FjqmkOeK5kqxiOMW9A/viewform?embedded=true"
-    allowfullscreen>
-  </iframe>
+  <header>
+    <span class="tag">Conversion Engine v3.1</span>
+    <h1>BIGGIE + PEGGY Instagram → Link Hub → Payment → Retention</h1>
+    <p>Compliance-safe, PG-13 language with stop checkpoints for Peggy approval.</p>
+  </header>
+
+  <main>
+    <section>
+      <h2>A) One-Page Funnel Map</h2>
+      <ul>
+        <li><strong>IG Entry:</strong> Reels + stories with light CTA → “link in bio only” trust reminder.</li>
+        <li><strong>Link Hub:</strong> 3-button menu (Support / Members / Live RSVP) + anti-scam line.</li>
+        <li><strong>Payment:</strong> Tip jar (one-time) + Members (recurring) + optional VIP Live ticket.</li>
+        <li><strong>Delivery:</strong> Thank-you note + members-only updates + weekly live.</li>
+        <li><strong>Retention:</strong> Weekly live + members perk drop + shout-out roll-up.</li>
+        <li><strong>Offers:</strong> Entry = Support, Core = Members, Upsell = Live/VIP.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>B) Offer Stack (Max 3)</h2>
+      <div class="grid-3">
+        <div class="soft">
+          <h3>Offer 1: Support/Tip</h3>
+          <ul>
+            <li><strong>Price tiers:</strong> NZD 5 / 15 / 35 “coffee, snack, glam”.</li>
+            <li><strong>What they get:</strong> public thank-you + weekly gratitude story.</li>
+            <li><strong>Delivery:</strong> tip link + auto thank-you message.</li>
+            <li><strong>Safe description:</strong> “Support the art + keep the lights on. PG-13 vibes only.”</li>
+          </ul>
+        </div>
+        <div class="soft">
+          <h3>Offer 2: Members (Core)</h3>
+          <ul>
+            <li><strong>Price tiers:</strong> NZD 9 / 19 / 39 monthly.</li>
+            <li><strong>What they get:</strong> members-only updates, weekly live, behind-the-scenes.</li>
+            <li><strong>Delivery:</strong> off-platform membership page with age gate.</li>
+            <li><strong>Safe description:</strong> “Soft, playful extras + early access drops.”</li>
+          </ul>
+        </div>
+        <div class="soft">
+          <h3>Offer 3: Live/VIP (Optional)</h3>
+          <ul>
+            <li><strong>Price tiers:</strong> NZD 20 / 45 / 80 per live.</li>
+            <li><strong>What they get:</strong> themed live, VIP shout-out, priority Q&amp;A.</li>
+            <li><strong>Delivery:</strong> RSVP page + calendar reminder.</li>
+            <li><strong>Safe description:</strong> “PG-13 themed live with a cozy vibe.”</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>C) Link Hub Rebuild (Linktree)</h2>
+      <div class="grid-2">
+        <div>
+          <h3>SOFT Version</h3>
+          <ul>
+            <li><strong>1. “Support Peggy”</strong> — “Tip the creator + keep the art going.” (Tip)</li>
+            <li><strong>2. “Join Members”</strong> — “Weekly perks + cozy updates.” (Members)</li>
+            <li><strong>3. “Live RSVP”</strong> — “Upcoming PG-13 live schedule.” (Live/VIP)</li>
+            <li><strong>4. “Official FAQ”</strong> — “What I post + safety boundaries.” (FAQ)</li>
+          </ul>
+        </div>
+        <div>
+          <h3>BOLD Version</h3>
+          <ul>
+            <li><strong>1. “Send Love Now”</strong> — “Quick support, big gratitude.” (Tip)</li>
+            <li><strong>2. “Unlock Members”</strong> — “Private drops + weekly live.” (Members)</li>
+            <li><strong>3. “VIP Live Pass”</strong> — “Seats are limited, RSVP.” (Live/VIP)</li>
+            <li><strong>4. “Safety + Rules”</strong> — “PG-13 only, boundaries.” (FAQ)</li>
+          </ul>
+        </div>
+      </div>
+      <p class="callout"><strong>Anti-scam line:</strong> “Only trust the bio link. I will never DM random payment links.”</p>
+    </section>
+
+    <section>
+      <h2>D) Bio + Profile Pack (Each IG Account)</h2>
+      <div class="grid-2">
+        <div>
+          <h3>@lill_peggy (main)</h3>
+          <ul>
+            <li><strong>SOFT bio:</strong> “Soft chaos + cozy glam. PG-13 only. Weekly lives + perks ↓”</li>
+            <li><strong>BOLD bio:</strong> “Your favorite pink menace. Weekly lives + members club ↓ PG-13.”</li>
+            <li><strong>Pinned post:</strong> “Welcome to Peggy’s hub” intro reel.</li>
+            <li><strong>Caption:</strong> “Everything official lives in the bio link. New perks weekly.”</li>
+            <li><strong>Highlights:</strong> Start Here, Members, Lives, Safety, FAQs.</li>
+            <li><strong>Story CTA:</strong> “Bio link is the only real link.”</li>
+          </ul>
+        </div>
+        <div>
+          <h3>@lill_peggy2 (secondary)</h3>
+          <ul>
+            <li><strong>SOFT bio:</strong> “Alt angles + mini updates. PG-13 vibes only.”</li>
+            <li><strong>BOLD bio:</strong> “Mini drops + behind the scenes. Official link below.”</li>
+            <li><strong>Pinned post:</strong> “Why I have two accounts” explainer.</li>
+            <li><strong>Caption:</strong> “Follow both, but only trust the bio link.”</li>
+            <li><strong>Highlights:</strong> Best Of, Members, Link, Safety.</li>
+            <li><strong>Story CTA:</strong> “Official link = bio.”</li>
+          </ul>
+        </div>
+        <div>
+          <h3>@lill_peggy3 (live account)</h3>
+          <ul>
+            <li><strong>SOFT bio:</strong> “Live-only home. Weekly schedule inside.”</li>
+            <li><strong>BOLD bio:</strong> “Lives + VIP nights. RSVP in bio.”</li>
+            <li><strong>Pinned post:</strong> “Live schedule walkthrough.”</li>
+            <li><strong>Caption:</strong> “Turn on notifications + check bio for RSVP.”</li>
+            <li><strong>Highlights:</strong> Live Times, VIP, Rules, Safety.</li>
+            <li><strong>Story CTA:</strong> “RSVP via bio link.”</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>E) Content Calendar (72 Hours)</h2>
+      <h3>3 Posts/Reels Concepts</h3>
+      <ul>
+        <li><strong>Post 1:</strong> “Soft glam intro” — 10-sec montage + text: “New perks live. Bio link only.”</li>
+        <li><strong>Post 2:</strong> “Behind-the-scenes tease” — quick setup clips + “members see more.”</li>
+        <li><strong>Post 3:</strong> “Live teaser” — countdown + “RSVP in bio.”</li>
+      </ul>
+      <h3>6 Story Sequences (3–6 frames each)</h3>
+      <ul>
+        <li><strong>Sequence 1:</strong> “Morning hello” — text: “good morning 💗 new link hub live.” Film: selfie + coffee.</li>
+        <li><strong>Sequence 2:</strong> “Support menu” — text: “3 ways to support today.” Film: screen recording of hub.</li>
+        <li><strong>Sequence 3:</strong> “Members peek” — text: “members get weekly cozy lives.” Film: teaser clip.</li>
+        <li><strong>Sequence 4:</strong> “Live RSVP” — text: “next live this week. RSVP in bio.” Film: calendar sticker.</li>
+        <li><strong>Sequence 5:</strong> “Gentle urgency” — text: “VIP spots are small, link in bio.” Film: countdown.</li>
+        <li><strong>Sequence 6:</strong> “Anti-scam” — text: “only trust the bio link.” Film: pointing gesture.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>F) Comment Reply Bank (20)</h2>
+      <ul>
+        <li>“You’re sweet 🫶 the official link is in my bio.”</li>
+        <li>“Thank you! Bio link has the full menu.”</li>
+        <li>“Appreciate you! Tap the top link in my bio.”</li>
+        <li>“That means a lot — support options are in bio.”</li>
+        <li>“Aww thanks! Members info is in the bio link.”</li>
+        <li>“Glad you’re here 💗 link in bio for the official hub.”</li>
+        <li>“You can find the tip jar in my bio.”</li>
+        <li>“Live schedule is in the bio link.”</li>
+        <li>“Check the bio link for the full list.”</li>
+        <li>“Bio link = official only.”</li>
+        <li>“Thanks love! The members button is in bio.”</li>
+        <li>“I keep everything in one safe place: bio link.”</li>
+        <li>“Tap the pink link in bio 💗.”</li>
+        <li>“Main link in bio has it all.”</li>
+        <li>“I don’t send payment links in DMs — bio only.”</li>
+        <li>“If it’s not in my bio, it’s not me.”</li>
+        <li>“Only trust the bio link, please.”</li>
+        <li>“I never DM payment links. Bio only.”</li>
+        <li>“Official hub = bio link. Stay safe.”</li>
+        <li>“Short answer: bio link.”</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>G) DM Template Bank (10)</h2>
+      <ul>
+        <li><strong>1) New follower:</strong> “Hey! Thanks for following 💗 Everything official is in my bio link.”</li>
+        <li><strong>2) Where can I support:</strong> “That’s so sweet. Tip + members are in the bio link.”</li>
+        <li><strong>3) Compliments:</strong> “You’re lovely, thank you! Bio link has the safe menu.”</li>
+        <li><strong>4) Free content request:</strong> “I keep freebies to stories. Full menu is in bio.”</li>
+        <li><strong>5) Customs inquiry:</strong> “I keep things PG-13. Requests go through the bio link.”</li>
+        <li><strong>6) Chat request:</strong> “I’m on a tight schedule, but I do weekly lives. RSVP in bio.”</li>
+        <li><strong>7) Scam suspicion:</strong> “Thanks for checking! Only trust the bio link.”</li>
+        <li><strong>8) Can’t afford:</strong> “No pressure at all. Your support by watching means a lot.”</li>
+        <li><strong>9) Send link:</strong> “I don’t send payment links in DMs. Bio only 💗.”</li>
+        <li><strong>10) High intent:</strong> “Love the energy! Join members via the bio link.”</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>H) Word Banks (Automation)</h2>
+      <div class="grid-2">
+        <div>
+          <h3>Tone Tags</h3>
+          <ul>
+            <li><strong>SOFT:</strong> “gentle, cozy, soft glam, sweet.”</li>
+            <li><strong>BOLD:</strong> “confident, direct, quick, strong.”</li>
+            <li><strong>PLAYFUL:</strong> “tease, wink, cheeky, flirty.”</li>
+            <li><strong>SWEET:</strong> “thank you, appreciate, grateful.”</li>
+            <li><strong>FIRM:</strong> “boundary, official, safe.”</li>
+            <li><strong>SAFETY:</strong> “bio link only, verified.”</li>
+          </ul>
+        </div>
+        <div>
+          <h3>CTA Tags</h3>
+          <ul>
+            <li><strong>LINK_IN_BIO:</strong> “bio link,” “main link,” “top link.”</li>
+            <li><strong>OFFICIAL_ONLY:</strong> “official hub,” “verified link.”</li>
+            <li><strong>SUPPORT_OPTION:</strong> “tip jar,” “support me,” “send love.”</li>
+            <li><strong>MEMBERS_OPTION:</strong> “join members,” “members club.”</li>
+            <li><strong>NO_PRESSURE:</strong> “no pressure,” “only if you want.”</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Boundaries</h3>
+          <ul>
+            <li><strong>PG_ONLY:</strong> “PG-13 only,” “safe vibes only.”</li>
+            <li><strong>TIME_BOUNDARY:</strong> “limited DMs,” “weekly lives instead.”</li>
+            <li><strong>NO_PRICES_IN_DM:</strong> “all pricing in bio.”</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>I) Conversion Rules (Anti-Spam + Human Feel)</h2>
+      <ul>
+        <li><strong>Rotation:</strong> Use 4 reply buckets (sweet, playful, firm, safety) and rotate every 3 comments.</li>
+        <li><strong>Cooldown:</strong> Max 2 CTA stories per day per account; 1 CTA per post caption.</li>
+        <li><strong>Don’t get banned:</strong> avoid “explicit,” “pay for X,” “DM for prices,” “send cash for pics.”</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>J) Metrics Dash (Simple)</h2>
+      <ul>
+        <li><strong>Daily numbers:</strong> profile visits, link clicks (or linktree views), paid conversions (tips + members).</li>
+        <li><strong>Success thresholds:</strong> 5% profile → link click; 3% link click → conversion.</li>
+        <li><strong>If missed:</strong> simplify hub copy, add one story CTA, re-pin intro post.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>K) Approval Gates (Peggy)</h2>
+      <div class="stop">
+        <strong>STOP-1:</strong> Approve offer names + boundaries.
+        <ul>
+          <li><strong>Too bold:</strong> soften names + remove urgency.</li>
+          <li><strong>Too soft:</strong> add stronger CTA line.</li>
+        </ul>
+      </div>
+      <div class="stop">
+        <strong>STOP-2:</strong> Approve bio + link hub copy.
+        <ul>
+          <li><strong>Too bold:</strong> swap “VIP” for “Live.”</li>
+          <li><strong>Too soft:</strong> add “members club” phrasing.</li>
+        </ul>
+      </div>
+      <div class="stop">
+        <strong>STOP-3:</strong> Approve story scripts + pinned captions.
+        <ul>
+          <li><strong>Too bold:</strong> remove urgency stories.</li>
+          <li><strong>Too soft:</strong> add a single “send love now” CTA.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h2>L) 72-Hour Task Split (Biggie vs Peggy)</h2>
+      <div class="grid-2">
+        <div>
+          <h3>Biggie Tasks</h3>
+          <ul>
+            <li>Rebuild link hub + add anti-scam line.</li>
+            <li>Set up tip + members pages with age gating.</li>
+            <li>Create highlights covers + upload FAQ.</li>
+            <li>Track daily metrics in a simple sheet.</li>
+            <li>Load comment + DM templates.</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Peggy Tasks</h3>
+          <ul>
+            <li>Approve offer names + boundaries (STOP-1).</li>
+            <li>Approve bio + link hub copy (STOP-2).</li>
+            <li>Record 3 reels + 6 story sequences.</li>
+            <li>Post on schedule + pin intro post.</li>
+            <li>Host weekly live + members perk drop.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Designed for fast conversion + safety-first trust.
+  </footer>
 </body>
 </html>
