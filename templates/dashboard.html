@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Local UTM + Affiliate Tracking</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <main class="container">
+    <header class="page-header">
+      <div>
+        <h1>Local UTM + Affiliate Tracking</h1>
+        <p class="subtitle">First-party, LAN-only tracking for campaigns and affiliate links.</p>
+      </div>
+      <div class="badge">
+        <span>Redirect base:</span>
+        <strong>{{ host_url }}</strong>
+      </div>
+    </header>
+
+    <section class="card">
+      <h2>Create a campaign</h2>
+      <form class="grid-form" action="/campaigns" method="post">
+        <label>
+          Name
+          <input name="name" placeholder="Summer Launch" required />
+        </label>
+        <label>
+          Destination URL
+          <input name="destination_url" placeholder="https://example.com/landing" required />
+        </label>
+        <label>
+          UTM Source
+          <input name="utm_source" placeholder="newsletter" required />
+        </label>
+        <label>
+          UTM Medium
+          <input name="utm_medium" placeholder="email" required />
+        </label>
+        <label>
+          UTM Campaign
+          <input name="utm_campaign" placeholder="summer_launch" required />
+        </label>
+        <label>
+          Total Campaign Cost (optional)
+          <input name="cost_total" type="number" step="0.01" placeholder="250.00" />
+        </label>
+        <button type="submit">Generate tracking link</button>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>Log an order (manual revenue entry)</h2>
+      <form class="grid-form" action="/orders" method="post">
+        <label>
+          Campaign Code
+          <input name="code" placeholder="Paste /r/&lt;code&gt;" required />
+        </label>
+        <label>
+          Order ID (optional)
+          <input name="order_id" placeholder="ORDER-1001" />
+        </label>
+        <label>
+          Revenue
+          <input name="revenue" type="number" step="0.01" placeholder="149.00" required />
+        </label>
+        <button type="submit">Attribute revenue</button>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>Daily spend entry</h2>
+      <form class="grid-form" action="/spend" method="post">
+        <label>
+          Date
+          <input name="spend_date" type="date" />
+        </label>
+        <label>
+          Spend amount
+          <input name="amount" type="number" step="0.01" placeholder="75.00" required />
+        </label>
+        <button type="submit">Add spend</button>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>Top campaigns</h2>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Tracking Link</th>
+              <th>Clicks</th>
+              <th>Orders</th>
+              <th>Conversion</th>
+              <th>Revenue</th>
+              <th>ROI</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for campaign in campaigns %}
+            {% set conversion = (campaign['order_count'] / campaign['click_count']) if campaign['click_count'] else 0 %}
+            {% set roi = ((campaign['revenue_total'] - campaign['cost_total']) / campaign['cost_total']) if campaign['cost_total'] else None %}
+            <tr>
+              <td>{{ campaign['name'] }}</td>
+              <td>
+                <code>{{ host_url }}/r/{{ campaign['code'] }}</code>
+              </td>
+              <td>{{ campaign['click_count'] }}</td>
+              <td>{{ campaign['order_count'] }}</td>
+              <td>{{ '{:.1%}'.format(conversion) }}</td>
+              <td>${{ '{:,.2f}'.format(campaign['revenue_total']) }}</td>
+              <td>
+                {% if roi is not none %}
+                  {{ '{:.1%}'.format(roi) }}
+                {% else %}
+                  n/a
+                {% endif %}
+              </td>
+            </tr>
+            {% else %}
+            <tr>
+              <td colspan="7">No campaigns yet. Create one above to get started.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Daily ROI summary</h2>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Clicks</th>
+              <th>Orders</th>
+              <th>Revenue</th>
+              <th>Spend</th>
+              <th>ROI</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in daily_rows %}
+            {% set roi = ((row['revenue_total'] - row['spend_total']) / row['spend_total']) if row['spend_total'] else None %}
+            <tr>
+              <td>{{ row['day'] }}</td>
+              <td>{{ row['click_count'] }}</td>
+              <td>{{ row['order_count'] }}</td>
+              <td>${{ '{:,.2f}'.format(row['revenue_total']) }}</td>
+              <td>${{ '{:,.2f}'.format(row['spend_total']) }}</td>
+              <td>
+                {% if roi is not none %}
+                  {{ '{:.1%}'.format(roi) }}
+                {% else %}
+                  n/a
+                {% endif %}
+              </td>
+            </tr>
+            {% else %}
+            <tr>
+              <td colspan="6">No activity logged yet.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card card-muted">
+      <h2>Transparent, first-party tracking</h2>
+      <ul>
+        <li>All tracking data stays in a local SQLite database (utm.sqlite3).</li>
+        <li>Redirects are handled locally via <code>/r/&lt;code&gt;</code> and add UTM parameters.</li>
+        <li>No third-party scripts, cookies, or fingerprinting are used.</li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>
