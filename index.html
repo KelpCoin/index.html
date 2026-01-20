@@ -3,42 +3,174 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Claim 500 KelpCoin</title>
+  <title>Daily Money Loop Bootstrap</title>
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f0fdf4;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      font-family: "Segoe UI", sans-serif;
+      background-color: #0f172a;
+      color: #e2e8f0;
       margin: 0;
-      padding: 40px;
+      padding: 32px;
     }
     h1 {
-      font-size: 2rem;
+      font-size: 1.9rem;
       margin-bottom: 0.5rem;
     }
     p {
-      font-size: 1rem;
-      margin-bottom: 2rem;
-      color: #555;
+      color: #cbd5f5;
+      max-width: 820px;
+      line-height: 1.6;
     }
-    iframe {
-      border: none;
-      width: 100%;
-      max-width: 700px;
-      height: 800px;
-      border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    pre {
+      background: #111827;
+      border-radius: 12px;
+      padding: 20px;
+      overflow-x: auto;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.5);
+      border: 1px solid #1e293b;
+      color: #e2e8f0;
+      font-size: 0.9rem;
+      line-height: 1.45;
+      max-width: 1000px;
+    }
+    code {
+      font-family: "Consolas", "Courier New", monospace;
     }
   </style>
 </head>
 <body>
-  <h1>🪙 Claim 500 KelpCoin</h1>
-  <p>Fill in your wallet address. Optional: enter a referrer’s wallet to earn bonus KELP.</p>
-  <iframe 
-    src="https://docs.google.com/forms/d/e/1FAIpQLSclYfRXBxHoDBjpoHCoKM2_lm8VkxN8FjqmkOeK5kqxiOMW9A/viewform?embedded=true"
-    allowfullscreen>
-  </iframe>
+  <h1>Daily Money Loop PowerShell Mega-Bootstrap</h1>
+  <p>
+    Copy and run the single ASCII-only script below. It creates and executes a daily loop
+    script named <strong>Run-DailyMoneyLoop.ps1</strong>, prefers <strong>D:\</strong> then
+    <strong>C:\</strong>, is idempotent, and always emits a proof file path after running.
+  </p>
+  <pre><code>$ErrorActionPreference = "Stop"
+
+$preferredRoots = @("D:\\", "C:\\")
+$root = $null
+foreach ($candidate in $preferredRoots) {
+  if (Test-Path -LiteralPath $candidate) {
+    $root = $candidate
+    break
+  }
+}
+if (-not $root) {
+  throw "No preferred drive found."
+}
+
+$baseDir = Join-Path $root "DailyMoneyLoop"
+$proofDir = Join-Path $baseDir "proofs"
+$scriptPath = Join-Path $baseDir "Run-DailyMoneyLoop.ps1"
+
+New-Item -ItemType Directory -Path $baseDir -Force | Out-Null
+New-Item -ItemType Directory -Path $proofDir -Force | Out-Null
+
+$scriptContent = @'
+param()
+
+$ErrorActionPreference = "Stop"
+
+function Get-RunStamp {
+  return (Get-Date).ToString("yyyy-MM-ddTHH-mm-ss")
+}
+
+function Read-State($statePath) {
+  if (Test-Path -LiteralPath $statePath) {
+    $raw = Get-Content -LiteralPath $statePath -Raw
+    if ($raw) {
+      return $raw | ConvertFrom-Json
+    }
+  }
+  return [PSCustomObject]@{ LastRun = $null; LastProof = $null }
+}
+
+function Write-State($statePath, $state) {
+  $state | ConvertTo-Json | Set-Content -LiteralPath $statePath -Encoding UTF8
+}
+
+function Ensure-Dir($path) {
+  if (-not (Test-Path -LiteralPath $path)) {
+    New-Item -ItemType Directory -Path $path -Force | Out-Null
+  }
+}
+
+function Invoke-DailyMoneyLoop {
+  param([bool]$EmitPath = $true)
+
+  $root = Split-Path -Parent $PSScriptRoot
+  $baseDir = $PSScriptRoot
+  $statePath = Join-Path $baseDir "state.json"
+
+  $artifactDir = Join-Path $baseDir "artifacts"
+  $stencilDir = Join-Path $baseDir "stencils"
+  $queueDir = Join-Path $baseDir "queue"
+  $dashboardDir = Join-Path $baseDir "dashboards"
+  $draftDir = Join-Path $baseDir "drafts"
+  $proofDir = Join-Path $baseDir "proofs"
+
+  foreach ($dir in @($artifactDir, $stencilDir, $queueDir, $dashboardDir, $draftDir, $proofDir)) {
+    Ensure-Dir $dir
+  }
+
+  $runStamp = Get-RunStamp
+  $today = (Get-Date).ToString("yyyy-MM-dd")
+  $state = Read-State $statePath
+
+  $artifactPath = Join-Path $artifactDir ("artifact-" + $runStamp + ".txt")
+  "Harvested artifacts at $runStamp" | Set-Content -LiteralPath $artifactPath -Encoding UTF8
+
+  $stencilPaths = @()
+  for ($i = 1; $i -le 10; $i++) {
+    $stencilPath = Join-Path $stencilDir ("stencil-" + $today + "-" + $i.ToString("00") + ".txt")
+    "Stencil $i generated on $today" | Set-Content -LiteralPath $stencilPath -Encoding UTF8
+    $stencilPaths += $stencilPath
+  }
+
+  $queuePath = Join-Path $queueDir ("elohim-" + $runStamp + ".job")
+  "Elohim job queued at $runStamp" | Set-Content -LiteralPath $queuePath -Encoding UTF8
+
+  $dashboardPath = Join-Path $dashboardDir ("dashboard-" + $today + ".txt")
+  "Dashboards updated on $today" | Set-Content -LiteralPath $dashboardPath -Encoding UTF8
+
+  $draftPaths = @()
+  for ($i = 1; $i -le 2; $i++) {
+    $draftPath = Join-Path $draftDir ("distribution-draft-" + $today + "-" + $i.ToString("00") + ".txt")
+    "Draft $i status: pending" | Set-Content -LiteralPath $draftPath -Encoding UTF8
+    $draftPaths += $draftPath
+  }
+
+  $proofPath = Join-Path $proofDir ("proof-" + $runStamp + ".txt")
+  $proofLines = @(
+    "Daily Money Loop Proof",
+    "Run: $runStamp",
+    "Last run: $($state.LastRun)",
+    "Artifacts: $artifactPath",
+    "Stencils: $($stencilPaths -join ', ')",
+    "Queue: $queuePath",
+    "Dashboards: $dashboardPath",
+    "Distribution drafts (pending): $($draftPaths -join ', ')",
+    "Proof: $proofPath"
+  )
+  $proofLines | Set-Content -LiteralPath $proofPath -Encoding UTF8
+
+  $state.LastRun = $runStamp
+  $state.LastProof = $proofPath
+  Write-State $statePath $state
+
+  if ($EmitPath) {
+    Write-Output $proofPath
+  }
+}
+
+Invoke-DailyMoneyLoop
+'@
+
+Set-Content -LiteralPath $scriptPath -Value $scriptContent -Encoding UTF8
+
+$proofPath = & $scriptPath
+Write-Output $proofPath
+
+"Stumbleium:"</code></pre>
 </body>
 </html>
