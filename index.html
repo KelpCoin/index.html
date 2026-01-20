@@ -1,44 +1,675 @@
+powershell -NoProfile -ExecutionPolicy Bypass -Command "& {
+$ErrorActionPreference='Stop'
+$core='C:\BrownEyeCortex'
+$code=Join-Path $core '_moneyfarm\NeuralMoneyAgents'
+$dataRoot=if (Test-Path 'D:\') { 'D:\BrownEye\BROWNEYE_ARTIFACTS\_neural_money_agents' } else { 'C:\BrownEyeCortexData\BROWNEYE_ARTIFACTS\_neural_money_agents' }
+$site=Join-Path $dataRoot 'site'
+$data=Join-Path $dataRoot 'data'
+$logs=Join-Path $dataRoot 'logs'
+$queue=Join-Path $dataRoot 'queue'
+$models=Join-Path $dataRoot 'models'
+$proof=Join-Path $dataRoot 'proof'
+$reports=Join-Path $dataRoot 'reports'
+$deliv=Join-Path $proof 'deliveries'
+$dirs=@($code,$dataRoot,$site,$data,$logs,$queue,$models,$proof,$reports,$deliv,`n  (Join-Path $queue 'incoming'),(Join-Path $queue 'processing'),(Join-Path $queue 'done'),(Join-Path $queue 'dlq'),(Join-Path $queue 'archive'))
+$dirs | ForEach-Object { New-Item -ItemType Directory -Force -Path $_ | Out-Null }
+$configPath=Join-Path $code 'config.json'
+$cfg=@'
+{
+  "port_preference": 9874,
+  "exploration_rate": 0.15,
+  "retry_budget": 3,
+  "stall_threshold_minutes": 15,
+  "traffic_minimum_for_learning": 20,
+  "pay_links": [
+    "https://wise.com/pay/me/joshuaa495"
+  ],
+  "outbound_posting_enabled": false,
+  "discord_enabled": false,
+  "approval_gate_required": true,
+  "data_root": "DATA_ROOT",
+  "code_root": "CODE_ROOT"
+}
+'@
+$cfg=$cfg -replace 'DATA_ROOT',($dataRoot -replace '\\','\\\\')
+$cfg=$cfg -replace 'CODE_ROOT',($code -replace '\\','\\\\')
+Set-Content -Path $configPath -Value $cfg -Encoding UTF8
+$serverPath=Join-Path $code 'server.py'
+@'
+import http.server
+import json
+import os
+import time
+from urllib.parse import urlparse
+
+CODE_ROOT = os.path.dirname(os.path.abspath(__file__))
+CONFIG_PATH = os.path.join(CODE_ROOT, "config.json")
+with open(CONFIG_PATH, "r", encoding="utf-8") as f:
+    CFG = json.load(f)
+DATA_ROOT = CFG["data_root"]
+SITE_DIR = os.path.join(DATA_ROOT, "site")
+DATA_DIR = os.path.join(DATA_ROOT, "data")
+LOG_DIR = os.path.join(DATA_ROOT, "logs")
+
+EVENTS_PATH = os.path.join(DATA_DIR, "events.ndjson")
+DAILY_PATH = os.path.join(DATA_DIR, "daily.json")
+
+os.makedirs(SITE_DIR, exist_ok=True)
+os.makedirs(DATA_DIR, exist_ok=True)
+os.makedirs(LOG_DIR, exist_ok=True)
+
+PORT = int(CFG.get("port_preference", 9874))
+
+class Handler(http.server.BaseHTTPRequestHandler):
+    def _send(self, code, body, content_type="text/html"):
+        self.send_response(code)
+        self.send_header("Content-Type", content_type)
+        self.end_headers()
+        if isinstance(body, str):
+            body = body.encode("utf-8")
+        self.wfile.write(body)
+
+    def do_GET(self):
+        parsed = urlparse(self.path)
+        if parsed.path == "/":
+            path = os.path.join(SITE_DIR, "index.html")
+            if os.path.exists(path):
+                with open(path, "rb") as f:
+                    self._send(200, f.read())
+            else:
+                self._send(200, b"No offer yet")
+            return
+        if parsed.path == "/dashboard.html":
+            path = os.path.join(SITE_DIR, "dashboard.html")
+            if os.path.exists(path):
+                with open(path, "rb") as f:
+                    self._send(200, f.read())
+            else:
+                self._send(200, b"No dashboard yet")
+            return
+        if parsed.path == "/daily.json":
+            if os.path.exists(DAILY_PATH):
+                with open(DAILY_PATH, "rb") as f:
+                    self._send(200, f.read(), "application/json")
+            else:
+                self._send(200, b"[]", "application/json")
+            return
+        self._send(404, b"Not found")
+
+    def do_POST(self):
+        parsed = urlparse(self.path)
+        if parsed.path != "/event":
+            self._send(404, b"Not found")
+            return
+        length = int(self.headers.get("Content-Length", "0"))
+        body = self.rfile.read(length) if length > 0 else b"{}"
+        try:
+            payload = json.loads(body.decode("utf-8"))
+        except Exception:
+            payload = {}
+        now = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+        day = time.strftime("%Y%m%d", time.gmtime())
+        event = {
+            "ts": now,
+            "day": day,
+            "offer_id": payload.get("offer_id", "unknown"),
+            "type": payload.get("type", "view"),
+            "meta": payload.get("meta", {})
+        }
+        line = json.dumps(event, ensure_ascii=True)
+        with open(EVENTS_PATH, "a", encoding="utf-8") as f:
+            f.write(line + "\n")
+        self._send(200, b"OK")
+
+if __name__ == "__main__":
+    server = http.server.HTTPServer(("127.0.0.1", PORT), Handler)
+    print("SERVER_OK http://127.0.0.1:%d/" % PORT)
+    server.serve_forever()
+'@ | Set-Content -Path $serverPath -Encoding UTF8
+$nmaPath=Join-Path $code 'nma.ps1'
+@'
+param([string]$Action="help")
+$ErrorActionPreference="Stop"
+$codeRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
+$configPath = Join-Path $codeRoot "config.json"
+$cfg = Get-Content $configPath -Raw | ConvertFrom-Json
+$dataRoot = $cfg.data_root
+$dataDir = Join-Path $dataRoot "data"
+$logDir = Join-Path $dataRoot "logs"
+$modelsDir = Join-Path $dataRoot "models"
+$proofDir = Join-Path $dataRoot "proof"
+$delivDir = Join-Path $proofDir "deliveries"
+$siteDir = Join-Path $dataRoot "site"
+$queueDir = Join-Path $dataRoot "queue"
+$incomingDir = Join-Path $queueDir "incoming"
+$processingDir = Join-Path $queueDir "processing"
+$doneDir = Join-Path $queueDir "done"
+$dlqDir = Join-Path $queueDir "dlq"
+$archiveDir = Join-Path $queueDir "archive"
+
+function Write-Log { param([string]$name,[string]$msg)
+  $line = "$(Get-Date -Format o)\t$msg"
+  Add-Content -Path (Join-Path $logDir $name) -Value $line
+}
+
+function Ensure-File { param([string]$path,[string]$default)
+  if (!(Test-Path $path)) { $default | Set-Content -Path $path -Encoding UTF8 }
+}
+
+function Ensure-Base {
+  Ensure-File (Join-Path $dataDir "offers.json") "[]"
+  Ensure-File (Join-Path $dataDir "events.ndjson") ""
+  Ensure-File (Join-Path $dataDir "outcomes.json") "[]"
+  Ensure-File (Join-Path $dataDir "allocations.json") "[]"
+  Ensure-File (Join-Path $dataDir "economy_state.json") "{}"
+  Ensure-File (Join-Path $modelsDir "metrics.json") "{}"
+}
+
+function Get-Events {
+  $path = Join-Path $dataDir "events.ndjson"
+  if (!(Test-Path $path)) { return @() }
+  $lines = Get-Content $path
+  $events = @()
+  foreach ($line in $lines) {
+    if ($line.Trim().Length -gt 0) {
+      try { $events += $line | ConvertFrom-Json } catch { }
+    }
+  }
+  return $events
+}
+
+function Compute-Daily {
+  $events = Get-Events
+  $byDay = @{}
+  foreach ($ev in $events) {
+    $day = $ev.day
+    if (-not $byDay.ContainsKey($day)) {
+      $byDay[$day] = [ordered]@{ day = $day; view = 0; click = 0; buy_intent = 0 }
+    }
+    if ($byDay[$day].ContainsKey($ev.type)) { $byDay[$day][$ev.type]++ }
+  }
+  $rows = @()
+  foreach ($day in ($byDay.Keys | Sort-Object)) { $rows += $byDay[$day] }
+  $rows | ConvertTo-Json -Depth 3 | Set-Content -Path (Join-Path $dataDir "daily.json") -Encoding UTF8
+}
+
+function Sample-Gamma { param([double]$shape)
+  $rand = New-Object System.Random
+  if ($shape -lt 1) {
+    $u = $rand.NextDouble()
+    return (Sample-Gamma ($shape + 1)) * [Math]::Pow($u, 1.0 / $shape)
+  }
+  $d = $shape - 1.0 / 3.0
+  $c = 1.0 / [Math]::Sqrt(9.0 * $d)
+  while ($true) {
+    $u1 = $rand.NextDouble()
+    $u2 = $rand.NextDouble()
+    $x = [Math]::Sqrt(-2.0 * [Math]::Log($u1)) * [Math]::Cos(2.0 * [Math]::PI * $u2)
+    $v = [Math]::Pow(1.0 + $c * $x, 3)
+    if ($v -gt 0) {
+      $u = $rand.NextDouble()
+      if ($u -lt 1.0 - 0.0331 * [Math]::Pow($x, 4) -or [Math]::Log($u) -lt 0.5 * $x * $x + $d * (1.0 - $v + [Math]::Log($v))) {
+        return $d * $v
+      }
+    }
+  }
+}
+
+function Sample-Beta { param([double]$a,[double]$b)
+  $ga = Sample-Gamma $a
+  $gb = Sample-Gamma $b
+  return $ga / ($ga + $gb)
+}
+
+function Update-Bandit {
+  $offers = @()
+  $offersPath = Join-Path $dataDir "offers.json"
+  if (Test-Path $offersPath) { $offers = Get-Content $offersPath -Raw | ConvertFrom-Json }
+  $events = Get-Events
+  $views = @{}
+  $clicks = @{}
+  foreach ($ev in $events) {
+    if ($ev.type -eq "view") { $views[$ev.offer_id] = 1 + ($views[$ev.offer_id] | ForEach-Object { $_ }) }
+    if ($ev.type -eq "click") { $clicks[$ev.offer_id] = 1 + ($clicks[$ev.offer_id] | ForEach-Object { $_ }) }
+  }
+  $state = [ordered]@{ objective = "click"; offers = @() }
+  foreach ($offer in $offers) {
+    $v = 0
+    $c = 0
+    if ($views.ContainsKey($offer.offer_id)) { $v = $views[$offer.offer_id] }
+    if ($clicks.ContainsKey($offer.offer_id)) { $c = $clicks[$offer.offer_id] }
+    if ($v -lt $c) { $v = $c }
+    $state.offers += [ordered]@{ offer_id = $offer.offer_id; alpha = 1 + $c; beta = 1 + ($v - $c) }
+  }
+  $state | ConvertTo-Json -Depth 5 | Set-Content -Path (Join-Path $modelsDir "bandit_state.json") -Encoding UTF8
+
+  $selected = $null
+  $reason = ""
+  if ($offers.Count -eq 0) {
+    $reason = "NO_OFFERS"
+  } else {
+    $traffic = $events.Count
+    if ($traffic -lt $cfg.traffic_minimum_for_learning) { $reason = "TRAFFIC_TOO_LOW_FOR_LEARNING" }
+    $rand = New-Object System.Random
+    if ($rand.NextDouble() -lt [double]$cfg.exploration_rate) {
+      $selected = $offers | Get-Random
+      $reason = "EXPLORE"
+    } else {
+      $best = -1
+      foreach ($o in $state.offers) {
+        $score = Sample-Beta $o.alpha $o.beta
+        if ($score -gt $best) { $best = $score; $selected = ($offers | Where-Object { $_.offer_id -eq $o.offer_id } | Select-Object -First 1) }
+      }
+      if (-not $reason) { $reason = "THOMPSON" }
+    }
+  }
+  $alloc = [ordered]@{ ts = (Get-Date -Format o); reason = $reason; objective = "click"; offer_id = if ($selected) { $selected.offer_id } else { "none" } }
+  $alloc | ConvertTo-Json -Depth 3 | Set-Content -Path (Join-Path $dataDir "allocations.json") -Encoding UTF8
+  return $selected
+}
+
+function Render-Site {
+  param($offer)
+  $payLinks = $cfg.pay_links
+  $title = if ($offer) { $offer.title } else { "No offer" }
+  $subtitle = if ($offer) { $offer.subtitle } else { "No offer available" }
+  $preview = if ($offer) { $offer.preview } else { "" }
+  $offerId = if ($offer) { $offer.offer_id } else { "none" }
+  $price = if ($offer) { $offer.price_band } else { "" }
+  $payList = ""
+  foreach ($link in $payLinks) { $payList += "<li><a href=\"$link\" target=\"_blank\">$link</a></li>" }
+  $html = @"
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Claim 500 KelpCoin</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f0fdf4;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin: 0;
-      padding: 40px;
-    }
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
-    }
-    p {
-      font-size: 1rem;
-      margin-bottom: 2rem;
-      color: #555;
-    }
-    iframe {
-      border: none;
-      width: 100%;
-      max-width: 700px;
-      height: 800px;
-      border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
-    }
-  </style>
+<html><head><meta charset=\"UTF-8\"><title>Neural Money Agents</title>
+<style>body{font-family:Segoe UI,Arial;background:#f6f7fb;margin:0;padding:24px} .card{background:#fff;border-radius:8px;padding:20px;max-width:900px;margin:0 auto;box-shadow:0 2px 10px rgba(0,0,0,0.1)} .meta{color:#555}</style>
 </head>
 <body>
-  <h1>🪙 Claim 500 KelpCoin</h1>
-  <p>Fill in your wallet address. Optional: enter a referrer’s wallet to earn bonus KELP.</p>
-  <iframe 
-    src="https://docs.google.com/forms/d/e/1FAIpQLSclYfRXBxHoDBjpoHCoKM2_lm8VkxN8FjqmkOeK5kqxiOMW9A/viewform?embedded=true"
-    allowfullscreen>
-  </iframe>
-</body>
-</html>
+<div class=\"card\">
+<h1>$title</h1>
+<p class=\"meta\">$subtitle</p>
+<p><strong>Price band:</strong> $price</p>
+<pre>$preview</pre>
+<h3>Pay links (proof gate only)</h3>
+<ul>$payList</ul>
+<button id=\"click\">I want this</button>
+<button id=\"buy\">Buy intent</button>
+</div>
+<script>
+const offerId = "$offerId";
+function send(type){fetch('/event',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({offer_id:offerId,type:type,meta:{}})});}
+window.addEventListener('load',()=>send('view'));
+document.getElementById('click').addEventListener('click',()=>send('click'));
+document.getElementById('buy').addEventListener('click',()=>send('buy_intent'));
+</script>
+</body></html>
+"@
+  $html | Set-Content -Path (Join-Path $siteDir "index.html") -Encoding UTF8
+}
+
+function Render-Dashboard {
+  $dailyPath = Join-Path $dataDir "daily.json"
+  $daily = @()
+  if (Test-Path $dailyPath) { $daily = Get-Content $dailyPath -Raw | ConvertFrom-Json }
+  $rows = ""
+  foreach ($row in ($daily | Select-Object -Last 7)) {
+    $rows += "<tr><td>$($row.day)</td><td>$($row.view)</td><td>$($row.click)</td><td>$($row.buy_intent)</td></tr>"
+  }
+  $queueIncoming = (Get-ChildItem $incomingDir -File | Measure-Object).Count
+  $queueProcessing = (Get-ChildItem $processingDir -File | Measure-Object).Count
+  $queueDlq = (Get-ChildItem $dlqDir -File | Measure-Object).Count
+  $mlStatus = "UNKNOWN"
+  $mlDisabledPath = Join-Path $modelsDir "ML_DISABLED.json"
+  if (Test-Path $mlDisabledPath) { $mlStatus = "ML_DISABLED" } else { $mlStatus = "ML_ACTIVE_OR_PENDING" }
+  $banditPath = Join-Path $modelsDir "bandit_state.json"
+  $banditInfo = if (Test-Path $banditPath) { "OK" } else { "MISSING" }
+  $gpuStatus = Get-GPUStatus
+  $lmStatus = Get-LMStatus
+  $html = @"
+<!DOCTYPE html>
+<html><head><meta charset=\"UTF-8\"><title>Dashboard</title>
+<style>body{font-family:Segoe UI,Arial;background:#fff;padding:24px} table{border-collapse:collapse} td,th{border:1px solid #ddd;padding:8px}</style></head>
+<body>
+<h1>Neural Money Agents Dashboard</h1>
+<h2>Today and last 7 days</h2>
+<table><tr><th>Day</th><th>Views</th><th>Clicks</th><th>Buy Intent</th></tr>$rows</table>
+<h2>Queues</h2>
+<ul><li>Incoming: $queueIncoming</li><li>Processing: $queueProcessing</li><li>DLQ: $queueDlq</li></ul>
+<h2>ML Status</h2><p>$mlStatus</p>
+<h2>Bandit Status</h2><p>$banditInfo</p>
+<h2>System Health</h2><ul><li>GPU: $gpuStatus</li><li>LM Studio: $lmStatus</li></ul>
+</body></html>
+"@
+  $html | Set-Content -Path (Join-Path $siteDir "dashboard.html") -Encoding UTF8
+}
+
+function Get-GPUStatus {
+  $status = "GPU_NOT_PROVEN"
+  try {
+    $nvidia = & nvidia-smi 2>$null
+    if ($LASTEXITCODE -eq 0 -and $nvidia) { $status = "GPU_PROVEN" }
+  } catch { }
+  if ($status -ne "GPU_PROVEN") {
+    try {
+      $gpus = Get-CimInstance Win32_VideoController | Where-Object { $_.Name -match "NVIDIA" }
+      if ($gpus) { $status = "GPU_PROVEN" }
+    } catch { }
+  }
+  if ($status -ne "GPU_PROVEN") { Write-Log "agent.log" "GPU_NOT_PROVEN" }
+  return $status
+}
+
+function Get-LMStatus {
+  $status = "LLM_DOWN"
+  try {
+    $resp = Invoke-RestMethod -TimeoutSec 2 -Uri "http://127.0.0.1:1234/v1/chat/completions" -Method Post -Body "{}" -ContentType "application/json" -ErrorAction Stop
+    $status = "LM_STUDIO_UP"
+  } catch { }
+  return $status
+}
+
+function Generate-Offers {
+  Ensure-Base
+  $offersPath = Join-Path $dataDir "offers.json"
+  $offers = @()
+  if (Test-Path $offersPath) { $offers = Get-Content $offersPath -Raw | ConvertFrom-Json }
+  $today = Get-Date -Format yyyyMMdd
+  $existing = $offers | Where-Object { $_.generated_ts -like "$today*" }
+  $target = 20
+  $need = $target - $existing.Count
+  if ($need -le 0) { Write-Log "agent.log" "OFFERS_OK"; return }
+  $categories = @("ops","marketing","finance","productivity","freelance","education","health","travel","localization","customer_success")
+  for ($i = 1; $i -le $need; $i++) {
+    $cat = $categories | Get-Random
+    $offerId = "offer_${today}_$i"
+    $title = "$cat quickstart kit"
+    $subtitle = "Fast path checklist and templates for $cat"
+    $preview = "Includes step list, mini playbook, and calculator outline."
+    $price = "USD 9-29"
+    $tags = @($cat, "global", "digital")
+    $deliverable = Join-Path $delivDir "$offerId.md"
+    $content = "# $title`n`n$subtitle`n`nPreview:`n$preview`n`nSteps:`n1) Define goal`n2) Use checklist`n3) Apply template`n"
+    $content | Set-Content -Path $deliverable -Encoding UTF8
+    $offers += [ordered]@{ offer_id = $offerId; title = $title; subtitle = $subtitle; target_pain = "Lack of clarity"; deliverable_path = $deliverable; preview = $preview; price_band = $price; tags = $tags; generated_ts = (Get-Date -Format o); version = 1 }
+  }
+  $offers | ConvertTo-Json -Depth 6 | Set-Content -Path $offersPath -Encoding UTF8
+  Write-Log "agent.log" "OFFERS_GENERATED $need"
+}
+
+function Process-Queue {
+  $files = Get-ChildItem $incomingDir -File | Sort-Object Name
+  foreach ($file in $files) {
+    $target = Join-Path $processingDir $file.Name
+    try {
+      Move-Item -Path $file.FullName -Destination $target -Force
+    } catch { continue }
+    $job = $null
+    try { $job = Get-Content $target -Raw | ConvertFrom-Json } catch { $job = @{} }
+    $attempt = 0
+    if ($job.attempt_count) { $attempt = [int]$job.attempt_count }
+    $ok = $true
+    try {
+      if ($job.type -eq "generate_offer") { Generate-Offers }
+    } catch { $ok = $false; $job.last_error = $_.Exception.Message }
+    if ($ok) {
+      Move-Item -Path $target -Destination (Join-Path $doneDir $file.Name) -Force
+    } else {
+      $attempt++
+      $job.attempt_count = $attempt
+      $job | ConvertTo-Json -Depth 5 | Set-Content -Path $target -Encoding UTF8
+      if ($attempt -ge [int]$cfg.retry_budget) {
+        Move-Item -Path $target -Destination (Join-Path $dlqDir $file.Name) -Force
+      } else {
+        Move-Item -Path $target -Destination (Join-Path $incomingDir $file.Name) -Force
+      }
+    }
+  }
+}
+
+function Write-DLQReport {
+  $day = Get-Date -Format yyyyMMdd
+  $dlqCount = (Get-ChildItem $dlqDir -File | Measure-Object).Count
+  $path = Join-Path $proofDir "dlq_report_$day.md"
+  "# DLQ Report $day`n`nCount: $dlqCount" | Set-Content -Path $path -Encoding UTF8
+}
+
+function Update-Economy {
+  $events = Get-Events
+  $views = ($events | Where-Object { $_.type -eq "view" }).Count
+  $clicks = ($events | Where-Object { $_.type -eq "click" }).Count
+  $buy = ($events | Where-Object { $_.type -eq "buy_intent" }).Count
+  $state = [ordered]@{ updated_ts = (Get-Date -Format o); views = $views; clicks = $clicks; buy_intent = $buy }
+  $state | ConvertTo-Json -Depth 3 | Set-Content -Path (Join-Path $dataDir "economy_state.json") -Encoding UTF8
+}
+
+function Write-Proof {
+  $day = Get-Date -Format yyyyMMdd
+  $proofPath = Join-Path $proofDir "proof_$day.md"
+  $offersPath = Join-Path $dataDir "offers.json"
+  $eventsPath = Join-Path $dataDir "events.ndjson"
+  $dashPath = Join-Path $siteDir "dashboard.html"
+  $modelPath = Join-Path $modelsDir "ranker.pkl"
+  $mlDisabledPath = Join-Path $modelsDir "ML_DISABLED.json"
+  $banditPath = Join-Path $modelsDir "bandit_state.json"
+  $offers = @()
+  if (Test-Path $offersPath) { $offers = Get-Content $offersPath -Raw | ConvertFrom-Json }
+  $top = $offers | Select-Object -First 10
+  $lines = @()
+  $lines += "# Proof $day"
+  $lines += ""
+  $lines += "Offers: $offersPath"
+  $lines += "Events: $eventsPath"
+  $lines += "Dashboard: $dashPath"
+  $lines += "Model: $modelPath"
+  $lines += "Bandit: $banditPath"
+  $lines += ""
+  $lines += "Top offers:"
+  foreach ($o in $top) { $lines += "- $($o.offer_id) $($o.title)" }
+  $lines += ""
+  $dlqCount = (Get-ChildItem $dlqDir -File | Measure-Object).Count
+  $lines += "DLQ count: $dlqCount"
+  if (Test-Path $mlDisabledPath) { $lines += "ML status: ML_DISABLED" } else { $lines += "ML status: ML_ACTIVE_OR_PENDING" }
+  $lines += "Bandit status: $(if (Test-Path $banditPath) { 'OK' } else { 'MISSING' })"
+  $lines -join "`n" | Set-Content -Path $proofPath -Encoding UTF8
+}
+
+function Watchdog {
+  $threshold = [int]$cfg.stall_threshold_minutes
+  $now = Get-Date
+  $files = Get-ChildItem $processingDir -File
+  foreach ($file in $files) {
+    $age = ($now - $file.LastWriteTime).TotalMinutes
+    if ($age -gt $threshold) {
+      Move-Item -Path $file.FullName -Destination (Join-Path $dlqDir $file.Name) -Force
+      Write-Log "watchdog.log" "MOVED_TO_DLQ $($file.Name)"
+    }
+  }
+}
+
+function Agent-Loop {
+  Ensure-Base
+  Process-Queue
+  Compute-Daily
+  $selected = Update-Bandit
+  Render-Site $selected
+  Render-Dashboard
+  Update-Economy
+  Write-DLQReport
+  Write-Proof
+  Write-Log "agent.log" "AGENT_LOOP_OK"
+}
+
+switch ($Action) {
+  "GenerateOffers" { Generate-Offers }
+  "AgentLoop" { Agent-Loop }
+  "Watchdog" { Watchdog }
+  default { Write-Output "Usage: nma.ps1 -Action GenerateOffers|AgentLoop|Watchdog" }
+}
+'@ | Set-Content -Path $nmaPath -Encoding UTF8
+$mlPath=Join-Path $code 'ml_train.py'
+@'
+import json
+import os
+import time
+
+CODE_ROOT = os.path.dirname(os.path.abspath(__file__))
+CONFIG_PATH = os.path.join(CODE_ROOT, "config.json")
+with open(CONFIG_PATH, "r", encoding="utf-8") as f:
+    CFG = json.load(f)
+DATA_ROOT = CFG["data_root"]
+DATA_DIR = os.path.join(DATA_ROOT, "data")
+MODELS_DIR = os.path.join(DATA_ROOT, "models")
+LOG_PATH = os.path.join(DATA_ROOT, "logs", "ml.log")
+
+os.makedirs(MODELS_DIR, exist_ok=True)
+
+offers_path = os.path.join(DATA_DIR, "offers.json")
+events_path = os.path.join(DATA_DIR, "events.ndjson")
+
+if not os.path.exists(offers_path):
+    with open(os.path.join(MODELS_DIR, "ML_DISABLED.json"), "w", encoding="utf-8") as f:
+        f.write(json.dumps({"reason": "NO_OFFERS"}))
+    raise SystemExit(0)
+
+try:
+    from sklearn.feature_extraction.text import HashingVectorizer
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.metrics import roc_auc_score, log_loss
+    import joblib
+except Exception:
+    with open(os.path.join(MODELS_DIR, "ML_DISABLED.json"), "w", encoding="utf-8") as f:
+        f.write(json.dumps({"reason": "ML_DISABLED_NO_DEPS"}))
+    with open(LOG_PATH, "a", encoding="utf-8") as f:
+        f.write(time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()) + "\tML_DISABLED_NO_DEPS\n")
+    raise SystemExit(0)
+
+with open(offers_path, "r", encoding="utf-8") as f:
+    offers = json.load(f)
+
+events = []
+if os.path.exists(events_path):
+    with open(events_path, "r", encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                events.append(json.loads(line))
+            except Exception:
+                pass
+
+click_ids = set(e.get("offer_id") for e in events if e.get("type") == "click")
+buy_ids = set(e.get("offer_id") for e in events if e.get("type") == "buy_intent")
+
+texts = []
+labels = []
+for offer in offers:
+    text = " ".join([offer.get("title", ""), offer.get("subtitle", ""), offer.get("preview", "")])
+    texts.append(text)
+    labels.append(1 if offer.get("offer_id") in click_ids else 0)
+
+if len(texts) < 2:
+    with open(os.path.join(MODELS_DIR, "ML_DISABLED.json"), "w", encoding="utf-8") as f:
+        f.write(json.dumps({"reason": "NOT_ENOUGH_DATA"}))
+    raise SystemExit(0)
+
+vectorizer = HashingVectorizer(n_features=1024, alternate_sign=False)
+X = vectorizer.transform(texts)
+model = LogisticRegression(max_iter=200)
+model.fit(X, labels)
+probs = model.predict_proba(X)[:, 1]
+
+metrics = {}
+try:
+    metrics["auc"] = float(roc_auc_score(labels, probs))
+except Exception:
+    metrics["auc"] = None
+try:
+    metrics["logloss"] = float(log_loss(labels, probs))
+except Exception:
+    metrics["logloss"] = None
+metrics["target"] = "click"
+metrics["trained_ts"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+
+ranked = []
+for offer, score in zip(offers, probs):
+    ranked.append({"offer_id": offer.get("offer_id"), "score": float(score)})
+
+with open(os.path.join(MODELS_DIR, "ranker.pkl"), "wb") as f:
+    joblib.dump({"model": model, "vectorizer": vectorizer}, f)
+with open(os.path.join(MODELS_DIR, "offers_ranked.json"), "w", encoding="utf-8") as f:
+    f.write(json.dumps(ranked, ensure_ascii=True))
+with open(os.path.join(MODELS_DIR, "metrics.json"), "w", encoding="utf-8") as f:
+    f.write(json.dumps(metrics, ensure_ascii=True))
+with open(LOG_PATH, "a", encoding="utf-8") as f:
+    f.write(metrics["trained_ts"] + "\tTRAIN_OK\t" + json.dumps(metrics) + "\n")
+'@ | Set-Content -Path $mlPath -Encoding UTF8
+$mlPs1=Join-Path $code 'ml_train.ps1'
+@'
+param()
+$ErrorActionPreference="Stop"
+$codeRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
+$venv = Join-Path $codeRoot "venv"
+$py = Join-Path $venv "Scripts\python.exe"
+if (!(Test-Path $py)) {
+  try { & python -m venv $venv } catch { }
+}
+if (Test-Path $py) {
+  try { & $py -m pip install --upgrade pip *> $null } catch { }
+  try { & $py -m pip install scikit-learn joblib *> $null } catch { }
+  & $py (Join-Path $codeRoot "ml_train.py")
+} else {
+  $cfg = Get-Content (Join-Path $codeRoot "config.json") -Raw | ConvertFrom-Json
+  $modelsDir = Join-Path $cfg.data_root "models"
+  $logPath = Join-Path $cfg.data_root "logs\ml.log"
+  "{\"reason\":\"PYTHON_MISSING\"}" | Set-Content -Path (Join-Path $modelsDir "ML_DISABLED.json") -Encoding UTF8
+  Add-Content -Path $logPath -Value "$(Get-Date -Format o)\tML_DISABLED_PYTHON_MISSING"
+}
+'@ | Set-Content -Path $mlPs1 -Encoding UTF8
+$exampleJob=Join-Path $code 'example_factoryui_job.json'
+@'
+{
+  "type": "generate_offer",
+  "attempt_count": 0,
+  "last_error": "",
+  "note": "Example job for FactoryUI drop-in"
+}
+'@ | Set-Content -Path $exampleJob -Encoding UTF8
+$serverPs1=Join-Path $code 'start_server.ps1'
+@'
+param()
+$ErrorActionPreference="Stop"
+$codeRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
+$cfg = Get-Content (Join-Path $codeRoot "config.json") -Raw | ConvertFrom-Json
+$venv = Join-Path $codeRoot "venv"
+$py = Join-Path $venv "Scripts\python.exe"
+if (!(Test-Path $py)) { $py = "python" }
+& $py (Join-Path $codeRoot "server.py")
+'@ | Set-Content -Path $serverPs1 -Encoding UTF8
+$tasks = @(
+  @{Name='BrownEye_NeuralMoney_Server_AtBoot'; Schedule='ONSTART'; TaskArgs="/SC ONSTART"; Script=$serverPs1},
+  @{Name='BrownEye_NeuralMoney_GenerateOffers_30min'; Schedule='MINUTE'; TaskArgs="/SC MINUTE /MO 30"; Script=$nmaPath + " -Action GenerateOffers"},
+  @{Name='BrownEye_NeuralMoney_AgentLoop_5min'; Schedule='MINUTE'; TaskArgs="/SC MINUTE /MO 5"; Script=$nmaPath + " -Action AgentLoop"},
+  @{Name='BrownEye_NeuralMoney_Watchdog_5min'; Schedule='MINUTE'; TaskArgs="/SC MINUTE /MO 5"; Script=$nmaPath + " -Action Watchdog"},
+  @{Name='BrownEye_NeuralMoney_MLTrain_1hr'; Schedule='MINUTE'; TaskArgs="/SC MINUTE /MO 60"; Script=$mlPs1}
+)
+foreach ($t in $tasks) {
+  $tn = $t.Name
+  $tr = "powershell -NoProfile -ExecutionPolicy Bypass -File $($t.Script)"
+  schtasks.exe /Create /TN $tn /TR $tr $($t.TaskArgs) /RU SYSTEM /RL HIGHEST /F | Out-Null
+}
+Start-Process -WindowStyle Hidden -FilePath "powershell" -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$serverPs1`"" | Out-Null
+& $nmaPath -Action GenerateOffers
+& $nmaPath -Action AgentLoop
+& $mlPs1
+$port = (Get-Content $configPath -Raw | ConvertFrom-Json).port_preference
+$proofPath = Join-Path $proof "proof_$(Get-Date -Format yyyyMMdd).md"
+$mlStatus = if (Test-Path (Join-Path $models 'ML_DISABLED.json')) { "ML_DISABLED" } else { "ML_ACTIVE" }
+Write-Output "OK CODE_ROOT=$code"
+Write-Output "OK DATA_ROOT=$dataRoot"
+Write-Output "OK URL http://127.0.0.1:$port/"
+Write-Output "OK URL http://127.0.0.1:$port/dashboard.html"
+Write-Output "OK PROOF $proofPath"
+Write-Output "OK TASKS BrownEye_NeuralMoney_Server_AtBoot,BrownEye_NeuralMoney_GenerateOffers_30min,BrownEye_NeuralMoney_AgentLoop_5min,BrownEye_NeuralMoney_Watchdog_5min,BrownEye_NeuralMoney_MLTrain_1hr"
+Write-Output "OK ML_STATUS $mlStatus"
+Write-Output "STUMBLEIUM Installed NeuralMoneyAgents; verify dashboard and proof file; run tasks to keep system active."
+}"
