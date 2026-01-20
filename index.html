@@ -1,44 +1,160 @@
+# BrownEye Cortex Checkout Gateway bootstrap (PowerShell)
+# ASCII-only, idempotent
+
+$ErrorActionPreference = 'Stop'
+
+function Get-PreferredRoot {
+  $preferred = @('D:', 'C:')
+  foreach ($drive in $preferred) {
+    if (Test-Path -Path ($drive + '\')) {
+      return ($drive + '\BrownEyeCortex\_moneyfarm\CheckoutGateway')
+    }
+  }
+  return ('C:\BrownEyeCortex\_moneyfarm\CheckoutGateway')
+}
+
+$root = Get-PreferredRoot
+$null = New-Item -Path $root -ItemType Directory -Force
+
+$configPath = Join-Path $root 'config.json'
+$landingPath = Join-Path $root 'landing.html'
+$webhookPath = Join-Path $root 'webhook_stub.ps1'
+$logPath = Join-Path $root 'webhook_events.log'
+$checklistPath = Join-Path $root 'payment_test_checklist.md'
+
+$config = @{
+  stripe = @{
+    secret_key_env = 'BROWNEYE_STRIPE_SECRET_KEY'
+    webhook_secret_env = 'BROWNEYE_STRIPE_WEBHOOK_SECRET'
+  }
+  wise = @{
+    pay_link = 'https://wise.com/pay/me/your-wise-handle'
+  }
+  paths = @{
+    landing_html = $landingPath
+    webhook_log = $logPath
+  }
+}
+
+$configJson = $config | ConvertTo-Json -Depth 5
+$configJson | Set-Content -Path $configPath -Encoding UTF8
+
+$landingHtml = @'
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Claim 500 KelpCoin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout Gateway</title>
   <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f0fdf4;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin: 0;
-      padding: 40px;
-    }
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
-    }
-    p {
-      font-size: 1rem;
-      margin-bottom: 2rem;
-      color: #555;
-    }
-    iframe {
-      border: none;
-      width: 100%;
-      max-width: 700px;
-      height: 800px;
-      border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
-    }
+    body { font-family: Segoe UI, Arial, sans-serif; margin: 32px; color: #1a1a1a; }
+    header { margin-bottom: 24px; }
+    h1 { margin-bottom: 8px; }
+    .product { border: 1px solid #ddd; padding: 16px; border-radius: 8px; margin-bottom: 12px; }
+    .cta { display: inline-block; margin-top: 8px; padding: 8px 12px; background: #2b7cff; color: #fff; text-decoration: none; border-radius: 6px; }
+    .muted { color: #666; font-size: 0.95rem; }
   </style>
 </head>
 <body>
-  <h1>🪙 Claim 500 KelpCoin</h1>
-  <p>Fill in your wallet address. Optional: enter a referrer’s wallet to earn bonus KELP.</p>
-  <iframe 
-    src="https://docs.google.com/forms/d/e/1FAIpQLSclYfRXBxHoDBjpoHCoKM2_lm8VkxN8FjqmkOeK5kqxiOMW9A/viewform?embedded=true"
-    allowfullscreen>
-  </iframe>
+  <header>
+    <h1>BrownEye Cortex Checkout Gateway</h1>
+    <p class="muted">Default path routes directly to Wise for first-dollar payments.</p>
+  </header>
+
+  <section class="product">
+    <h2>Starter Access</h2>
+    <p>Quick access bundle for first-time customers.</p>
+    <a class="cta" href="https://wise.com/pay/me/your-wise-handle">Pay with Wise</a>
+  </section>
+
+  <section class="product">
+    <h2>Growth Access</h2>
+    <p>Includes extended support and priority processing.</p>
+    <a class="cta" href="https://wise.com/pay/me/your-wise-handle">Pay with Wise</a>
+  </section>
+
+  <section class="product">
+    <h2>Enterprise Access</h2>
+    <p>Custom onboarding for larger deployments.</p>
+    <a class="cta" href="https://wise.com/pay/me/your-wise-handle">Pay with Wise</a>
+  </section>
 </body>
 </html>
+'@
+
+$landingHtml | Set-Content -Path $landingPath -Encoding UTF8
+
+$webhookScript = @'
+# Local-only webhook stub
+$ErrorActionPreference = 'Stop'
+
+$listener = New-Object System.Net.HttpListener
+$listener.Prefixes.Add('http://localhost:4242/stripe/webhook/')
+$listener.Start()
+
+Write-Host 'Listening on http://localhost:4242/stripe/webhook/'
+
+while ($listener.IsListening) {
+  $context = $listener.GetContext()
+  $request = $context.Request
+  $reader = New-Object System.IO.StreamReader($request.InputStream, $request.ContentEncoding)
+  $body = $reader.ReadToEnd()
+  $reader.Close()
+
+  $timestamp = (Get-Date).ToString('o')
+  $entry = @(
+    '---',
+    ('timestamp: ' + $timestamp),
+    ('method: ' + $request.HttpMethod),
+    ('path: ' + $request.Url.AbsolutePath),
+    'headers:'
+  )
+
+  foreach ($key in $request.Headers.AllKeys) {
+    $entry += ('  ' + $key + ': ' + $request.Headers[$key])
+  }
+
+  $entry += 'body:'
+  $entry += $body
+
+  $entryText = ($entry -join [Environment]::NewLine) + [Environment]::NewLine
+  $entryText | Add-Content -Path 'webhook_events.log' -Encoding UTF8
+
+  $response = $context.Response
+  $response.StatusCode = 200
+  $buffer = [System.Text.Encoding]::UTF8.GetBytes('{"ok":true}')
+  $response.OutputStream.Write($buffer, 0, $buffer.Length)
+  $response.OutputStream.Close()
+}
+'@
+
+$webhookScript | Set-Content -Path $webhookPath -Encoding UTF8
+
+$checklist = @'
+# Payment Test Checklist
+
+- [ ] Set environment variables:
+  - BROWNEYE_STRIPE_SECRET_KEY
+  - BROWNEYE_STRIPE_WEBHOOK_SECRET
+- [ ] Open landing page (landing.html) and confirm Wise link works.
+- [ ] Run webhook_stub.ps1 and POST a sample event to http://localhost:4242/stripe/webhook/.
+- [ ] Confirm webhook_events.log contains the event payload.
+- [ ] Verify config.json references env var key names only.
+'@
+
+$checklist | Set-Content -Path $checklistPath -Encoding UTF8
+
+Write-Host 'Bootstrap complete.'
+Write-Host ('Root path: ' + $root)
+Write-Host ('Config: ' + $configPath)
+Write-Host ('Landing: ' + $landingPath)
+Write-Host ('Webhook stub: ' + $webhookPath)
+Write-Host ('Webhook log: ' + $logPath)
+Write-Host ('Checklist: ' + $checklistPath)
+Write-Host ''
+Write-Host 'Set env vars with:'
+Write-Host '$env:BROWNEYE_STRIPE_SECRET_KEY = "your_stripe_secret_key"'
+Write-Host '$env:BROWNEYE_STRIPE_WEBHOOK_SECRET = "your_stripe_webhook_secret"'
+Write-Host ''
+Write-Host 'Run webhook stub with:'
+Write-Host ('powershell -ExecutionPolicy Bypass -File "' + $webhookPath + '"')
