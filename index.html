@@ -1,44 +1,252 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Claim 500 KelpCoin</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f0fdf4;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin: 0;
-      padding: 40px;
+# PowerShell mega-bootstrap for 50 daily mainstream digital product stencils
+Set-StrictMode -Version Latest
+$ErrorActionPreference = 'Stop'
+
+function Get-PreferredDrive {
+    if (Test-Path 'D:\') { return 'D:' }
+    return 'C:'
+}
+
+function Ensure-Directory {
+    param([string]$Path)
+    if (-not (Test-Path $Path)) {
+        New-Item -Path $Path -ItemType Directory -Force | Out-Null
     }
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
+}
+
+function Load-Index {
+    param([string]$Path)
+    if (Test-Path $Path) {
+        $raw = Get-Content -Path $Path -Raw
+        if ($raw.Trim().Length -gt 0) {
+            return ($raw | ConvertFrom-Json)
+        }
     }
-    p {
-      font-size: 1rem;
-      margin-bottom: 2rem;
-      color: #555;
+    return [ordered]@{
+        titles = @()
+        byDate = @{}
     }
-    iframe {
-      border: none;
-      width: 100%;
-      max-width: 700px;
-      height: 800px;
-      border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+}
+
+function Save-Index {
+    param(
+        [string]$Path,
+        $Index
+    )
+    $json = $Index | ConvertTo-Json -Depth 6
+    $json | Set-Content -Path $Path -Encoding UTF8
+}
+
+function New-Slug {
+    param([string]$Text)
+    $slug = $Text.ToLowerInvariant()
+    $slug = $slug -replace '[^a-z0-9\s-]', ''
+    $slug = $slug -replace '\s+', '-'
+    $slug = $slug -replace '-+', '-'
+    return $slug.Trim('-')
+}
+
+function Get-StencilCatalog {
+    return @(
+        @{ Title = 'Household Admin Quickstart Checklist'; Category = 'home admin'; Promise = 'Get home admin tasks out of your head and onto one calm page.'; Included = @('Monthly admin sweep list','Service contacts block','Bills autopay tracker'); For = 'Busy households who want a tidy admin system.'; Setup = '20 minutes'; Preview = 'Inbox > Sort > Pay > File'; Scores = @{ clarity = 5; appeal = 5; effort = 5; repeat = 4 } },
+        @{ Title = 'Family Budget Snapshot Sheet'; Category = 'budgeting'; Promise = 'See the whole month in 10 minutes with a simple cash flow map.'; Included = @('Income lines','Fixed expenses list','Weekly spend allowance'); For = 'Families wanting an easy money overview.'; Setup = '15 minutes'; Preview = 'Income - Bills = Weekly Spend'; Scores = @{ clarity = 5; appeal = 5; effort = 5; repeat = 4 } },
+        @{ Title = 'Job Hunt Weekly Sprint Planner'; Category = 'job hunting'; Promise = 'Plan a focused 7-day job search with zero overwhelm.'; Included = @('Daily target list','Follow-up tracker','Confidence wins log'); For = 'Job seekers who want structure.'; Setup = '10 minutes'; Preview = 'Mon: Apply 3 | Tue: Follow 2'; Scores = @{ clarity = 5; appeal = 5; effort = 5; repeat = 4 } },
+        @{ Title = 'Meal Planning Grid and Pantry Scan'; Category = 'meal planning'; Promise = 'Build dinner plans around what you already have.'; Included = @('7-day grid','Pantry scan checklist','Leftover plan box'); For = 'Households that want faster dinner decisions.'; Setup = '15 minutes'; Preview = 'Mon: Pasta | Tue: Stir-fry'; Scores = @{ clarity = 5; appeal = 5; effort = 5; repeat = 4 } },
+        @{ Title = 'Declutter 15-Minute Room Reset'; Category = 'declutter'; Promise = 'Make progress in tiny time blocks that feel doable.'; Included = @('Timer rounds','Keep-Donate-Bin notes','Before-after box'); For = 'People who want quick wins at home.'; Setup = '5 minutes'; Preview = 'Round 1: Surfaces only'; Scores = @{ clarity = 5; appeal = 5; effort = 5; repeat = 4 } },
+        @{ Title = 'Study Focus Block Tracker'; Category = 'study'; Promise = 'Protect study time with short, repeatable focus blocks.'; Included = @('Block plan','Distraction list','Completion tally'); For = 'Students and lifelong learners.'; Setup = '10 minutes'; Preview = '3 blocks x 25 min'; Scores = @{ clarity = 5; appeal = 4; effort = 5; repeat = 4 } },
+        @{ Title = 'Small Biz Daily Ops Log'; Category = 'small business ops'; Promise = 'Capture the daily essentials without a full system.'; Included = @('Daily must-do list','Sales and outreach tickers','Tomorrow preview'); For = 'Solo operators and side hustles.'; Setup = '10 minutes'; Preview = 'Today: calls 5 | invoices 2'; Scores = @{ clarity = 5; appeal = 5; effort = 5; repeat = 5 } },
+        @{ Title = 'Parenting Morning Routine Cards'; Category = 'parenting routines'; Promise = 'Create a calm morning flow that kids can follow.'; Included = @('Step-by-step cards','Reward tracker','Backup plan'); For = 'Parents of primary school kids.'; Setup = '20 minutes'; Preview = 'Wake > Wash > Dress > Breakfast'; Scores = @{ clarity = 5; appeal = 5; effort = 4; repeat = 4 } },
+        @{ Title = 'Gentle Activity and Mood Log'; Category = 'health tracking'; Promise = 'Track energy and mood patterns without any medical claims.'; Included = @('Daily check-in','Energy scale','Notes space'); For = 'Anyone who wants to notice patterns.'; Setup = '5 minutes'; Preview = 'Energy: 3/5 | Mood: steady'; Scores = @{ clarity = 5; appeal = 4; effort = 5; repeat = 5 } },
+        @{ Title = 'Home Maintenance Seasons Planner'; Category = 'home admin'; Promise = 'Know what to handle each season without guesswork.'; Included = @('Season checklists','Vendor notes','Budget estimate'); For = 'Homeowners and renters.'; Setup = '20 minutes'; Preview = 'Spring: gutters, filters, garden'; Scores = @{ clarity = 5; appeal = 5; effort = 4; repeat = 4 } },
+        @{ Title = 'Weekly Cash Envelope Plan'; Category = 'budgeting'; Promise = 'Turn messy spending into a weekly plan you can stick to.'; Included = @('Envelope categories','Weekly totals','Notes'); For = 'People who want tighter spending control.'; Setup = '15 minutes'; Preview = 'Groceries: 150 | Fuel: 60'; Scores = @{ clarity = 5; appeal = 4; effort = 5; repeat = 4 } },
+        @{ Title = 'Resume Refresh Checklist'; Category = 'job hunting'; Promise = 'Refresh your resume in one sitting with clear steps.'; Included = @('Section checklist','Achievement prompt list','Proofread pass'); For = 'Job seekers updating documents.'; Setup = '30 minutes'; Preview = 'Results > Tools > Keywords'; Scores = @{ clarity = 5; appeal = 5; effort = 4; repeat = 3 } },
+        @{ Title = 'Interview Story Builder'; Category = 'job hunting'; Promise = 'Build short, memorable stories for common interview questions.'; Included = @('STAR prompts','Question bank','Practice log'); For = 'Job seekers preparing answers.'; Setup = '20 minutes'; Preview = 'Situation | Task | Action | Result'; Scores = @{ clarity = 5; appeal = 5; effort = 4; repeat = 4 } },
+        @{ Title = 'Pantry-to-Plate Recipe Picker'; Category = 'meal planning'; Promise = 'Pick meals fast based on what is already in your pantry.'; Included = @('Ingredient inventory','Recipe idea matrix','Shopping add-ons'); For = 'Home cooks who want quick meals.'; Setup = '15 minutes'; Preview = 'Protein + Veg + Sauce'; Scores = @{ clarity = 5; appeal = 5; effort = 5; repeat = 4 } },
+        @{ Title = 'Lunchbox Rotation Planner'; Category = 'meal planning'; Promise = 'Rotate lunches so you never wonder what to pack.'; Included = @('5-day rotation list','Pack night checklist','Kids feedback log'); For = 'Parents and busy workers.'; Setup = '15 minutes'; Preview = 'Mon: Wrap | Tue: Bento'; Scores = @{ clarity = 5; appeal = 4; effort = 5; repeat = 4 } },
+        @{ Title = 'Closet Capsule Builder'; Category = 'declutter'; Promise = 'Create a small wardrobe you actually wear.'; Included = @('Keep list','Gap list','Outfit combos'); For = 'Anyone who wants a simpler closet.'; Setup = '30 minutes'; Preview = 'Tops 8 | Bottoms 5 | Shoes 3'; Scores = @{ clarity = 5; appeal = 5; effort = 4; repeat = 3 } },
+        @{ Title = 'Paperwork Triage Sheet'; Category = 'home admin'; Promise = 'Sort paperwork in one pass without overthinking.'; Included = @('Keep-Action-File bins','Due date notes','Shred list'); For = 'People with paper piles.'; Setup = '10 minutes'; Preview = 'Action: call utility by Fri'; Scores = @{ clarity = 5; appeal = 4; effort = 5; repeat = 4 } },
+        @{ Title = 'Exam Week Countdown Plan'; Category = 'study'; Promise = 'Spread study effort evenly with a daily countdown plan.'; Included = @('Countdown grid','Priority topics','Rest reminders'); For = 'Students facing exams.'; Setup = '15 minutes'; Preview = 'Day 5: Topic A + practice'; Scores = @{ clarity = 5; appeal = 4; effort = 4; repeat = 3 } },
+        @{ Title = 'Assignment Breakdown Map'; Category = 'study'; Promise = 'Split big assignments into small wins.'; Included = @('Task list','Milestone dates','Confidence check'); For = 'Students with long projects.'; Setup = '15 minutes'; Preview = 'Draft > Revise > Submit'; Scores = @{ clarity = 5; appeal = 4; effort = 5; repeat = 3 } },
+        @{ Title = 'Client Onboarding Mini Pack'; Category = 'small business ops'; Promise = 'Start new clients with a clear, friendly first step.'; Included = @('Welcome checklist','Info request list','First-week timeline'); For = 'Freelancers and consultants.'; Setup = '20 minutes'; Preview = 'Day 1: welcome + goals'; Scores = @{ clarity = 5; appeal = 5; effort = 4; repeat = 5 } },
+        @{ Title = 'Weekly Content Batch Planner'; Category = 'small business ops'; Promise = 'Batch content in one go and keep the week light.'; Included = @('Idea capture','Batch schedule','Posting tracker'); For = 'Creators and small businesses.'; Setup = '20 minutes'; Preview = 'Batch 3 posts in 60 min'; Scores = @{ clarity = 5; appeal = 5; effort = 4; repeat = 5 } },
+        @{ Title = 'After-School Routine Planner'; Category = 'parenting routines'; Promise = 'Turn after-school chaos into a predictable flow.'; Included = @('Snack-homework-play order','Timer cues','Calm-down notes'); For = 'Parents managing after-school hours.'; Setup = '15 minutes'; Preview = 'Snack > Homework > Play'; Scores = @{ clarity = 5; appeal = 5; effort = 4; repeat = 4 } },
+        @{ Title = 'Weekend Family Plan Sheet'; Category = 'parenting routines'; Promise = 'Fit fun and chores into a weekend that feels full.'; Included = @('Morning plan','Afternoon plan','Family vote list'); For = 'Families who want smoother weekends.'; Setup = '10 minutes'; Preview = 'Sat: chores 1h | fun 2h'; Scores = @{ clarity = 5; appeal = 4; effort = 5; repeat = 4 } },
+        @{ Title = 'Hydration and Movement Tracker'; Category = 'health tracking'; Promise = 'Keep tabs on daily water and gentle movement.'; Included = @('Water checkboxes','Movement tally','Notes'); For = 'Anyone building simple habits.'; Setup = '5 minutes'; Preview = 'Water 6 cups | Walk 20 min'; Scores = @{ clarity = 5; appeal = 5; effort = 5; repeat = 5 } },
+        @{ Title = 'Sleep Wind-Down Planner'; Category = 'health tracking'; Promise = 'Create a calmer bedtime routine without pressure.'; Included = @('Wind-down steps','Device cutoff note','Morning notes'); For = 'People who want better evenings.'; Setup = '10 minutes'; Preview = 'Tea > Read > Lights out'; Scores = @{ clarity = 5; appeal = 5; effort = 4; repeat = 4 } },
+        @{ Title = 'Monthly Bill Negotiation Tracker'; Category = 'budgeting'; Promise = 'Track who you called and what you saved.'; Included = @('Provider list','Call outcomes','Savings total'); For = 'Households wanting lower bills.'; Setup = '10 minutes'; Preview = 'Internet: saved 15/mo'; Scores = @{ clarity = 5; appeal = 4; effort = 4; repeat = 4 } },
+        @{ Title = 'Savings Goal Ladder'; Category = 'budgeting'; Promise = 'Reach savings goals with small milestone steps.'; Included = @('Goal ladder','Mini rewards list','Progress bar'); For = 'Anyone saving for a purchase.'; Setup = '10 minutes'; Preview = 'Goal: 500 | Steps: 50 x 10'; Scores = @{ clarity = 5; appeal = 5; effort = 5; repeat = 3 } },
+        @{ Title = 'Declutter Donation Box Label Pack'; Category = 'declutter'; Promise = 'Label boxes fast so items leave the house.'; Included = @('Donation labels','Drop-off list','Date note'); For = 'People clearing space.'; Setup = '5 minutes'; Preview = 'Donate | Recycle | Sell'; Scores = @{ clarity = 5; appeal = 4; effort = 5; repeat = 4 } },
+        @{ Title = 'Kitchen Reset Checklist'; Category = 'declutter'; Promise = 'Reset the kitchen in 15 minutes so mornings are easy.'; Included = @('15-minute steps','Dish plan','Counter reset'); For = 'Busy households.'; Setup = '5 minutes'; Preview = 'Clear > Wash > Wipe'; Scores = @{ clarity = 5; appeal = 5; effort = 5; repeat = 5 } },
+        @{ Title = 'Study Notes Summarizer'; Category = 'study'; Promise = 'Turn long notes into a one-page summary.'; Included = @('Summary prompts','Key terms box','Practice questions'); For = 'Students prepping for tests.'; Setup = '20 minutes'; Preview = 'Topic summary in 10 bullets'; Scores = @{ clarity = 5; appeal = 4; effort = 4; repeat = 4 } },
+        @{ Title = 'Reading Log and Reflection'; Category = 'study'; Promise = 'Remember what you read without extra effort.'; Included = @('Book tracker','Key takeaways','Next action'); For = 'Students and avid readers.'; Setup = '10 minutes'; Preview = 'Book | Pages | Key idea'; Scores = @{ clarity = 5; appeal = 4; effort = 5; repeat = 4 } },
+        @{ Title = 'Invoice Follow-Up Tracker'; Category = 'small business ops'; Promise = 'Know exactly who to follow up with and when.'; Included = @('Invoice list','Due date tracker','Follow-up notes'); For = 'Freelancers and small business owners.'; Setup = '10 minutes'; Preview = 'Invoice 104 due Fri'; Scores = @{ clarity = 5; appeal = 5; effort = 5; repeat = 5 } },
+        @{ Title = 'Simple CRM Call Log'; Category = 'small business ops'; Promise = 'Log client calls without a full CRM.'; Included = @('Call log','Next step notes','Priority flag'); For = 'Small business owners.'; Setup = '10 minutes'; Preview = 'Client: J | Next: send quote'; Scores = @{ clarity = 5; appeal = 5; effort = 5; repeat = 5 } },
+        @{ Title = 'Bedtime Routine Tracker'; Category = 'parenting routines'; Promise = 'Make bedtime predictable with a quick tracker.'; Included = @('Steps list','Sticker grid','Week review'); For = 'Parents of young kids.'; Setup = '10 minutes'; Preview = 'Bath > Book > Bed'; Scores = @{ clarity = 5; appeal = 5; effort = 5; repeat = 5 } },
+        @{ Title = 'Chore Rotation Wheel'; Category = 'parenting routines'; Promise = 'Share chores fairly with a simple rotation.'; Included = @('Chore list','Weekly wheel','Reward notes'); For = 'Families with shared chores.'; Setup = '15 minutes'; Preview = 'Week 1: Sam | Week 2: Lee'; Scores = @{ clarity = 5; appeal = 4; effort = 5; repeat = 4 } },
+        @{ Title = 'Gentle Symptom and Trigger Log'; Category = 'health tracking'; Promise = 'Note patterns without making any claims.'; Included = @('Daily notes','Trigger list','Context box'); For = 'People tracking daily patterns.'; Setup = '5 minutes'; Preview = 'Notes: late night, low energy'; Scores = @{ clarity = 5; appeal = 4; effort = 5; repeat = 4 } },
+        @{ Title = 'Weekly Movement Wins'; Category = 'health tracking'; Promise = 'Celebrate small movement wins each week.'; Included = @('Movement log','Wins list','Next week plan'); For = 'Anyone building momentum.'; Setup = '5 minutes'; Preview = 'Walked 3 days | Stretch 2 days'; Scores = @{ clarity = 5; appeal = 5; effort = 5; repeat = 5 } },
+        @{ Title = 'Household Contacts Sheet'; Category = 'home admin'; Promise = 'Keep key contacts in one easy place.'; Included = @('Emergency contacts','Service providers','Account notes'); For = 'Households wanting quick access.'; Setup = '10 minutes'; Preview = 'Plumber: 021-000-000'; Scores = @{ clarity = 5; appeal = 5; effort = 5; repeat = 4 } },
+        @{ Title = 'One-Page Home Inventory'; Category = 'home admin'; Promise = 'Record essentials for quick reference.'; Included = @('Room list','High-value items','Purchase notes'); For = 'Renters and homeowners.'; Setup = '20 minutes'; Preview = 'Living room: TV, couch'; Scores = @{ clarity = 5; appeal = 5; effort = 4; repeat = 3 } },
+        @{ Title = 'Price Check Shopping Card'; Category = 'budgeting'; Promise = 'Keep grocery costs steady with quick comparisons.'; Included = @('Price list','Brand swap notes','Unit cost box'); For = 'Shoppers watching spending.'; Setup = '10 minutes'; Preview = 'Rice: 2.20/kg'; Scores = @{ clarity = 5; appeal = 5; effort = 5; repeat = 4 } },
+        @{ Title = 'No-Spend Day Planner'; Category = 'budgeting'; Promise = 'Plan a day with zero spending and still have fun.'; Included = @('Activity list','Treat swap ideas','Spend-free checklist'); For = 'Anyone trying to spend less.'; Setup = '10 minutes'; Preview = 'Walk + library + leftovers'; Scores = @{ clarity = 5; appeal = 5; effort = 5; repeat = 4 } },
+        @{ Title = 'Networking Follow-Up Tracker'; Category = 'job hunting'; Promise = 'Remember who you met and follow up politely.'; Included = @('Contact log','Follow-up dates','Notes'); For = 'Job seekers and professionals.'; Setup = '10 minutes'; Preview = 'Met: Alex | Follow up Tue'; Scores = @{ clarity = 5; appeal = 4; effort = 5; repeat = 4 } },
+        @{ Title = 'Offer Comparison Worksheet'; Category = 'job hunting'; Promise = 'Compare offers clearly without stress.'; Included = @('Compensation table','Benefits notes','Gut check'); For = 'Job seekers with multiple offers.'; Setup = '15 minutes'; Preview = 'Offer A | Offer B | Notes'; Scores = @{ clarity = 5; appeal = 4; effort = 4; repeat = 3 } },
+        @{ Title = 'Weeknight Dinner Shortcut Plan'; Category = 'meal planning'; Promise = 'Pick fast dinners that still feel good.'; Included = @('Shortcut meals list','Time estimate','Grocery add-ons'); For = 'Busy households.'; Setup = '10 minutes'; Preview = '15-min meals x 5'; Scores = @{ clarity = 5; appeal = 5; effort = 5; repeat = 5 } },
+        @{ Title = 'Freezer Inventory Sheet'; Category = 'meal planning'; Promise = 'Use what you already froze and cut waste.'; Included = @('Freezer list','Use-by notes','Meal ideas'); For = 'Home cooks who freeze food.'; Setup = '10 minutes'; Preview = 'Chicken portions: 3'; Scores = @{ clarity = 5; appeal = 5; effort = 5; repeat = 4 } },
+        @{ Title = 'Desk Declutter Reset'; Category = 'declutter'; Promise = 'Reset your desk for a focused workday.'; Included = @('Clear steps','Cable tidy list','Daily reset habit'); For = 'Remote workers and students.'; Setup = '10 minutes'; Preview = 'Clear top > Sort cables'; Scores = @{ clarity = 5; appeal = 4; effort = 5; repeat = 4 } },
+        @{ Title = 'Phone Photo Clean-Up List'; Category = 'declutter'; Promise = 'Delete clutter fast and keep the memories.'; Included = @('Review steps','Keep list','Backup note'); For = 'Anyone with a crowded phone.'; Setup = '10 minutes'; Preview = 'Delete 20 | Favorite 5'; Scores = @{ clarity = 5; appeal = 4; effort = 5; repeat = 4 } },
+        @{ Title = 'Study Accountability Contract'; Category = 'study'; Promise = 'Stick to study goals with a simple commitment sheet.'; Included = @('Goal statement','Weekly target','Accountability partner'); For = 'Students who want consistency.'; Setup = '10 minutes'; Preview = 'Goal: 6 hours/wk'; Scores = @{ clarity = 5; appeal = 4; effort = 5; repeat = 3 } },
+        @{ Title = 'Flashcard Review Tracker'; Category = 'study'; Promise = 'Keep flashcard practice on track.'; Included = @('Deck list','Review schedule','Confidence score'); For = 'Students and language learners.'; Setup = '10 minutes'; Preview = 'Deck 1: 10 min daily'; Scores = @{ clarity = 5; appeal = 4; effort = 5; repeat = 4 } },
+        @{ Title = 'Stock Reorder Sheet'; Category = 'small business ops'; Promise = 'Know when to reorder stock without stress.'; Included = @('Item list','Min stock','Lead time notes'); For = 'Product-based small businesses.'; Setup = '15 minutes'; Preview = 'Candles: min 12 | lead 7 days'; Scores = @{ clarity = 5; appeal = 4; effort = 4; repeat = 5 } },
+        @{ Title = 'Service Checklist Template'; Category = 'small business ops'; Promise = 'Deliver consistent service every time.'; Included = @('Step list','Quality check','Client sign-off'); For = 'Service providers.'; Setup = '15 minutes'; Preview = 'Prep > Deliver > Confirm'; Scores = @{ clarity = 5; appeal = 5; effort = 4; repeat = 5 } },
+        @{ Title = 'Family Appointment Map'; Category = 'parenting routines'; Promise = 'See the week of appointments on one page.'; Included = @('Weekly grid','Location notes','Prep list'); For = 'Parents managing busy calendars.'; Setup = '10 minutes'; Preview = 'Wed 3pm: dentist'; Scores = @{ clarity = 5; appeal = 5; effort = 5; repeat = 4 } },
+        @{ Title = 'Screen Time Plan'; Category = 'parenting routines'; Promise = 'Set simple screen time rules everyone understands.'; Included = @('Rules list','Earning chart','Device parking spot'); For = 'Families setting boundaries.'; Setup = '15 minutes'; Preview = 'Weekdays: 30 min after homework'; Scores = @{ clarity = 5; appeal = 4; effort = 4; repeat = 4 } },
+        @{ Title = 'Daily Gratitude and Wins Log'; Category = 'health tracking'; Promise = 'Spot small wins that keep you grounded.'; Included = @('Daily prompt','Win list','Tomorrow note'); For = 'Anyone wanting a positive reset.'; Setup = '5 minutes'; Preview = 'Win: finished a task'; Scores = @{ clarity = 5; appeal = 5; effort = 5; repeat = 5 } },
+        @{ Title = 'Healthy Habit Streak Calendar'; Category = 'health tracking'; Promise = 'See your habit streaks at a glance.'; Included = @('Monthly grid','Habit list','Reset note'); For = 'Anyone building daily habits.'; Setup = '10 minutes'; Preview = 'Habit: walk 10 min'; Scores = @{ clarity = 5; appeal = 5; effort = 5; repeat = 5 } }
+    )
+}
+
+$preferredDrive = Get-PreferredDrive
+$productsRoot = Join-Path $preferredDrive 'BrownEye\BROWNEYE_ARTIFACTS'
+$today = Get-Date -Format 'yyyyMMdd'
+$productsDayPath = Join-Path $productsRoot (Join-Path 'products' $today)
+$queuePath = 'C:\BrownEyeCortex\FactoryUI\queue\incoming'
+$indexPath = Join-Path $productsRoot 'stencils_index.json'
+
+Ensure-Directory -Path $productsRoot
+Ensure-Directory -Path $productsDayPath
+Ensure-Directory -Path $queuePath
+
+$index = Load-Index -Path $indexPath
+if (-not $index.byDate.ContainsKey($today)) {
+    $index.byDate[$today] = @()
+}
+
+$catalog = Get-StencilCatalog
+$existingTitles = [System.Collections.Generic.HashSet[string]]::new([string[]]$index.titles)
+$seedCount = 10
+$dailyTarget = 50
+if ($index.titles.Count -eq 0 -and $index.byDate[$today].Count -eq 0) {
+    $dailyTarget = $seedCount
+} else {
+    $remaining = $dailyTarget - $index.byDate[$today].Count
+    if ($remaining -lt 0) { $remaining = 0 }
+    $dailyTarget = $remaining
+}
+
+$created = @()
+$skipped = @()
+
+foreach ($item in $catalog) {
+    if ($created.Count -ge $dailyTarget) { break }
+    if ($existingTitles.Contains($item.Title)) {
+        $skipped += $item.Title
+        continue
     }
-  </style>
-</head>
-<body>
-  <h1>🪙 Claim 500 KelpCoin</h1>
-  <p>Fill in your wallet address. Optional: enter a referrer’s wallet to earn bonus KELP.</p>
-  <iframe 
-    src="https://docs.google.com/forms/d/e/1FAIpQLSclYfRXBxHoDBjpoHCoKM2_lm8VkxN8FjqmkOeK5kqxiOMW9A/viewform?embedded=true"
-    allowfullscreen>
-  </iframe>
-</body>
-</html>
+
+    $slug = New-Slug -Text $item.Title
+    $productPath = Join-Path $productsDayPath ($slug + '.md')
+    $snippetPath = Join-Path $productsDayPath ($slug + '__sales_snippet.txt')
+    $jobId = "$today-$slug-$([guid]::NewGuid().ToString('N'))"
+    $jobPath = Join-Path $queuePath ($jobId + '.json')
+
+    $pricing = @(
+        'Pricing suggestion (NZD):',
+        '- Base: $12 NZD',
+        '- Plus: $19 NZD (includes quickstart notes)',
+        '- Microtransaction: $1 NZD tip jar'
+    ) -join "`n"
+
+    $preview = @(
+        'Preview:',
+        '--------------------------------',
+        $item.Preview,
+        '--------------------------------'
+    ) -join "`n"
+
+    $md = @(
+        "# $($item.Title)",
+        '',
+        "**Promise:** $($item.Promise)",
+        '',
+        '**What is included:**',
+        ($item.Included | ForEach-Object { "- $_" }),
+        '',
+        "**Who it is for:** $($item.For)",
+        '',
+        "**Setup time:** $($item.Setup)",
+        '',
+        '**Pricing:**',
+        $pricing,
+        '',
+        $preview
+    ) -join "`n"
+
+    $snippet = @(
+        "$($item.Title) - $($item.Promise)",
+        'Includes: ' + ($item.Included -join '; '),
+        'Setup time: ' + $item.Setup,
+        'NZD pricing: $12 base, $19 plus, $1 tip jar',
+        'Some people ask if theres a way to throw a dollar our way - there is, if you want. Totally optional. No expectations.'
+    ) -join "`n"
+
+    $job = [ordered]@{
+        job_id = $jobId
+        type = 'refine_copy_and_pdf_ready_content'
+        title = $item.Title
+        category = $item.Category
+        source_markdown_path = $productPath
+        instructions = 'Refine the copy with a friendly, human voice. Keep it concise. Output content only, ready for PDF layout. Do not add medical claims.'
+        output_format = 'content_only'
+        approval_gate_required = $true
+        public_posting_allowed = $false
+    }
+
+    $md | Set-Content -Path $productPath -Encoding UTF8
+    $snippet | Set-Content -Path $snippetPath -Encoding UTF8
+    ($job | ConvertTo-Json -Depth 6) | Set-Content -Path $jobPath -Encoding UTF8
+
+    $index.titles += $item.Title
+    $index.byDate[$today] += $item.Title
+    $created += [ordered]@{
+        Title = $item.Title
+        ProductPath = $productPath
+        SnippetPath = $snippetPath
+        JobPath = $jobPath
+        Score = $item.Scores.clarity + $item.Scores.appeal + $item.Scores.effort + $item.Scores.repeat
+    }
+}
+
+Save-Index -Path $indexPath -Index $index
+
+$summaryPath = Join-Path $productsDayPath 'daily_summary.md'
+$topCandidates = $created | Sort-Object -Property Score -Descending | Select-Object -First 10
+$summary = @(
+    "# Daily Summary - $today",
+    '',
+    "Created: $($created.Count)",
+    "Skipped (existing titles): $($skipped.Count)",
+    "Total indexed titles: $($index.titles.Count)",
+    '',
+    'Top 10 best candidates (by clarity, mass appeal, low effort, repeat purchase):'
+)
+foreach ($cand in $topCandidates) {
+    $summary += "- $($cand.Title) (score $($cand.Score))"
+}
+$summary | Set-Content -Path $summaryPath -Encoding UTF8
+
+Write-Host 'Created paths:'
+foreach ($item in $created) {
+    Write-Host $item.ProductPath
+    Write-Host $item.SnippetPath
+    Write-Host $item.JobPath
+}
+Write-Host $summaryPath
+Write-Host $indexPath
+
+Write-Host ''
+Write-Host 'Stumbleium:'
+Write-Host '1) Re-run this script to confirm no duplicate titles are generated.'
+Write-Host "2) Review the markdown files under $productsDayPath."
+Write-Host "3) Review queued jobs under $queuePath."
+Write-Host '4) Confirm daily_summary.md counts and top candidates.'
