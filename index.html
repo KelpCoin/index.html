@@ -2,43 +2,697 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Claim 500 KelpCoin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StencilForge Dash · Instagram Conversion Governor</title>
   <style>
+    :root {
+      color-scheme: light;
+      --bg: #f6f7fb;
+      --card: #ffffff;
+      --ink: #18202a;
+      --muted: #5c6b7a;
+      --accent: #7c3aed;
+      --accent-soft: #ede9fe;
+      --border: #e2e8f0;
+      --warn: #d97706;
+      --safe: #16a34a;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f0fdf4;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
       margin: 0;
-      padding: 40px;
+      font-family: "Segoe UI", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
     }
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
+
+    header {
+      padding: 32px 16px 24px;
+      text-align: center;
     }
-    p {
+
+    header h1 {
+      margin: 0 0 8px;
+      font-size: 2.3rem;
+    }
+
+    header p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 0 auto 40px;
+      padding: 0 16px 40px;
+      display: grid;
+      gap: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      padding: 20px;
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+    }
+
+    .card h2 {
+      margin: 0 0 12px;
+      font-size: 1.3rem;
+    }
+
+    .card h3 {
+      margin: 16px 0 8px;
       font-size: 1rem;
-      margin-bottom: 2rem;
-      color: #555;
+      color: var(--muted);
     }
-    iframe {
+
+    button {
+      background: var(--accent);
+      color: #fff;
       border: none;
-      width: 100%;
-      max-width: 700px;
-      height: 800px;
       border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      padding: 10px 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    button.secondary {
+      background: var(--accent-soft);
+      color: var(--accent);
+      border: 1px solid #c4b5fd;
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    .pill {
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    .pill.safe {
+      background: #ecfdf3;
+      color: var(--safe);
+    }
+
+    .pill.warn {
+      background: #fff7ed;
+      color: var(--warn);
+    }
+
+    .control-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .toggle-group {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .toggle-group input {
+      display: none;
+    }
+
+    .toggle-group label {
+      border: 1px solid var(--border);
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-weight: 600;
+      cursor: pointer;
+      background: #f8fafc;
+      color: var(--muted);
+    }
+
+    .toggle-group input:checked + label {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    ul.bank {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 10px;
+    }
+
+    .bank li {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px;
+      background: #f8fafc;
+      display: grid;
+      gap: 8px;
+    }
+
+    .bank p {
+      margin: 0;
+      color: #1f2937;
+      font-size: 0.95rem;
+      line-height: 1.4;
+    }
+
+    .bank .meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    textarea,
+    input[type="text"],
+    input[type="number"],
+    select {
+      width: 100%;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      padding: 10px 12px;
+      font-family: inherit;
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .grid-2 {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    }
+
+    .note {
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    .summary-item {
+      border-left: 4px solid var(--accent);
+      padding-left: 10px;
+      margin-bottom: 12px;
+    }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      padding: 20px 0 40px;
     }
   </style>
 </head>
 <body>
-  <h1>🪙 Claim 500 KelpCoin</h1>
-  <p>Fill in your wallet address. Optional: enter a referrer’s wallet to earn bonus KELP.</p>
-  <iframe 
-    src="https://docs.google.com/forms/d/e/1FAIpQLSclYfRXBxHoDBjpoHCoKM2_lm8VkxN8FjqmkOeK5kqxiOMW9A/viewform?embedded=true"
-    allowfullscreen>
-  </iframe>
+  <header>
+    <h1>StencilForge Dash</h1>
+    <p>Instagram Conversion Governor · generate, rotate, and track copy safely.</p>
+  </header>
+
+  <main>
+    <section class="card" aria-labelledby="bootstrap-title">
+      <h2 id="bootstrap-title">Bootstrap &amp; Guardrails</h2>
+      <p class="note">
+        One-shot PowerShell install command (idempotent). Runs locally and prepares the module only. Nothing auto-sends.
+      </p>
+      <textarea readonly id="bootstrapCommand">powershell -NoProfile -ExecutionPolicy Bypass -Command "if (!(Test-Path \"$HOME\\StencilForge\")) { New-Item -ItemType Directory -Path \"$HOME\\StencilForge\" | Out-Null }; Copy-Item -Force \"./index.html\" \"$HOME\\StencilForge\\stencilforge-dash.html\""</textarea>
+      <div class="control-row" style="margin-top: 12px;">
+        <button class="secondary" data-copy="bootstrapCommand">Copy Command</button>
+        <span class="pill warn">Human approval gate: manual send only.</span>
+      </div>
+      <h3>Avoid banned phrases</h3>
+      <ul class="bank" id="bannedList"></ul>
+    </section>
+
+    <section class="card" aria-labelledby="controls-title">
+      <h2 id="controls-title">Generation Controls</h2>
+      <div class="control-row">
+        <div class="toggle-group" role="radiogroup" aria-label="Tone selector">
+          <input type="radio" id="toneSoft" name="tone" value="soft" checked />
+          <label for="toneSoft">SOFT</label>
+          <input type="radio" id="toneBold" name="tone" value="bold" />
+          <label for="toneBold">BOLD</label>
+          <input type="radio" id="toneSafety" name="tone" value="safety" />
+          <label for="toneSafety">SAFETY</label>
+        </div>
+        <span class="pill safe" id="tonePill">Tone: soft</span>
+      </div>
+      <div class="control-row" style="margin-top: 16px;">
+        <button id="generateComments">Generate 200 comment replies</button>
+        <button id="generateDms">Generate 50 DM templates</button>
+        <button id="generateStories">Generate 30 story scripts</button>
+      </div>
+      <p class="note" style="margin-top: 12px;">
+        Rotation engine prevents repeats within the last <strong id="rotationCount">25</strong> uses per tone &amp; type.
+      </p>
+    </section>
+
+    <section class="card" aria-labelledby="comments-title">
+      <h2 id="comments-title">Comment Replies Wordbank</h2>
+      <p class="note">Non-spammy replies with human variation. Each entry includes an anti-scam line.</p>
+      <ul class="bank" id="commentBank"></ul>
+    </section>
+
+    <section class="card" aria-labelledby="dm-title">
+      <h2 id="dm-title">DM Templates Wordbank</h2>
+      <p class="note">PG-13 templates with opt-in tone. Manual send only.</p>
+      <ul class="bank" id="dmBank"></ul>
+    </section>
+
+    <section class="card" aria-labelledby="story-title">
+      <h2 id="story-title">Story CTA Scripts Wordbank</h2>
+      <p class="note">CTA scripts ready for Stories, with soft vs bold variants.</p>
+      <ul class="bank" id="storyBank"></ul>
+    </section>
+
+    <section class="card" aria-labelledby="metrics-title">
+      <h2 id="metrics-title">Metrics Entry (Manual)</h2>
+      <div class="grid-2">
+        <label>
+          Profile visits
+          <input type="number" min="0" id="metricVisits" />
+        </label>
+        <label>
+          Link clicks
+          <input type="number" min="0" id="metricClicks" />
+        </label>
+        <label>
+          Paid conversions
+          <input type="number" min="0" id="metricConversions" />
+        </label>
+      </div>
+      <div class="control-row" style="margin-top: 12px;">
+        <button class="secondary" id="saveMetrics">Save Metrics</button>
+        <span class="note" id="metricsSaved"></span>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="summary-title">
+      <h2 id="summary-title">Daily Artifact Summary</h2>
+      <div id="dailySummary"></div>
+      <textarea id="nextSteps" placeholder="What to do next (manual notes)..."></textarea>
+      <div class="control-row" style="margin-top: 12px;">
+        <button class="secondary" id="saveSummary">Save Daily Summary</button>
+        <span class="note" id="summarySaved"></span>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Instagram Conversion Governor · prepared copy only · no auto-sends.</p>
+  </footer>
+
+  <script>
+    const rotationWindow = 25;
+    const bannedPhrases = [
+      "DM for price",
+      "Guaranteed results",
+      "Click my link",
+      "OnlyFans",
+      "18+",
+      "Explicit",
+      "Sugar baby",
+      "Send nudes",
+      "Hard sell",
+      "Act now or miss out"
+    ];
+
+    const scamWarnings = [
+      "Only trust the link in bio.",
+      "Please only trust the link in bio for anything official.",
+      "Reminder: only trust the link in bio—no other links.",
+      "Heads up: only trust the link in bio."
+    ];
+
+    const templates = {
+      comments: {
+        soft: [
+          "Appreciate you! That means a lot.",
+          "Thanks for the love — noted!",
+          "You just made my day, thank you.",
+          "Grateful for you 🙏",
+          "So kind of you, thanks!",
+          "Appreciate the vibe — thank you.",
+          "Happy this landed with you!",
+          "Thanks for being here!"
+        ],
+        bold: [
+          "Let’s goooo 🔥 thanks for pulling up!",
+          "You’re the real MVP — thank you.",
+          "That energy is elite, thanks!",
+          "Major love, we’re just getting started.",
+          "Big respect — thanks for the hype!",
+          "Legend move. Appreciate you!"
+        ],
+        safety: [
+          "Thanks for the support — staying safe out here.",
+          "Appreciate you. Keeping it official only.",
+          "Thanks for rocking with us — safety first.",
+          "Your support means a lot. We keep it legit." 
+        ]
+      },
+      dms: {
+        soft: [
+          "Hey! Appreciate you connecting. If you want the details, I can send them over.",
+          "Thanks for reaching out — happy to share the overview when you’re ready.",
+          "Appreciate the interest! Want the quick rundown?",
+          "Hey there! I can send the info pack whenever you want."
+        ],
+        bold: [
+          "Hey! Want the fast version or the deep dive?",
+          "Appreciate you. Want me to drop the details now?",
+          "We can keep it simple — I’ll send the key points if you’re in.",
+          "If you’re ready, I can send the full breakdown." 
+        ],
+        safety: [
+          "Hey! Happy to share info — I only use official links and keep it clean.",
+          "Thanks for the message. If you want details, I’ll send official info only.",
+          "Appreciate you reaching out. I can share the official steps if you’re interested."
+        ]
+      },
+      stories: {
+        soft: [
+          "If you’re curious, I can walk you through the basics today.",
+          "Want the simple overview? I can share it in a quick message.",
+          "If you’ve been wondering, I can explain it in 30 seconds.",
+          "I’ll share the quick breakdown if you want it."
+        ],
+        bold: [
+          "Big update: want the quick play-by-play?",
+          "If you’re serious, I’ll show you the exact steps.",
+          "Today’s the day—want the full breakdown?",
+          "Ready for the next move? I’ll send the steps." 
+        ],
+        safety: [
+          "Friendly reminder: I only share official steps.",
+          "Keeping it safe and simple — official info only.",
+          "Safety check: I’ll only send verified steps."
+        ]
+      }
+    };
+
+    const state = {
+      tone: "soft",
+      wordbanks: {
+        comments: [],
+        dms: [],
+        stories: []
+      }
+    };
+
+    const elements = {
+      tonePill: document.getElementById("tonePill"),
+      rotationCount: document.getElementById("rotationCount"),
+      commentBank: document.getElementById("commentBank"),
+      dmBank: document.getElementById("dmBank"),
+      storyBank: document.getElementById("storyBank"),
+      bannedList: document.getElementById("bannedList"),
+      dailySummary: document.getElementById("dailySummary"),
+      nextSteps: document.getElementById("nextSteps"),
+      metricsSaved: document.getElementById("metricsSaved"),
+      summarySaved: document.getElementById("summarySaved")
+    };
+
+    function persist(key, value) {
+      localStorage.setItem(key, JSON.stringify(value));
+    }
+
+    function load(key, fallback) {
+      const stored = localStorage.getItem(key);
+      if (!stored) return fallback;
+      try {
+        return JSON.parse(stored);
+      } catch {
+        return fallback;
+      }
+    }
+
+    function renderBannedPhrases() {
+      elements.bannedList.innerHTML = "";
+      bannedPhrases.forEach((phrase) => {
+        const li = document.createElement("li");
+        li.innerHTML = `<p>${phrase}</p>`;
+        elements.bannedList.appendChild(li);
+      });
+    }
+
+    function toneBadge(tone) {
+      const badges = {
+        soft: "SOFT",
+        bold: "BOLD",
+        safety: "SAFETY"
+      };
+      return badges[tone] || "SOFT";
+    }
+
+    function rotatePick(pool, history) {
+      const available = pool.filter((item) => !history.slice(-rotationWindow).includes(item));
+      const selectionPool = available.length ? available : pool;
+      const pick = selectionPool[Math.floor(Math.random() * selectionPool.length)];
+      history.push(pick);
+      return pick;
+    }
+
+    function buildItem(base, tone) {
+      const warning = scamWarnings[Math.floor(Math.random() * scamWarnings.length)];
+      const imperfections = ["", "", "", " (typo? idk)", "…", " — honest."]; 
+      const imperfection = imperfections[Math.floor(Math.random() * imperfections.length)];
+      return `${base}${imperfection} ${warning}`.trim();
+    }
+
+    function generateBank(type, count) {
+      const historyKey = `history_${type}_${state.tone}`;
+      const history = load(historyKey, []);
+      const pool = templates[type][state.tone];
+
+      const output = [];
+      while (output.length < count) {
+        const base = rotatePick(pool, history);
+        const line = buildItem(base, state.tone);
+        output.push(line);
+      }
+
+      persist(historyKey, history.slice(-rotationWindow * 2));
+      state.wordbanks[type] = output;
+      persist(`wordbank_${type}_${state.tone}`, output);
+      logDailyArtifact(`Generated ${count} ${type} (${state.tone}).`);
+      renderBank(type);
+    }
+
+    function renderBank(type) {
+      const bankElement = elements[`${type}Bank`];
+      bankElement.innerHTML = "";
+      const bank = state.wordbanks[type];
+      bank.forEach((item, index) => {
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <div class="meta">
+            <span class="pill">${toneBadge(state.tone)} · #${index + 1}</span>
+            <button class="secondary" data-copy-inline="${type}-${index}">Copy</button>
+          </div>
+          <p id="${type}-${index}">${item}</p>
+        `;
+        bankElement.appendChild(li);
+      });
+    }
+
+    function logDailyArtifact(message) {
+      const today = new Date().toISOString().slice(0, 10);
+      const dailyKey = `daily_${today}`;
+      const entry = load(dailyKey, {
+        date: today,
+        generated: [],
+        used: [],
+        metrics: {},
+        nextSteps: ""
+      });
+      entry.generated.push({ message, at: new Date().toLocaleTimeString() });
+      persist(dailyKey, entry);
+      renderDailySummary();
+    }
+
+    function logUsage(type, index) {
+      const today = new Date().toISOString().slice(0, 10);
+      const dailyKey = `daily_${today}`;
+      const entry = load(dailyKey, {
+        date: today,
+        generated: [],
+        used: [],
+        metrics: {},
+        nextSteps: ""
+      });
+      entry.used.push({
+        item: `${type} #${index + 1}`,
+        tone: state.tone,
+        at: new Date().toLocaleTimeString()
+      });
+      persist(dailyKey, entry);
+      renderDailySummary();
+    }
+
+    function renderDailySummary() {
+      const today = new Date().toISOString().slice(0, 10);
+      const dailyKey = `daily_${today}`;
+      const entry = load(dailyKey, {
+        date: today,
+        generated: [],
+        used: [],
+        metrics: {},
+        nextSteps: ""
+      });
+
+      elements.dailySummary.innerHTML = "";
+
+      const generatedBlock = document.createElement("div");
+      generatedBlock.className = "summary-item";
+      generatedBlock.innerHTML = `
+        <strong>Generated</strong>
+        <ul>${entry.generated.map((item) => `<li>${item.at} · ${item.message}</li>`).join("") || "<li>Nothing yet.</li>"}</ul>
+      `;
+
+      const usedBlock = document.createElement("div");
+      usedBlock.className = "summary-item";
+      usedBlock.innerHTML = `
+        <strong>Used (manual copy only)</strong>
+        <ul>${entry.used.map((item) => `<li>${item.at} · ${item.item} (${item.tone})</li>`).join("") || "<li>No usage tracked yet.</li>"}</ul>
+      `;
+
+      const metricsBlock = document.createElement("div");
+      metricsBlock.className = "summary-item";
+      metricsBlock.innerHTML = `
+        <strong>Metrics</strong>
+        <ul>
+          <li>Profile visits: ${entry.metrics.visits ?? "—"}</li>
+          <li>Link clicks: ${entry.metrics.clicks ?? "—"}</li>
+          <li>Paid conversions: ${entry.metrics.conversions ?? "—"}</li>
+        </ul>
+      `;
+
+      const nextStepsBlock = document.createElement("div");
+      nextStepsBlock.className = "summary-item";
+      nextStepsBlock.innerHTML = `
+        <strong>What to do next</strong>
+        <p>${entry.nextSteps || "Add next steps below."}</p>
+      `;
+
+      elements.dailySummary.append(generatedBlock, usedBlock, metricsBlock, nextStepsBlock);
+      elements.nextSteps.value = entry.nextSteps || "";
+    }
+
+    function bindCopyButtons() {
+      document.addEventListener("click", async (event) => {
+        const copyTarget = event.target.getAttribute("data-copy");
+        const copyInline = event.target.getAttribute("data-copy-inline");
+        if (copyTarget) {
+          const field = document.getElementById(copyTarget);
+          await navigator.clipboard.writeText(field.value || field.textContent);
+          event.target.textContent = "Copied";
+          setTimeout(() => (event.target.textContent = "Copy Command"), 1200);
+        }
+        if (copyInline) {
+          const field = document.getElementById(copyInline);
+          await navigator.clipboard.writeText(field.textContent);
+          const [type, index] = copyInline.split("-");
+          logUsage(type, Number(index));
+          event.target.textContent = "Copied";
+          setTimeout(() => (event.target.textContent = "Copy"), 1200);
+        }
+      });
+    }
+
+    function initToneControls() {
+      document.querySelectorAll("input[name='tone']").forEach((input) => {
+        input.addEventListener("change", () => {
+          state.tone = input.value;
+          elements.tonePill.textContent = `Tone: ${state.tone}`;
+          loadWordbanks();
+        });
+      });
+    }
+
+    function loadWordbanks() {
+      ["comments", "dms", "stories"].forEach((type) => {
+        const stored = load(`wordbank_${type}_${state.tone}`, []);
+        state.wordbanks[type] = stored;
+        renderBank(type);
+      });
+    }
+
+    function initButtons() {
+      document.getElementById("generateComments").addEventListener("click", () => {
+        generateBank("comments", 200);
+      });
+      document.getElementById("generateDms").addEventListener("click", () => {
+        generateBank("dms", 50);
+      });
+      document.getElementById("generateStories").addEventListener("click", () => {
+        generateBank("stories", 30);
+      });
+      document.getElementById("saveMetrics").addEventListener("click", () => {
+        const today = new Date().toISOString().slice(0, 10);
+        const dailyKey = `daily_${today}`;
+        const entry = load(dailyKey, {
+          date: today,
+          generated: [],
+          used: [],
+          metrics: {},
+          nextSteps: ""
+        });
+        entry.metrics = {
+          visits: document.getElementById("metricVisits").value || 0,
+          clicks: document.getElementById("metricClicks").value || 0,
+          conversions: document.getElementById("metricConversions").value || 0
+        };
+        persist(dailyKey, entry);
+        renderDailySummary();
+        elements.metricsSaved.textContent = "Metrics saved.";
+        setTimeout(() => (elements.metricsSaved.textContent = ""), 1600);
+      });
+      document.getElementById("saveSummary").addEventListener("click", () => {
+        const today = new Date().toISOString().slice(0, 10);
+        const dailyKey = `daily_${today}`;
+        const entry = load(dailyKey, {
+          date: today,
+          generated: [],
+          used: [],
+          metrics: {},
+          nextSteps: ""
+        });
+        entry.nextSteps = elements.nextSteps.value.trim();
+        persist(dailyKey, entry);
+        renderDailySummary();
+        elements.summarySaved.textContent = "Summary saved.";
+        setTimeout(() => (elements.summarySaved.textContent = ""), 1600);
+      });
+    }
+
+    function init() {
+      elements.rotationCount.textContent = rotationWindow;
+      renderBannedPhrases();
+      initToneControls();
+      initButtons();
+      bindCopyButtons();
+      loadWordbanks();
+      renderDailySummary();
+    }
+
+    init();
+  </script>
 </body>
 </html>
