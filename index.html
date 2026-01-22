@@ -2,43 +2,125 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Claim 500 KelpCoin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HAPPYHOMARID Deck Sales Stencil Engine</title>
   <style>
+    :root {
+      color-scheme: light;
+      font-family: "Segoe UI", sans-serif;
+      background-color: #f5f7fb;
+      color: #1f2933;
+    }
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f0fdf4;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
       margin: 0;
-      padding: 40px;
+      padding: 32px;
+      display: flex;
+      justify-content: center;
+    }
+    .container {
+      max-width: 900px;
+      width: 100%;
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
     }
     h1 {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
+      margin: 0 0 8px;
+      font-size: 1.9rem;
     }
     p {
-      font-size: 1rem;
-      margin-bottom: 2rem;
-      color: #555;
+      margin: 0 0 20px;
+      color: #4b5563;
     }
-    iframe {
-      border: none;
-      width: 100%;
-      max-width: 700px;
-      height: 800px;
-      border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    pre {
+      margin: 0;
+      background: #0f172a;
+      color: #e2e8f0;
+      padding: 20px;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      overflow-x: auto;
+      white-space: pre-wrap;
     }
   </style>
 </head>
 <body>
-  <h1>🪙 Claim 500 KelpCoin</h1>
-  <p>Fill in your wallet address. Optional: enter a referrer’s wallet to earn bonus KELP.</p>
-  <iframe 
-    src="https://docs.google.com/forms/d/e/1FAIpQLSclYfRXBxHoDBjpoHCoKM2_lm8VkxN8FjqmkOeK5kqxiOMW9A/viewform?embedded=true"
-    allowfullscreen>
-  </iframe>
+  <div class="container">
+    <h1>HAPPYHOMARID Deck Sales Stencil Engine</h1>
+    <p>Paste the following prompt into your workflow to generate deck sales artifacts.</p>
+    <pre>CODEX PROMPT (PASTE AS-IS): HAPPYHOMARID Deck Sales Stencil Engine (JSON + listing + buyer clarity)
+
+Role: You are Codex operating locally in the HAPPYHOMARID / CollectorsCoast MTG silo. Your job is to maximize deck sales speed by producing buyer-clarity artifacts that slot into an existing one-page primer template and a sales listing.
+
+Hard rules:
+- Output must be ASCII only.
+- No public posting. No contacting platforms. No scraping. Local artifacts only.
+- Produce the deliverables in the exact output format below. No extra commentary.
+- The output must be designed to reduce buyer questions to near zero.
+
+Input I will provide:
+1) Commander decklist (text or link pasted as text)
+2) Deck price target (NZD) and power target (1-10)
+3) A short sentence about the local meta (optional)
+4) Any special notes: foils, condition, proxies allowed or not
+
+Your tasks:
+A) Create a "DECK SALES PACK" that contains:
+1) A one-page primer JSON object compatible with the template keys below.
+2) A sales listing markdown that can be posted anywhere later (but do NOT post).
+3) A 30-second message script for DMs.
+4) A 5-bullet "objection killer" section (shipping, condition, power, rules, upgrades).
+5) A micro upsell: 1 paid add-on option that is low friction and immediate (example: printed primer + deckbox label, or upgrade pack).
+6) A trust payload: a short "why buy from me" paragraph that is factual and non-cringe.
+
+Template JSON keys (must match exactly):
+deck_name, tagline, price_nzd, power_level, turn_range,
+wincon_primary, wincon_secondary,
+mulligan, sequencing,
+commander_name, commander_role,
+backup_name, backup_role,
+strengths, weaknesses, notes
+
+Constraints that make it sell:
+- Tagline must be 10-14 words and punchy.
+- Strengths and weaknesses must be bullets, max 6 each.
+- Mulligan must be max 5 bullets.
+- Sequencing must be 3 phases: EARLY/MID/LATE and short.
+- Notes must include: what buyer gets immediately + upgrade path + a warning (honest).
+- Use concrete phrasing: turn windows, board states, what hands to keep, what pods it hates.
+- Avoid long paragraphs. Use short lines and bullets.
+
+Required output format (exactly this ordering and headings):
+===JSON===
+{ ...valid JSON... }
+
+===LISTING_MD===
+# Title
+...
+(complete markdown listing)
+
+===DM_SCRIPT_30S===
+(one short paragraph)
+
+===OBJECTION_KILLERS===
+- ...
+- ...
+- ...
+- ...
+- ...
+
+===UPSELL_ADDON===
+Name:
+Price:
+What they get immediately:
+How to deliver in under 60 seconds:
+
+===TRUST_PAYLOAD===
+(one short paragraph)
+
+Now do it. If the decklist is missing details, infer reasonable commander plan based on the list, but do NOT hallucinate specific card names not present.</pre>
+  </div>
 </body>
 </html>
