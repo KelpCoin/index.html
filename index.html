@@ -3,42 +3,273 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Claim 500 KelpCoin</title>
+  <title>BrownEye Cortex — Chaos Money Dashboard</title>
   <style>
+    :root {
+      color-scheme: light;
+      --bg: #f6f7fb;
+      --card: #ffffff;
+      --ink: #1f2937;
+      --muted: #6b7280;
+      --accent: #111827;
+      --pill: #eff6ff;
+      --pill-ink: #1d4ed8;
+      --border: #e5e7eb;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f0fdf4;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
       margin: 0;
-      padding: 40px;
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
     }
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
+
+    header {
+      padding: 48px 20px 32px;
+      text-align: center;
     }
-    p {
-      font-size: 1rem;
-      margin-bottom: 2rem;
-      color: #555;
+
+    header h1 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      margin-bottom: 8px;
     }
-    iframe {
-      border: none;
-      width: 100%;
-      max-width: 700px;
-      height: 800px;
-      border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+
+    header p {
+      max-width: 720px;
+      margin: 0 auto 24px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .pill {
+      background: var(--pill);
+      color: var(--pill-ink);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+
+    main {
+      display: grid;
+      gap: 24px;
+      max-width: 1100px;
+      margin: 0 auto 60px;
+      padding: 0 20px 40px;
+    }
+
+    .grid {
+      display: grid;
+      gap: 20px;
+    }
+
+    @media (min-width: 900px) {
+      .grid.two {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 18px;
+      padding: 24px;
+      border: 1px solid var(--border);
+      box-shadow: 0 12px 24px rgba(15, 23, 42, 0.06);
+    }
+
+    .card h2 {
+      margin-top: 0;
+      margin-bottom: 12px;
+      font-size: 1.3rem;
+    }
+
+    .card p {
+      margin-top: 0;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .card ul {
+      padding-left: 20px;
+      margin: 12px 0 0;
+      color: var(--muted);
+    }
+
+    .card li {
+      margin-bottom: 8px;
+    }
+
+    .highlight {
+      background: #111827;
+      color: #ffffff;
+      border-radius: 14px;
+      padding: 16px 18px;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 18px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      text-decoration: none;
+      color: var(--accent);
+      font-weight: 600;
+      background: #ffffff;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 18px rgba(15, 23, 42, 0.12);
+    }
+
+    .note {
+      background: #fef3c7;
+      color: #92400e;
+      padding: 14px 16px;
+      border-radius: 12px;
+      font-weight: 600;
+      margin-top: 16px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: var(--muted);
+      font-size: 0.85rem;
     }
   </style>
 </head>
 <body>
-  <h1>🪙 Claim 500 KelpCoin</h1>
-  <p>Fill in your wallet address. Optional: enter a referrer’s wallet to earn bonus KELP.</p>
-  <iframe 
-    src="https://docs.google.com/forms/d/e/1FAIpQLSclYfRXBxHoDBjpoHCoKM2_lm8VkxN8FjqmkOeK5kqxiOMW9A/viewform?embedded=true"
-    allowfullscreen>
-  </iframe>
+  <header>
+    <h1>BrownEye Cortex — Chaos Money Dashboard</h1>
+    <p>
+      Centralized mission board for the BrownEye Cortex, Amplissa, and HappyHomarid silos.
+      This page captures the operating directives, revenue surfaces, and gated distribution rules
+      in one place for rapid iteration and handoff.
+    </p>
+    <div class="pill-row">
+      <span class="pill">Chaos Money</span>
+      <span class="pill">Codex 1–3</span>
+      <span class="pill">MegaBootstrap Law</span>
+      <span class="pill">Human-Gated Publishing</span>
+    </div>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>Source-of-Truth Canon</h2>
+      <p>
+        The handwritten maps are treated as canon. Every loop, derivative, and product series
+        should trace back to the visual map artifacts and be expanded into monetizable tracks.
+      </p>
+      <div class="highlight">
+        Extract · Expand · Clone · Monetize — every node becomes a loop with proof logs and zips.
+      </div>
+    </section>
+
+    <section class="grid two">
+      <article class="card">
+        <h2>Codex Prompt 1 — Stunt Franchises</h2>
+        <p>
+          Create rival brands, fake feuds, and controversy loops that trigger books, merch drops,
+          apology videos, and fan response bundles. Every feud yields at least three monetizable drops.
+        </p>
+        <ul>
+          <li>Streetwear insults with rapid merchandise cycles.</li>
+          <li>Parody authors writing response chains.</li>
+          <li>Automated drama timelines with versioned artifacts.</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <h2>Codex Prompt 2 — Rogue Franchises</h2>
+        <p>
+          Serialized microproducts disguised as long-running franchises. Each release includes
+          a PDF template, teaser copy, sequels, a tip jar plug, and viral bait.
+        </p>
+        <ul>
+          <li>Zip/Archive every issue with tiered bundles.</li>
+          <li>Queue sequels via PowerShell scheduling loops.</li>
+          <li>Discord/Patreon distribution is human-gated.</li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="grid two">
+      <article class="card">
+        <h2>Codex Prompt 3 — Template Hellforge</h2>
+        <p>
+          Weaponized simplicity: breakup texts, poems, legal threats, eulogies, and themed packs.
+          Each template ships as a PDF + Word doc (optional PNG) and ships in a themed bundle.
+        </p>
+        <ul>
+          <li>Bundles organized by theme for storefront catalogs.</li>
+          <li>Auto-insert tip jar message in every pack.</li>
+          <li>Bootstrap installers deploy locally.</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <h2>MegaBootstrap Law</h2>
+        <p>Operational boot rules for every new artifact, log, and delivery path.</p>
+        <ul>
+          <li>Artifacts → <strong>D:\BrownEye\BROWNEYE_ARTIFACTS</strong> (fallback: C:\BrownEyeCortex).</li>
+          <li>Queue JSON → <strong>C:\BrownEyeCortex\FactoryUI\queue\incoming</strong>.</li>
+          <li>Logs append to <strong>C:\BrownEyeCortex\FactoryUI\logs\elohim.log</strong>.</li>
+          <li>Proof files: <strong>artifact_YYYYMMDD_HHMMSS_CodexX.md</strong>.</li>
+          <li>Discord publishing gated by human approval.</li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="card">
+      <h2>Monetization Surfaces</h2>
+      <p>Hard-coded pathways for passive flow and tip-jar invites.</p>
+      <div class="cta-row">
+        <a class="cta" href="https://www.patreon.com/happyhomarid">Patreon: HappyHomarid</a>
+        <a class="cta" href="https://wise.com/pay/me/joshuaa495">Wise: Direct Support</a>
+      </div>
+      <div class="note">
+        Discord Tip Message: “Some people ask if there’s a way to throw a dollar our way — there is,
+        if you want. Totally optional. No expectations.”
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Chaos Apache Bootstrap</h2>
+      <p>
+        Deploy artifacts into a public-style structure (<strong>\public</strong>, <strong>\zips</strong>,
+        <strong>\franchises</strong>) with static index pages and stable public links. Manual trigger
+        buttons in Dash remain the final gate.
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    BrownEye Cortex • Amplissa • HappyHomarid — Human-gated public publishing.
+  </footer>
 </body>
 </html>
