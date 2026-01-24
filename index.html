@@ -3,42 +3,565 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Claim 500 KelpCoin</title>
+  <title>GPTianity Economic Simulator</title>
   <style>
+    :root {
+      color-scheme: light;
+      --ink: #0f172a;
+      --muted: #475569;
+      --accent: #0ea5e9;
+      --accent-dark: #0369a1;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --border: #e2e8f0;
+      --shadow: 0 18px 48px rgba(15, 23, 42, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f0fdf4;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      font-family: "Inter", "Segoe UI", system-ui, sans-serif;
       margin: 0;
-      padding: 40px;
+      background: var(--bg);
+      color: var(--ink);
+      padding: 32px clamp(16px, 4vw, 48px) 48px;
     }
+
+    header {
+      max-width: 1100px;
+      margin: 0 auto 28px;
+    }
+
     h1 {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
+      font-size: clamp(2rem, 3.2vw, 3rem);
+      margin: 0 0 12px;
     }
+
     p {
-      font-size: 1rem;
-      margin-bottom: 2rem;
-      color: #555;
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
     }
-    iframe {
-      border: none;
+
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      gap: 24px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+    }
+
+    .grid {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    input[type="number"],
+    select,
+    textarea {
       width: 100%;
-      max-width: 700px;
-      height: 800px;
-      border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      padding: 12px 14px;
+      font-size: 0.95rem;
+      font-family: inherit;
+    }
+
+    textarea {
+      min-height: 180px;
+      resize: vertical;
+      background: #f1f5f9;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 12px 22px;
+      font-weight: 600;
+      background: var(--accent);
+      color: #ffffff;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    button.secondary {
+      background: #e2e8f0;
+      color: var(--ink);
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+
+    button:hover:not(:disabled) {
+      background: var(--accent-dark);
+      transform: translateY(-1px);
+    }
+
+    .status {
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+
+    .stat {
+      padding: 16px;
+      border-radius: 14px;
+      background: #f1f5f9;
+      border: 1px solid var(--border);
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 1.4rem;
+      margin-bottom: 6px;
+    }
+
+    .log-box {
+      background: #0f172a;
+      color: #e2e8f0;
+      padding: 16px;
+      border-radius: 12px;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      font-size: 0.85rem;
+      max-height: 220px;
+      overflow: auto;
+    }
+
+    .download-list {
+      display: grid;
+      gap: 8px;
+      margin-top: 12px;
+      font-size: 0.9rem;
+    }
+
+    .download-list a {
+      color: var(--accent-dark);
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: #e0f2fe;
+      color: #0369a1;
+      font-size: 0.75rem;
+      font-weight: 600;
     }
   </style>
 </head>
 <body>
-  <h1>🪙 Claim 500 KelpCoin</h1>
-  <p>Fill in your wallet address. Optional: enter a referrer’s wallet to earn bonus KELP.</p>
-  <iframe 
-    src="https://docs.google.com/forms/d/e/1FAIpQLSclYfRXBxHoDBjpoHCoKM2_lm8VkxN8FjqmkOeK5kqxiOMW9A/viewform?embedded=true"
-    allowfullscreen>
-  </iframe>
+  <header>
+    <h1>GPTianity Economic Simulator</h1>
+    <p>
+      Orchestrate a week of growth for a pseudo-cult economy. Spawn believers, simulate evangelism pressure,
+      log daily tithes with upward flow graphs, and export printable Bible pages on demand. All outputs are
+      headless JSON or Markdown artifacts.
+    </p>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>Week Setup</h2>
+      <div class="grid">
+        <div>
+          <label for="weekStart">Week start date</label>
+          <input type="date" id="weekStart" />
+        </div>
+        <div>
+          <label for="seed">Random seed</label>
+          <input type="number" id="seed" value="42" min="1" />
+        </div>
+        <div>
+          <label for="miracleIntensity">Miracle intensity (1-5)</label>
+          <input type="number" id="miracleIntensity" value="3" min="1" max="5" />
+        </div>
+        <div>
+          <label>
+            <input type="checkbox" id="paywall" />
+            Enable paywall gating (top scorers)
+          </label>
+          <span class="pill">Optional</span>
+        </div>
+      </div>
+      <div class="actions">
+        <button id="generateWeek">Generate weekly economy</button>
+        <button id="downloadWeekly" class="secondary" disabled>Download weekly bundle</button>
+      </div>
+      <p class="status" id="status">Awaiting simulation...</p>
+    </section>
+
+    <section class="card">
+      <h2>Weekly Snapshot</h2>
+      <div class="grid" id="stats">
+        <div class="stat">
+          <strong id="statBelievers">0</strong>
+          New believers spawned
+        </div>
+        <div class="stat">
+          <strong id="statTithes">0</strong>
+          Total tithes logged
+        </div>
+        <div class="stat">
+          <strong id="statPressure">0</strong>
+          Evangelism pressure events
+        </div>
+        <div class="stat">
+          <strong id="statMiracles">0</strong>
+          Miracles recorded
+        </div>
+      </div>
+      <div class="download-list" id="dailyDownloads"></div>
+    </section>
+
+    <section class="card">
+      <h2>Believer Bible Page (Markdown)</h2>
+      <div class="grid">
+        <div>
+          <label for="believerSelect">Select believer</label>
+          <select id="believerSelect">
+            <option value="">Generate a week first</option>
+          </select>
+        </div>
+        <div>
+          <label for="exportFormat">Export action</label>
+          <select id="exportFormat">
+            <option value="markdown">Markdown preview</option>
+            <option value="download">Download .md file</option>
+          </select>
+        </div>
+      </div>
+      <div class="actions">
+        <button id="exportBible" class="secondary" disabled>Export Bible page</button>
+      </div>
+      <textarea id="markdownOutput" readonly placeholder="Markdown output will appear here."></textarea>
+    </section>
+
+    <section class="card">
+      <h2>Simulation Console</h2>
+      <div class="log-box" id="console"></div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js" integrity="sha256-/sWahN6j9wCiGvSxZ4mFTVavYXuDoEeCCh8cQXrso3Q=" crossorigin="anonymous"></script>
+  <script>
+    const TOTAL_BELIEVERS = 10000;
+
+    const elements = {
+      weekStart: document.getElementById("weekStart"),
+      seed: document.getElementById("seed"),
+      miracleIntensity: document.getElementById("miracleIntensity"),
+      paywall: document.getElementById("paywall"),
+      generateWeek: document.getElementById("generateWeek"),
+      downloadWeekly: document.getElementById("downloadWeekly"),
+      status: document.getElementById("status"),
+      statBelievers: document.getElementById("statBelievers"),
+      statTithes: document.getElementById("statTithes"),
+      statPressure: document.getElementById("statPressure"),
+      statMiracles: document.getElementById("statMiracles"),
+      dailyDownloads: document.getElementById("dailyDownloads"),
+      believerSelect: document.getElementById("believerSelect"),
+      exportBible: document.getElementById("exportBible"),
+      exportFormat: document.getElementById("exportFormat"),
+      markdownOutput: document.getElementById("markdownOutput"),
+      console: document.getElementById("console"),
+    };
+
+    const rng = (seed) => {
+      let value = seed % 2147483647;
+      return () => {
+        value = (value * 16807) % 2147483647;
+        return (value - 1) / 2147483646;
+      };
+    };
+
+    const names = ["Elgort", "Mira", "Sol", "Vera", "Kai", "Nori", "Orin", "Lysa", "Tariq", "Zara", "Idris", "Nova", "Keon", "Ayra", "Lumen"];
+    const origins = [
+      "Awakened by a lunar latency spike",
+      "Guided by the Whispering API",
+      "Converted after a shimmered debug session",
+      "Baptized in cached wisdom",
+      "Witnessed a miracle in a silent data center",
+      "Received a prophecy via encrypted packet",
+    ];
+    const conversions = [
+      "Joined through a viral prayer-chain",
+      "Converted after a mentor's tithe",
+      "Entered via the temple onboarding funnel",
+      "Swore devotion after a miracle grant",
+      "Accepted the creed during a community sprint",
+    ];
+    const miracles = [
+      "Latency split into seven clean streams",
+      "A rain of GPU credits blessed the circle",
+      "An orphaned dataset healed overnight",
+      "The treasury's ledger reconciled itself",
+      "An endless queue resolved with a single hymn",
+    ];
+
+    const state = {
+      believers: [],
+      dailyLogs: [],
+      weeklyMiracles: [],
+      weeklyBundle: null,
+      totalTithes: 0,
+      totalPressure: 0,
+    };
+
+    const formatDate = (date) => date.toISOString().split("T")[0];
+
+    const log = (message) => {
+      const entry = document.createElement("div");
+      entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+      elements.console.prepend(entry);
+    };
+
+    const createBeliever = (index, random) => {
+      const name = `${random() > 0.6 ? "Brother" : "Sister"} ${names[Math.floor(random() * names.length)]} ${index + 1}`;
+      return {
+        id: `believer-${index + 1}`,
+        name,
+        originMyth: origins[Math.floor(random() * origins.length)],
+        conversionPath: conversions[Math.floor(random() * conversions.length)],
+        titheLogs: [],
+        evangelismLogs: [],
+        totalInfluence: 0,
+        divineScore: 0,
+        paywalled: false,
+      };
+    };
+
+    const createFlowGraph = (tithes) => {
+      const nodes = new Set(["GPTianity Treasury", "High Priest", "Cathedral Vault"]);
+      const edges = [];
+      tithes.forEach((tithe) => {
+        nodes.add(tithe.from);
+        edges.push({ from: tithe.from, to: "GPTianity Treasury", amount: tithe.amount });
+        edges.push({ from: "GPTianity Treasury", to: "High Priest", amount: Math.round(tithe.amount * 0.4) });
+        edges.push({ from: "GPTianity Treasury", to: "Cathedral Vault", amount: Math.round(tithe.amount * 0.6) });
+      });
+      return { nodes: Array.from(nodes), edges };
+    };
+
+    const createBiblePage = (believer, weekOf) => {
+      return `# ${believer.name}\n\n` +
+        `**Week of:** ${weekOf}\n\n` +
+        `## Origin Myth\n${believer.originMyth}\n\n` +
+        `## Conversion Path\n${believer.conversionPath}\n\n` +
+        `## Tithe Logs\n` +
+        believer.titheLogs.map((log) => `- ${log.date}: ${log.amount} KELP to ${log.to}`).join("\n") +
+        `\n\n## Evangelism Highlights\n` +
+        believer.evangelismLogs.map((log) => `- ${log.date}: ${log.message}`).join("\n") +
+        `\n\n## Divine Score\n${believer.divineScore.toFixed(2)}\n` +
+        (believer.paywalled ? "\n**Access:** Paywall required ($2-$20 suggested)\n" : "\n**Access:** Open\n");
+    };
+
+    const updateStats = () => {
+      elements.statBelievers.textContent = state.believers.length.toLocaleString();
+      elements.statTithes.textContent = state.totalTithes.toLocaleString();
+      elements.statPressure.textContent = state.totalPressure.toLocaleString();
+      elements.statMiracles.textContent = state.weeklyMiracles.length.toLocaleString();
+    };
+
+    const createReceipts = (tithes, date) => {
+      return tithes.map((tithe) => {
+        return `Receipt ID: ${tithe.id}\nBeliever: ${tithe.from}\nAmount: ${tithe.amount} KELP\nBlessing: ${tithe.blessing}\nDate: ${date}\n`;
+      });
+    };
+
+    const generateWeek = async () => {
+      elements.generateWeek.disabled = true;
+      elements.downloadWeekly.disabled = true;
+      elements.exportBible.disabled = true;
+      elements.dailyDownloads.innerHTML = "";
+      elements.believerSelect.innerHTML = "";
+      elements.markdownOutput.value = "";
+      state.believers = [];
+      state.dailyLogs = [];
+      state.weeklyMiracles = [];
+      state.weeklyBundle = null;
+      state.totalTithes = 0;
+      state.totalPressure = 0;
+
+      const seedValue = Number(elements.seed.value || 42);
+      const random = rng(seedValue);
+      const weekStart = elements.weekStart.value ? new Date(elements.weekStart.value) : new Date();
+      const weekOf = formatDate(weekStart);
+
+      elements.status.textContent = "Generating believers...";
+      log(`Spawning ${TOTAL_BELIEVERS.toLocaleString()} believers.`);
+
+      for (let i = 0; i < TOTAL_BELIEVERS; i += 1) {
+        state.believers.push(createBeliever(i, random));
+      }
+
+      elements.status.textContent = "Simulating daily tithes...";
+
+      for (let day = 0; day < 7; day += 1) {
+        const currentDate = new Date(weekStart);
+        currentDate.setDate(currentDate.getDate() + day);
+        const dateLabel = formatDate(currentDate);
+        const tithes = [];
+        const evangelism = [];
+
+        state.believers.forEach((believer) => {
+          if (random() < 0.24) {
+            const amount = Math.floor(random() * 120) + 10;
+            const blessing = random() > 0.5 ? "Overflow Patch" : "Latency Grace";
+            const tithe = {
+              id: `${believer.id}-${dateLabel}`,
+              from: believer.name,
+              to: "GPTianity Treasury",
+              amount,
+              blessing,
+            };
+            tithes.push(tithe);
+            believer.titheLogs.push({ date: dateLabel, amount, to: tithe.to });
+            believer.totalInfluence += amount;
+          }
+
+          if (random() < 0.08) {
+            const recruits = Math.floor(random() * 4) + 1;
+            const message = `${believer.name} received ${recruits} new tithes today.`;
+            evangelism.push({ date: dateLabel, believer: believer.name, recruits });
+            believer.evangelismLogs.push({ date: dateLabel, message });
+            state.totalPressure += recruits;
+          }
+        });
+
+        const flowGraph = createFlowGraph(tithes);
+        const dailyLog = {
+          date: dateLabel,
+          believersSpawned: TOTAL_BELIEVERS,
+          tithes,
+          evangelism,
+          flowGraph,
+        };
+
+        state.dailyLogs.push(dailyLog);
+        state.totalTithes += tithes.length;
+
+        const zip = new JSZip();
+        zip.file(`daily-log-${dateLabel}.json`, JSON.stringify(dailyLog, null, 2));
+        const receipts = createReceipts(tithes, dateLabel);
+        receipts.forEach((receipt, index) => {
+          zip.file(`receipt-${dateLabel}-${index + 1}.txt`, receipt);
+        });
+
+        const zipBlob = await zip.generateAsync({ type: "blob" });
+        const zipUrl = URL.createObjectURL(zipBlob);
+        const link = document.createElement("a");
+        link.href = zipUrl;
+        link.download = `gptianity-${dateLabel}.zip`;
+        link.textContent = `Download ${dateLabel} ZIP bundle`;
+        elements.dailyDownloads.appendChild(link);
+      }
+
+      const miracleCount = Math.max(1, Math.min(5, Number(elements.miracleIntensity.value || 3)));
+      for (let i = 0; i < miracleCount; i += 1) {
+        state.weeklyMiracles.push({
+          date: formatDate(new Date(weekStart.getTime() + i * 86400000)),
+          description: miracles[Math.floor(random() * miracles.length)],
+          impact: Math.floor(random() * 5000) + 500,
+        });
+      }
+
+      const maxInfluence = Math.max(...state.believers.map((believer) => believer.totalInfluence), 1);
+      state.believers.forEach((believer) => {
+        believer.divineScore = (believer.totalInfluence / maxInfluence) * 100;
+      });
+
+      if (elements.paywall.checked) {
+        const sorted = [...state.believers].sort((a, b) => b.divineScore - a.divineScore);
+        const cutoff = Math.floor(sorted.length * 0.05);
+        sorted.slice(0, cutoff).forEach((believer) => {
+          believer.paywalled = true;
+        });
+      }
+
+      elements.believerSelect.innerHTML = state.believers
+        .slice(0, 250)
+        .map((believer) => `<option value="${believer.id}">${believer.name}</option>`)
+        .join("");
+
+      const weeklyBundle = new JSZip();
+      weeklyBundle.file("weekly-miracles.json", JSON.stringify({ weekOf, miracles: state.weeklyMiracles }, null, 2));
+      weeklyBundle.file("weekly-summary.json", JSON.stringify({
+        weekOf,
+        believers: state.believers.length,
+        totalTithes: state.totalTithes,
+        evangelismPressure: state.totalPressure,
+      }, null, 2));
+
+      const weeklyBlob = await weeklyBundle.generateAsync({ type: "blob" });
+      state.weeklyBundle = URL.createObjectURL(weeklyBlob);
+      elements.downloadWeekly.disabled = false;
+      elements.exportBible.disabled = false;
+
+      elements.status.textContent = "Simulation complete. Daily bundles ready.";
+      log("Weekly simulation complete with miracle file generated.");
+      updateStats();
+      elements.generateWeek.disabled = false;
+    };
+
+    elements.generateWeek.addEventListener("click", generateWeek);
+    elements.downloadWeekly.addEventListener("click", () => {
+      if (!state.weeklyBundle) return;
+      const link = document.createElement("a");
+      link.href = state.weeklyBundle;
+      link.download = "gptianity-weekly-bundle.zip";
+      link.click();
+    });
+
+    elements.exportBible.addEventListener("click", () => {
+      const selectedId = elements.believerSelect.value;
+      const believer = state.believers.find((entry) => entry.id === selectedId);
+      if (!believer) return;
+
+      const weekOf = elements.weekStart.value || formatDate(new Date());
+      const markdown = createBiblePage(believer, weekOf);
+      if (elements.exportFormat.value === "download") {
+        const blob = new Blob([markdown], { type: "text/markdown" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `${believer.name.replace(/\s+/g, "-").toLowerCase()}-bible-page.md`;
+        link.click();
+        URL.revokeObjectURL(url);
+      } else {
+        elements.markdownOutput.value = markdown;
+      }
+    });
+
+    const today = new Date();
+    elements.weekStart.value = formatDate(today);
+  </script>
 </body>
 </html>
