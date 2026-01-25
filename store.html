@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BrownEye Cortex MTG Store</title>
+  <link rel="stylesheet" href="store.css">
+  <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="title-block">
+      <h1 id="store-title">BrownEye Cortex MTG Store</h1>
+      <p id="store-status" class="status">Live inventory from Cortex</p>
+    </div>
+    <div class="controls">
+      <input id="search-input" type="search" placeholder="Search name, tags, or SKU" aria-label="Search">
+      <label class="toggle">
+        <input id="toggle-auctions" type="checkbox">
+        <span>Auctions only</span>
+      </label>
+      <label class="toggle">
+        <input id="toggle-instock" type="checkbox">
+        <span>Only with bundle</span>
+      </label>
+    </div>
+  </header>
+
+  <main>
+    <section id="tag-bar" class="tag-bar"></section>
+    <section id="sku-grid" class="grid"></section>
+  </main>
+
+  <template id="sku-card-template">
+    <article class="card">
+      <div class="card-header">
+        <div>
+          <h2 class="sku-name"></h2>
+          <p class="sku-id"></p>
+        </div>
+        <span class="price"></span>
+      </div>
+      <p class="sku-description"></p>
+      <div class="video-wrap"></div>
+      <div class="cta-row">
+        <button class="btn stripe-btn">Buy with Card</button>
+        <button class="btn paypal-btn">PayPal</button>
+        <button class="btn bundle-btn">Download Bundle</button>
+      </div>
+      <p class="fulfillment"></p>
+      <button class="btn info-toggle">More info</button>
+      <div class="more-info">
+        <div class="tags"></div>
+        <p class="last-updated"></p>
+        <div class="auction-panel"></div>
+      </div>
+    </article>
+  </template>
+
+  <script src="store.js"></script>
+</body>
+</html>
