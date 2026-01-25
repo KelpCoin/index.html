@@ -1,0 +1,5 @@
+{
+  "store_title": "BrownEye Cortex MTG Store",
+  "stripe_publishable_key": "",
+  "approval_gate_path": "C:\\BrownEyeCortex\\_moneyfarm\\out\\PUBLIC_STORE_OK.txt"
+}
