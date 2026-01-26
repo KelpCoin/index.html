@@ -1,0 +1,56 @@
+{
+  "pipeline": "Brandly-Cinema-01",
+  "description": "Bootstrap pipeline linking BrownEye Cortex, ComfyUI, and MegaWrapper.",
+  "stages": [
+    {
+      "name": "ingest",
+      "service": "brown-eye-cortex",
+      "endpoint": "POST https://api.brandlycortex.local/v1/scenes",
+      "outputs": ["scene_id", "storyboard"]
+    },
+    {
+      "name": "storyboard",
+      "service": "brown-eye-cortex",
+      "endpoint": "POST https://api.brandlycortex.local/v1/scenes/{scene_id}/storyboard",
+      "outputs": ["shot_list", "prompt_pack"]
+    },
+    {
+      "name": "comfyui",
+      "service": "comfyui-bridge",
+      "endpoint": "POST https://comfyui.local/api/render",
+      "inputs": ["prompt_pack"],
+      "outputs": ["render_job_id", "preview_frames"]
+    },
+    {
+      "name": "composite",
+      "service": "brandly-compositor",
+      "endpoint": "POST https://api.brandlycortex.local/v1/render/composite",
+      "inputs": ["preview_frames", "brand_pack"],
+      "outputs": ["final_video"]
+    },
+    {
+      "name": "publish",
+      "service": "megawrapper",
+      "endpoint": "POST https://megawrapper.local/v1/dashboard/slice",
+      "inputs": ["final_video", "metrics"],
+      "outputs": ["public_slice_url"]
+    }
+  ],
+  "fan_interaction": {
+    "provider": "stripe",
+    "checkout_mode": "payment",
+    "actions": [
+      "scene_reroll",
+      "vip_priority",
+      "fan_vote_boost"
+    ],
+    "webhook": "POST https://api.brandlycortex.local/v1/fan/events"
+  },
+  "security": {
+    "auth": "bearer",
+    "rate_limits": {
+      "default_per_minute": 120,
+      "paid_actions_per_minute": 15
+    }
+  }
+}

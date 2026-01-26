@@ -1,0 +1,63 @@
+openapi: 3.0.3
+info:
+  title: BrownEye Cortex API
+  version: 0.1.0
+  description: Bootstrap API for cinematic orchestration and fan monetization.
+servers:
+  - url: https://api.brandlycortex.local
+paths:
+  /v1/scenes:
+    post:
+      summary: Create a new scene.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                prompt:
+                  type: string
+                brand_pack:
+                  type: string
+      responses:
+        "201":
+          description: Scene created.
+  /v1/scenes/{scene_id}/storyboard:
+    post:
+      summary: Generate storyboard for a scene.
+      parameters:
+        - name: scene_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Storyboard generated.
+  /v1/render/jobs:
+    post:
+      summary: Submit a render job to ComfyUI.
+      responses:
+        "202":
+          description: Render job accepted.
+  /v1/render/composite:
+    post:
+      summary: Composite brand overlays on rendered frames.
+      responses:
+        "200":
+          description: Composite complete.
+  /v1/fan/events:
+    post:
+      summary: Register a fan monetization event.
+      responses:
+        "200":
+          description: Fan event processed.
+  /v1/dashboard/slice:
+    get:
+      summary: Retrieve a public dashboard slice.
+      responses:
+        "200":
+          description: Dashboard slice data.

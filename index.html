@@ -3,42 +3,311 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Claim 500 KelpCoin</title>
+  <title>BrownEye Cortex - MegaWrapper Dashboard</title>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      background-color: #f0fdf4;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      background: #0b0e14;
+      color: #e6edf3;
       margin: 0;
-      padding: 40px;
     }
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 48px;
+      background: linear-gradient(120deg, #1f6feb, #8b5cf6);
+      color: #fff;
     }
-    p {
-      font-size: 1rem;
-      margin-bottom: 2rem;
-      color: #555;
+    header h1 {
+      margin: 0;
+      font-size: 1.8rem;
+      letter-spacing: 0.02em;
     }
-    iframe {
-      border: none;
-      width: 100%;
-      max-width: 700px;
-      height: 800px;
+    header p {
+      margin: 6px 0 0;
+      font-size: 0.95rem;
+      opacity: 0.9;
+    }
+    .cta-group {
+      display: flex;
+      gap: 12px;
+    }
+    .cta {
+      background: #0b0e14;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.4);
+      font-weight: 600;
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+    .layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      min-height: calc(100vh - 86px);
+    }
+    nav {
+      padding: 24px;
+      border-right: 1px solid #1f2631;
+      background: #0f131a;
+    }
+    nav h2 {
+      margin-top: 0;
+      font-size: 0.9rem;
+      color: #8b949e;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    nav ul {
+      list-style: none;
+      padding: 0;
+      margin: 16px 0 0;
+      display: grid;
+      gap: 12px;
+    }
+    nav a {
+      color: #e6edf3;
+      text-decoration: none;
+      padding: 10px 12px;
       border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      background: #151b23;
+      display: block;
+    }
+    main {
+      padding: 32px 40px;
+    }
+    .grid {
+      display: grid;
+      gap: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    }
+    .card {
+      background: #111827;
+      border: 1px solid #1f2631;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    }
+    .card h3 {
+      margin: 0 0 12px;
+      font-size: 1.1rem;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(31, 111, 235, 0.2);
+      color: #7cc3ff;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    .list {
+      display: grid;
+      gap: 8px;
+      margin: 12px 0 0;
+      padding-left: 18px;
+      color: #9da7b3;
+      font-size: 0.95rem;
+    }
+    .code {
+      background: #0b0e14;
+      border-radius: 12px;
+      padding: 14px;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      font-size: 0.85rem;
+      color: #e6edf3;
+      border: 1px solid #1f2631;
+      overflow-x: auto;
+    }
+    .pill {
+      display: inline-block;
+      background: rgba(139, 92, 246, 0.2);
+      color: #c8b6ff;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      margin-right: 6px;
+    }
+    footer {
+      padding: 20px 40px 32px;
+      color: #6e7681;
+      font-size: 0.85rem;
+    }
+    @media (max-width: 960px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+      nav {
+        border-right: none;
+        border-bottom: 1px solid #1f2631;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>🪙 Claim 500 KelpCoin</h1>
-  <p>Fill in your wallet address. Optional: enter a referrer’s wallet to earn bonus KELP.</p>
-  <iframe 
-    src="https://docs.google.com/forms/d/e/1FAIpQLSclYfRXBxHoDBjpoHCoKM2_lm8VkxN8FjqmkOeK5kqxiOMW9A/viewform?embedded=true"
-    allowfullscreen>
-  </iframe>
+  <header>
+    <div>
+      <h1>BrownEye Cortex · MegaWrapper Dashboard</h1>
+      <p>GPU-enhanced cinematic pipeline linking ComfyUI, fan monetization, and brand orchestration.</p>
+    </div>
+    <div class="cta-group">
+      <a class="cta" href="#pipelines">Launch Pipeline</a>
+      <a class="cta" href="#fan-revenue">Fan Revenue</a>
+    </div>
+  </header>
+  <div class="layout">
+    <nav>
+      <h2>Control Plane</h2>
+      <ul>
+        <li><a href="#overview">Overview</a></li>
+        <li><a href="#integrations">Integrations</a></li>
+        <li><a href="#pipelines">Cinema Pipelines</a></li>
+        <li><a href="#fan-revenue">Fan Interaction</a></li>
+        <li><a href="#deploy">Deploy</a></li>
+      </ul>
+    </nav>
+    <main>
+      <section id="overview" class="grid">
+        <div class="card">
+          <span class="badge">Live Session</span>
+          <h3>Brandly Cortex Status</h3>
+          <p>Unified orchestration for cinema-grade content, dashboards, and community interaction.</p>
+          <ul class="list">
+            <li>API Gateway: <strong>https://api.brandlycortex.local</strong></li>
+            <li>GPU Cluster: <strong>RTX-Cloud / A100 pool</strong></li>
+            <li>Dashboard: <strong>MegaWrapper v0.9</strong></li>
+          </ul>
+        </div>
+        <div class="card">
+          <span class="badge">Revenue Streams</span>
+          <h3>Fan Engagement Board</h3>
+          <p>Interactive prompts, MTG-style drop events, and paid rerolls for cinematic outcomes.</p>
+          <div class="list">
+            <div><span class="pill">Stripe Checkout</span> Tokenized fan boosts</div>
+            <div><span class="pill">VIP Tier</span> Priority render lanes</div>
+            <div><span class="pill">Live Ops</span> Real-time voting switches</div>
+          </div>
+        </div>
+        <div class="card">
+          <span class="badge">GPU Video</span>
+          <h3>ComfyUI Render Queue</h3>
+          <p>Transforms storyboard prompts into branded cinematic clips with post-compositing.</p>
+          <div class="code">
+            queue.add({ prompt: "Cinematic MTG duel", fps: 24, brand_pack: "Brandly-Prime" });
+          </div>
+        </div>
+      </section>
+
+      <section id="integrations" class="grid" style="margin-top: 28px;">
+        <div class="card">
+          <h3>Integration Modules</h3>
+          <ul class="list">
+            <li><strong>BrownEye Cortex API:</strong> orchestrates scenes, assets, and approvals.</li>
+            <li><strong>ComfyUI Bridge:</strong> GPU job dispatch + asset retrieval.</li>
+            <li><strong>MegaWrapper UI:</strong> dashboard widgets &amp; public-facing slices.</li>
+            <li><strong>Stripe FanOps:</strong> monetized interaction with live render perks.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>API Bootstrap Stub</h3>
+          <div class="code">
+            POST /v1/scenes<br/>
+            POST /v1/render/jobs<br/>
+            POST /v1/fan/events<br/>
+            GET /v1/dashboard/slice
+          </div>
+        </div>
+        <div class="card">
+          <h3>Dashboard UI Hooks</h3>
+          <p>Use MegaWrapper widgets to expose status, revenue, and live fan toggles.</p>
+          <ul class="list">
+            <li>Widget: <strong>PipelineMonitor</strong></li>
+            <li>Widget: <strong>FanCommerce</strong></li>
+            <li>Widget: <strong>GPUHeatmap</strong></li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="pipelines" class="grid" style="margin-top: 28px;">
+        <div class="card">
+          <h3>Cinema Pipeline Config</h3>
+          <p>Composable pipeline wiring for Brandly Cortex, ComfyUI, and MegaWrapper.</p>
+          <div class="code">
+            pipeline: Brandly-Cinema-01<br/>
+            stages: ingest → storyboard → comfyui → composite → publish
+          </div>
+        </div>
+        <div class="card">
+          <h3>GPU Render Policy</h3>
+          <ul class="list">
+            <li>Priority: <strong>VIP fans + paid rerolls</strong></li>
+            <li>Fallback: <strong>CPU storyboard preview</strong></li>
+            <li>Branding: <strong>dynamic overlays + watermark</strong></li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Public Dashboard Slice</h3>
+          <p>Expose a live view for audiences while keeping ops-only panels private.</p>
+          <ul class="list">
+            <li>Streamed render status</li>
+            <li>Fan-driven decisions</li>
+            <li>Merch + MTG drop callouts</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="fan-revenue" class="grid" style="margin-top: 28px;">
+        <div class="card">
+          <h3>Fan Interaction (Stripe)</h3>
+          <p>Tokenize fan votes with rerolls, scene votes, and collectible prompts.</p>
+          <div class="code">
+            stripe.checkout.sessions.create({<br/>
+            &nbsp;&nbsp;mode: "payment",<br/>
+            &nbsp;&nbsp;metadata: { fan_action: "scene_reroll" }<br/>
+            });
+          </div>
+        </div>
+        <div class="card">
+          <h3>MTG Community Hooks</h3>
+          <ul class="list">
+            <li>Weekly duel themes</li>
+            <li>Patron-only cinematics</li>
+            <li>Rewarded fan poll outcomes</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Safeguards</h3>
+          <ul class="list">
+            <li>Rate limits for paid prompts</li>
+            <li>Content review queue</li>
+            <li>Audit logs tied to Stripe receipts</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="deploy" class="grid" style="margin-top: 28px;">
+        <div class="card">
+          <h3>Deployment Checklist</h3>
+          <ul class="list">
+            <li>Provision ComfyUI GPU workers</li>
+            <li>Deploy Brandly Cortex API gateway</li>
+            <li>Register MegaWrapper widgets</li>
+            <li>Enable Stripe webhook listener</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Config Files</h3>
+          <p>See <strong>pipeline.config.json</strong> and <strong>DEPLOYMENT.md</strong> for bootstrap details.</p>
+        </div>
+      </section>
+    </main>
+  </div>
+  <footer>
+    Built for cinematic GPU workflows with fan-driven monetization. Customize endpoints to match your infra.
+  </footer>
 </body>
 </html>
