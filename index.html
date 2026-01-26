@@ -3,42 +3,226 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Claim 500 KelpCoin</title>
+  <title>Biggie's MTG Content Engine</title>
   <style>
+    :root {
+      color-scheme: light;
+      --bg: #0b1411;
+      --panel: #111c18;
+      --text: #f4f7f5;
+      --muted: #b9c3bf;
+      --accent: #5ef2b2;
+      --accent-2: #ffd369;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f0fdf4;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
       margin: 0;
-      padding: 40px;
+      font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+      background: linear-gradient(180deg, #0b1411 0%, #101e19 50%, #0b1411 100%);
+      color: var(--text);
+      padding: 40px 20px 80px;
+      display: flex;
+      justify-content: center;
     }
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
-    }
-    p {
-      font-size: 1rem;
-      margin-bottom: 2rem;
-      color: #555;
-    }
-    iframe {
-      border: none;
+
+    main {
+      max-width: 980px;
       width: 100%;
-      max-width: 700px;
-      height: 800px;
-      border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      display: grid;
+      gap: 32px;
+    }
+
+    header {
+      text-align: left;
+      background: var(--panel);
+      padding: 28px 32px;
+      border-radius: 16px;
+      border: 1px solid rgba(94, 242, 178, 0.2);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+    }
+
+    header h1 {
+      margin: 0 0 12px;
+      font-size: 2.4rem;
+    }
+
+    header p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1.05rem;
+      line-height: 1.6;
+    }
+
+    .card {
+      background: var(--panel);
+      border-radius: 16px;
+      padding: 24px 28px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+    }
+
+    .card h2 {
+      margin: 0 0 8px;
+      font-size: 1.7rem;
+      color: var(--accent);
+    }
+
+    .card h3 {
+      margin: 20px 0 6px;
+      color: var(--accent-2);
+      font-size: 1.2rem;
+    }
+
+    .markdown {
+      white-space: pre-wrap;
+      font-family: "Fira Code", "Courier New", monospace;
+      background: #0b1411;
+      padding: 20px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      color: var(--text);
+      line-height: 1.6;
+      font-size: 0.95rem;
+    }
+
+    .note {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-top: 16px;
+    }
+
+    .cta {
+      margin-top: 14px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-top: 12px;
     }
   </style>
 </head>
 <body>
-  <h1>🪙 Claim 500 KelpCoin</h1>
-  <p>Fill in your wallet address. Optional: enter a referrer’s wallet to earn bonus KELP.</p>
-  <iframe 
-    src="https://docs.google.com/forms/d/e/1FAIpQLSclYfRXBxHoDBjpoHCoKM2_lm8VkxN8FjqmkOeK5kqxiOMW9A/viewform?embedded=true"
-    allowfullscreen>
-  </iframe>
+  <main>
+    <header>
+      <h1>Biggie's MTG Content Engine: Live Drop</h1>
+      <p>
+        Two fresh posts ready to ship — one Kinkukas Crafts, one Spec Mentions — plus
+        two new serialized template families for the pipeline. Markdown format as requested.
+      </p>
+    </header>
+
+    <section class="card">
+      <h2>Spec Mentions: "Carbon-Fibre Bargains"</h2>
+      <div class="markdown">
+# Spec Mentions — "Carbon-Fibre Bargains"
+
+## Subhead / Hook
+If you're sick of watching whale specs nuke your wallet, here's the quiet NZ-friendly cardboard that still has gas in the tank.
+
+## Main Article Body
+### 1) **Tangle Wire** (Reserve List, artifact tax tech)
+- **Why it bangs in EDH:** This thing still time-walks greedy tables and makes durdle piles cry. It’s disgusting in stax-adjacent shells like **Gerrard Weatherlight Hero**, **Mazirek**, or any trashy **Smokestack** cosplay.
+- **Finance angle (NZD lens):** It's been sleepy while other RL spikes stole the spotlight. Card Kingdom comps are climbing, but local supply is still crusty and thin. This is the kind of RL that moves when a new prison Commander hits the Discord.
+- **Exit plan:** Flip into a real staple, or hoard for the next stax meta wave.
+
+### 2) **Vanquisher's Banner** (tribal payoff that keeps sneaking back)
+- **Why it bangs in EDH:** People keep rediscovering it in sketchy tribes — Hydras, Cats, Treefolk, you name it. It's the “I should cut this” card that never leaves.
+- **Finance angle:** CK pricing has fattened up again, but EU/NZ copies still chill. It's a long-hold that pays when Commander precons drop with a random tribe.
+- **Exit plan:** Any time a new tribe gets printed, move the extra copies into hype buyers.
+
+### 3) **Bubbling Muck** (bad Dark Ritual, great with Swamps)
+- **Why it bangs in EDH:** Mono-black rituals are free wins in budget K'rrik and tiny turn-clock combos. It’s clunky, but it makes dumb things happen.
+- **Finance angle:** Every time mono-black gets hype, this old common vanishes. CK pricing stays annoying while other markets forget it exists.
+- **Exit plan:** Buy deep on restocks, dump when the next black commander sets the table on fire.
+
+## TL;DR (Discord Preview)
+Tangle Wire is still dirt for RL stax heads, Vanquisher's Banner keeps creeping up off tribal hype, and Bubbling Muck is the dirty ritual that keeps dodging reprint heat.
+
+## CTA
+Throw a dollar at **Patreon.com/HappyHomarid**, grab the full watchlist on Discord, and let's bully the market before the whales wake up.
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Kinkukas Crafts: "Surrak's Bad Decisions"</h2>
+      <div class="markdown">
+# Kinkukas Crafts — "Surrak's Bad Decisions"
+
+## Subhead / Hook
+We're building **Surrak, the Hunt Caller** as a commander because you're allergic to good choices and you like punching with bad cards.
+
+## Main Article Body
+### Commander: **Surrak, the Hunt Caller**
+Surrak is basically a green tutor for **haste** if you can hit ferocious. Most people ignore him because they can't count to 4 without staples. So we do it with jank and dirt rares.
+
+### Core Gameplan
+- **Turn 1-3:** Drop chunky 4-power garbage early (**Leatherback Baloth**, **Rhonas's Stalwart**, **Hunt the Weak** targets).
+- **Turn 4+:** Surrak gives haste, you swing, and your table realizes your "bad" deck now hits like a truck.
+- **Finishers:** **Overrun**-style nonsense and "whoops" trample pieces.
+
+### Spice Rack (Weird Tech)
+- **Aspect of Hydra** — combat trick that reads like a meme and hits like a truck.
+- **Predatory Hunger** — budget-ish and makes your 4-power scraps snowball.
+- **Primal Bellow** — instant-speed pump that ruins blocks.
+- **Lifecrafter's Bestiary** — fake card advantage that actually works in mono-green piles.
+
+### Why This Deck Exists
+- It's a cheap, violent green pile that punishes people for durdling.
+- You can build it from bulk bins and still win games when you curve out.
+- It turns trash-tier 4-power creatures into actual threats.
+
+## TL;DR (Discord Preview)
+Surrak wants any 4-power clown, gives it haste, and turns bulk rares into a ferocious punchline.
+
+## CTA
+If you want the full list + swap options, tip the Patreon or chuck a couple bucks in the Discord tip jar. We're not running this for free.
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>New Template Families (Ready to Serialize)</h2>
+      <div class="markdown">
+# Next Template Families
+
+## 1) **Deck Funeral**
+### Subhead / Hook
+"Here's why your pet deck died, and how to drag it back up." Brutal teardown, fast fixes.
+
+### What it includes
+- Core fail points (curve, wincons, draw density).
+- 3 fixes under $5 NZD.
+- 3 greed upgrades if you want to flex.
+
+### Use case
+Discord roasts, newsletter ops, and a weekly Patreon post that feels personal.
+
+## 2) **Command This!**
+### Subhead / Hook
+"Non-legendary weirdos that still deserve to be built around." Rule 0, spice-first.
+
+### What it includes
+- The commander (Rule 0 pitch).
+- 10-card package that makes it feel real.
+- The single card that makes people respect it.
+
+### Use case
+Content with a built-in conversation hook for socials and shop chatter.
+      </div>
+      <p class="note">Need these templated into your CMS? I can spin them into week-one drops on request.</p>
+      <p class="cta">CTA: Throw a dollar at Patreon.com/HappyHomarid or hop into Discord for full decks, prices, and watchlists.</p>
+    </section>
+
+    <footer>
+      Built for Biggie's MTG engine — clear, loud, and ready to sell.
+    </footer>
+  </main>
 </body>
 </html>
