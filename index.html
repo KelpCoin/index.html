@@ -3,42 +3,437 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Claim 500 KelpCoin</title>
+  <title>Browneye Cortex Cash Machine Library</title>
   <style>
+    :root {
+      color-scheme: light;
+      --ink: #0f172a;
+      --muted: #475569;
+      --accent: #0f766e;
+      --accent-soft: #ccfbf1;
+      --border: #e2e8f0;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --warning: #b45309;
+    }
+    * {
+      box-sizing: border-box;
+    }
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f0fdf4;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
       margin: 0;
-      padding: 40px;
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.6;
     }
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
+    header {
+      padding: 48px 24px 32px;
+      background: linear-gradient(135deg, #ccfbf1 0%, #f0fdf4 100%);
+      border-bottom: 1px solid var(--border);
     }
-    p {
-      font-size: 1rem;
-      margin-bottom: 2rem;
-      color: #555;
+    header h1 {
+      font-size: 2.4rem;
+      margin: 0 0 12px;
     }
-    iframe {
-      border: none;
-      width: 100%;
-      max-width: 700px;
-      height: 800px;
-      border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    header p {
+      max-width: 920px;
+      margin: 0;
+      color: var(--muted);
+    }
+    main {
+      padding: 32px 24px 64px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .pill {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-weight: 600;
+      font-size: 0.85rem;
+      margin-bottom: 16px;
+    }
+    h2 {
+      margin-top: 40px;
+      font-size: 1.8rem;
+    }
+    h3 {
+      margin-top: 24px;
+      font-size: 1.4rem;
+    }
+    section {
+      margin-top: 32px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 20px;
+      border: 1px solid var(--border);
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
+    }
+    .module {
+      background: var(--card);
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+    .module h4 {
+      margin: 0 0 12px;
+      color: var(--accent);
+    }
+    .module ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+    .module li {
+      margin-bottom: 8px;
+    }
+    .label {
+      font-weight: 700;
+      color: var(--ink);
+    }
+    .muted {
+      color: var(--muted);
+    }
+    .warning {
+      color: var(--warning);
+      font-weight: 600;
+    }
+    .timeline {
+      display: grid;
+      gap: 16px;
+    }
+    .timeline-item {
+      background: var(--card);
+      border-radius: 14px;
+      padding: 18px;
+      border: 1px solid var(--border);
+    }
+    footer {
+      padding: 24px;
+      border-top: 1px solid var(--border);
+      background: #f1f5f9;
+    }
+    .checklist {
+      background: #0f172a;
+      color: #f8fafc;
+      padding: 24px;
+      border-radius: 16px;
+    }
+    .checklist ul {
+      margin: 0;
+      padding-left: 20px;
     }
   </style>
 </head>
 <body>
-  <h1>🪙 Claim 500 KelpCoin</h1>
-  <p>Fill in your wallet address. Optional: enter a referrer’s wallet to earn bonus KELP.</p>
-  <iframe 
-    src="https://docs.google.com/forms/d/e/1FAIpQLSclYfRXBxHoDBjpoHCoKM2_lm8VkxN8FjqmkOeK5kqxiOMW9A/viewform?embedded=true"
-    allowfullscreen>
-  </iframe>
+  <header>
+    <div class="pill">BROWNEYE CORTEX · CASH MACHINE LIBRARY</div>
+    <h1>Closed-Loop Transaction Modules for Two-Computer Automation</h1>
+    <p>
+      The following system design delivers one-off, low-friction revenue modules built for the Furnace (always-on)
+      and Cortex (burst GPU) split. Each module is a repeatable "SimCity building" that captures cash where money
+      already flows, produces proof logs, and resets for reuse without subscriptions or audience-building.
+    </p>
+  </header>
+
+  <main>
+    <section>
+      <h2>Output 1: The 12 Modules</h2>
+      <p class="muted">3 Tier-0, 6 Tier-1, and 3 Tier-2 modules. Every module is one-off, compliant, and fully closed-loop.</p>
+
+      <h3>Tier-0 Modules (Fastest Cash, Lowest Risk)</h3>
+
+      <div class="module">
+        <h4>MODULE NAME: Instant Listing Photo Pack (Tier-0)</h4>
+        <ul>
+          <li><span class="label">1) MONEY FLOW ANCHOR:</span> Etsy, eBay, Trade Me sellers pay for listing photo enhancement packs via Fiverr/Upwork gigs and Etsy digital downloads.</li>
+          <li><span class="label">2) BUYER TRIGGER:</span> New product listing needs compliant, clean images within hours.</li>
+          <li><span class="label">3) CASH CAPTURE STRUCTURE:</span> Converter + formatter gate for "ready-to-list" photos.</li>
+          <li><span class="label">4) TRANSACTION MODEL (NZD):</span> Micro $12 (up to 5 photos), Standard $29 (up to 20 photos), Premium $55 (up to 50 photos + 2 aspect ratios).</li>
+          <li><span class="label">5) TWO-COMPUTER ROLE SPLIT:</span> Furnace handles uploads, queueing, resizing, retries, and payment unlocks. Cortex runs background cleanup, color QA, and batch packaging.</li>
+          <li><span class="label">6) SELLABLE UNIT (SKU):</span> ZIP file of optimized JPG/PNG + a listing checklist PDF.</li>
+          <li><span class="label">7) DISTRIBUTION SURFACE:</span> Gumroad-style checkout + Etsy digital listing + Stripe Checkout link.</li>
+          <li><span class="label">8) AUTOMATION LOOP:</span> 1) User pays, 2) Furnace issues upload link, 3) Upload stored, 4) Furnace validates count, 5) Cortex processes batch, 6) Cortex QA flags, 7) Furnace packages ZIP, 8) Delivery link + receipt, 9) Proof log stored, 10) Queue reset.</li>
+          <li><span class="label">9) FAILURE SIGNAL + KILL SWITCH:</span> &gt;10% jobs fail QA or exceed 2-hour latency → auto-pause checkout.</li>
+          <li><span class="label">10) CLONE STRATEGY:</span> Rebrand for niche marketplaces (vintage, handmade, electronics) by swapping templates and pricing.</li>
+        </ul>
+      </div>
+
+      <div class="module">
+        <h4>MODULE NAME: One-Click PDF Cleanup &amp; Compression (Tier-0)</h4>
+        <ul>
+          <li><span class="label">1) MONEY FLOW ANCHOR:</span> Users pay for one-off PDF compression/repair on Smallpdf, iLovePDF, and Adobe tools.</li>
+          <li><span class="label">2) BUYER TRIGGER:</span> Submission deadline with file size limits or broken PDF export.</li>
+          <li><span class="label">3) CASH CAPTURE STRUCTURE:</span> Toll gate for compliant, smaller file delivery.</li>
+          <li><span class="label">4) TRANSACTION MODEL (NZD):</span> Micro $9 (1 file), Standard $19 (up to 5 files), Premium $39 (up to 15 files + OCR pass).</li>
+          <li><span class="label">5) TWO-COMPUTER ROLE SPLIT:</span> Furnace validates uploads, queues jobs, logs metadata. Cortex runs heavy compression, OCR, integrity checks.</li>
+          <li><span class="label">6) SELLABLE UNIT (SKU):</span> Cleaned PDF(s) + compression report CSV.</li>
+          <li><span class="label">7) DISTRIBUTION SURFACE:</span> Stripe Checkout link embedded on a landing page + API marketplace listing.</li>
+          <li><span class="label">8) AUTOMATION LOOP:</span> 1) Payment confirmed, 2) Upload portal unlocks, 3) Furnace inspects PDFs, 4) Cortex compresses/OCR, 5) Cortex QA report, 6) Furnace packages outputs, 7) Delivery email/link, 8) Proof log, 9) Reset job.</li>
+          <li><span class="label">9) FAILURE SIGNAL + KILL SWITCH:</span> Output larger than input in 5%+ of jobs → auto-disable compression mode.</li>
+          <li><span class="label">10) CLONE STRATEGY:</span> Create variants for specific portals (immigration, academic, legal) with preset size rules.</li>
+        </ul>
+      </div>
+
+      <div class="module">
+        <h4>MODULE NAME: Social Ad Resize &amp; Format Kit (Tier-0)</h4>
+        <ul>
+          <li><span class="label">1) MONEY FLOW ANCHOR:</span> Marketers pay per pack for Canva templates, banner resizing tools, or Fiverr gigs.</li>
+          <li><span class="label">2) BUYER TRIGGER:</span> Campaign needs multi-platform dimensions today.</li>
+          <li><span class="label">3) CASH CAPTURE STRUCTURE:</span> Router + formatter toll gate for ready-to-publish assets.</li>
+          <li><span class="label">4) TRANSACTION MODEL (NZD):</span> Micro $15 (1 creative, 6 sizes), Standard $35 (up to 5 creatives), Premium $75 (10 creatives + platform copy snippet).</li>
+          <li><span class="label">5) TWO-COMPUTER ROLE SPLIT:</span> Furnace handles upload, job queue, and template routing. Cortex generates high-quality resizes, text safety checks, and exports.</li>
+          <li><span class="label">6) SELLABLE UNIT (SKU):</span> ZIP of PNG/JPG + size matrix PDF.</li>
+          <li><span class="label">7) DISTRIBUTION SURFACE:</span> Direct checkout + Shopify digital product listing.</li>
+          <li><span class="label">8) AUTOMATION LOOP:</span> 1) Payment, 2) Upload asset, 3) Furnace selects size profiles, 4) Cortex resizes/QA, 5) Furnace packages, 6) Delivery, 7) Proof log, 8) Reset.</li>
+          <li><span class="label">9) FAILURE SIGNAL + KILL SWITCH:</span> Cropping QA fail &gt;8% in a week → halt new orders until template updated.</li>
+          <li><span class="label">10) CLONE STRATEGY:</span> Clone by platform bundle (LinkedIn B2B, TikTok, Meta ads).</li>
+        </ul>
+      </div>
+
+      <h3>Tier-1 Modules (Expanded Revenue Surface)</h3>
+
+      <div class="module">
+        <h4>MODULE NAME: Compliance Screenshot Evidence Pack (Tier-1)</h4>
+        <ul>
+          <li><span class="label">1) MONEY FLOW ANCHOR:</span> Businesses pay for compliance evidence packs via legal/compliance consultants and documentation services.</li>
+          <li><span class="label">2) BUYER TRIGGER:</span> Audit or vendor onboarding requires time-stamped screenshots and evidence PDFs.</li>
+          <li><span class="label">3) CASH CAPTURE STRUCTURE:</span> Verifier + compiler gate for evidence generation.</li>
+          <li><span class="label">4) TRANSACTION MODEL (NZD):</span> Micro $25 (up to 5 URLs), Standard $59 (up to 20 URLs), Premium $110 (up to 60 URLs + timestamp certificate).</li>
+          <li><span class="label">5) TWO-COMPUTER ROLE SPLIT:</span> Furnace schedules URL checks, maintains logs, retries. Cortex renders full-page screenshots, creates timestamped PDF bundle.</li>
+          <li><span class="label">6) SELLABLE UNIT (SKU):</span> PDF evidence pack + CSV log + signed timestamp certificate.</li>
+          <li><span class="label">7) DISTRIBUTION SURFACE:</span> Stripe Checkout + API marketplace listing for compliance teams.</li>
+          <li><span class="label">8) AUTOMATION LOOP:</span> 1) Payment, 2) User submits URLs, 3) Furnace queues snapshots, 4) Cortex captures and compiles, 5) QA pass, 6) Furnace delivers, 7) Proof log, 8) Reset.</li>
+          <li><span class="label">9) FAILURE SIGNAL + KILL SWITCH:</span> &gt;5% URLs blocked or inaccessible → auto-refund queue and pause checkout.</li>
+          <li><span class="label">10) CLONE STRATEGY:</span> Clone for niche evidence needs (ads, policy pages, terms pages).</li>
+        </ul>
+      </div>
+
+      <div class="module">
+        <h4>MODULE NAME: One-Off Audio Cleanup &amp; Loudness Master (Tier-1)</h4>
+        <ul>
+          <li><span class="label">1) MONEY FLOW ANCHOR:</span> Creators pay per episode for cleanup via Auphonic credits and Fiverr audio gigs.</li>
+          <li><span class="label">2) BUYER TRIGGER:</span> Podcast or voiceover must meet platform loudness specs today.</li>
+          <li><span class="label">3) CASH CAPTURE STRUCTURE:</span> Converter + verifier for broadcast-ready audio.</li>
+          <li><span class="label">4) TRANSACTION MODEL (NZD):</span> Micro $18 (up to 15 minutes), Standard $45 (up to 60 minutes), Premium $85 (up to 120 minutes + intro/outro insertion).</li>
+          <li><span class="label">5) TWO-COMPUTER ROLE SPLIT:</span> Furnace handles upload, queueing, and duration checks. Cortex runs noise reduction, loudness normalization, and QA waveform scans.</li>
+          <li><span class="label">6) SELLABLE UNIT (SKU):</span> Mastered WAV/MP3 + loudness report PDF.</li>
+          <li><span class="label">7) DISTRIBUTION SURFACE:</span> Direct checkout + audio marketplace listing.</li>
+          <li><span class="label">8) AUTOMATION LOOP:</span> 1) Payment, 2) Upload audio, 3) Furnace validates duration, 4) Cortex processes master, 5) QA report, 6) Furnace delivers, 7) Proof log, 8) Reset.</li>
+          <li><span class="label">9) FAILURE SIGNAL + KILL SWITCH:</span> Loudness compliance failures &gt;3% → pause and recalibrate pipeline.</li>
+          <li><span class="label">10) CLONE STRATEGY:</span> Clone by platform spec (Spotify, Audible, broadcast radio).</li>
+        </ul>
+      </div>
+
+      <div class="module">
+        <h4>MODULE NAME: Resume-to-ATS Format Converter (Tier-1)</h4>
+        <ul>
+          <li><span class="label">1) MONEY FLOW ANCHOR:</span> Job seekers pay for ATS-optimized resume formatting via Fiverr and resume tools.</li>
+          <li><span class="label">2) BUYER TRIGGER:</span> New job application with strict ATS parsing needs immediate formatting.</li>
+          <li><span class="label">3) CASH CAPTURE STRUCTURE:</span> Formatter gate that converts to ATS-friendly layout.</li>
+          <li><span class="label">4) TRANSACTION MODEL (NZD):</span> Micro $12 (1 resume), Standard $25 (1 resume + 1 cover letter), Premium $45 (resume + cover + ATS keyword report).</li>
+          <li><span class="label">5) TWO-COMPUTER ROLE SPLIT:</span> Furnace handles uploads, file conversion, and queueing. Cortex runs layout normalization, keyword extraction, and QA rendering.</li>
+          <li><span class="label">6) SELLABLE UNIT (SKU):</span> DOCX + PDF resume pack + keyword report CSV.</li>
+          <li><span class="label">7) DISTRIBUTION SURFACE:</span> Gumroad checkout + LinkedIn-adjacent digital listing (no audience building).</li>
+          <li><span class="label">8) AUTOMATION LOOP:</span> 1) Payment, 2) Upload files, 3) Furnace validates, 4) Cortex formats/QA, 5) Furnace packages, 6) Delivery, 7) Proof log, 8) Reset.</li>
+          <li><span class="label">9) FAILURE SIGNAL + KILL SWITCH:</span> Parsing errors in QA &gt;5% → disable until template fixes.</li>
+          <li><span class="label">10) CLONE STRATEGY:</span> Clone per region/job sector with preset keyword libraries.</li>
+        </ul>
+      </div>
+
+      <div class="module">
+        <h4>MODULE NAME: Brand Color Palette Harmonizer (Tier-1)</h4>
+        <ul>
+          <li><span class="label">1) MONEY FLOW ANCHOR:</span> Designers pay for quick palette generation on creative marketplaces and brand kit tools.</li>
+          <li><span class="label">2) BUYER TRIGGER:</span> Rebrand or new product needs a usable color system within hours.</li>
+          <li><span class="label">3) CASH CAPTURE STRUCTURE:</span> Synthesizer + verifier for accessibility-compliant palettes.</li>
+          <li><span class="label">4) TRANSACTION MODEL (NZD):</span> Micro $10 (1 palette), Standard $22 (3 palettes + hex/CMYK), Premium $45 (5 palettes + accessibility checks + gradients).</li>
+          <li><span class="label">5) TWO-COMPUTER ROLE SPLIT:</span> Furnace collects inputs and queues jobs. Cortex generates palettes, runs contrast checks, and packages assets.</li>
+          <li><span class="label">6) SELLABLE UNIT (SKU):</span> PDF brand sheet + ASE/JSON palette files.</li>
+          <li><span class="label">7) DISTRIBUTION SURFACE:</span> Shopify digital download + Behance marketplace listing.</li>
+          <li><span class="label">8) AUTOMATION LOOP:</span> 1) Payment, 2) Input brand image or colors, 3) Furnace validates, 4) Cortex generates palettes, 5) QA for contrast, 6) Furnace packages, 7) Delivery, 8) Proof log, 9) Reset.</li>
+          <li><span class="label">9) FAILURE SIGNAL + KILL SWITCH:</span> Accessibility failures &gt;7% → pause until algorithm adjustment.</li>
+          <li><span class="label">10) CLONE STRATEGY:</span> Clone for industry presets (fintech, wellness, luxury).</li>
+        </ul>
+      </div>
+
+      <div class="module">
+        <h4>MODULE NAME: Product Spec Sheet Generator (Tier-1)</h4>
+        <ul>
+          <li><span class="label">1) MONEY FLOW ANCHOR:</span> Manufacturers and resellers pay for datasheet generation through design freelancers and catalog services.</li>
+          <li><span class="label">2) BUYER TRIGGER:</span> Vendor onboarding or distributor request for a formal spec sheet.</li>
+          <li><span class="label">3) CASH CAPTURE STRUCTURE:</span> Compiler + formatter gate for standardized spec sheets.</li>
+          <li><span class="label">4) TRANSACTION MODEL (NZD):</span> Micro $28 (1 product), Standard $65 (up to 5 products), Premium $120 (up to 12 products + multilingual summary).</li>
+          <li><span class="label">5) TWO-COMPUTER ROLE SPLIT:</span> Furnace validates input fields, queues jobs, and monitors completion. Cortex lays out datasheets, checks formatting, and renders PDFs.</li>
+          <li><span class="label">6) SELLABLE UNIT (SKU):</span> PDF datasheets + CSV spec table.</li>
+          <li><span class="label">7) DISTRIBUTION SURFACE:</span> Direct checkout + B2B marketplace listing.</li>
+          <li><span class="label">8) AUTOMATION LOOP:</span> 1) Payment, 2) Input specs, 3) Furnace validates fields, 4) Cortex renders sheet, 5) QA, 6) Furnace packages, 7) Delivery, 8) Proof log, 9) Reset.</li>
+          <li><span class="label">9) FAILURE SIGNAL + KILL SWITCH:</span> Formatting errors in >4% of jobs → stop templates until fixed.</li>
+          <li><span class="label">10) CLONE STRATEGY:</span> Clone per category (electronics, home goods, industrial).</li>
+        </ul>
+      </div>
+
+      <h3>Tier-2 Modules (Higher Upside, Longer Ramp)</h3>
+
+      <div class="module">
+        <h4>MODULE NAME: Due-Diligence Website Risk Snapshot (Tier-2)</h4>
+        <ul>
+          <li><span class="label">1) MONEY FLOW ANCHOR:</span> Buyers pay for one-off website risk reports via due diligence providers and cyber audit tools.</li>
+          <li><span class="label">2) BUYER TRIGGER:</span> M&amp;A, vendor onboarding, or partnership risk screening required now.</li>
+          <li><span class="label">3) CASH CAPTURE STRUCTURE:</span> Verifier + scoring gate for rapid risk visibility.</li>
+          <li><span class="label">4) TRANSACTION MODEL (NZD):</span> Micro $45 (1 domain), Standard $95 (up to 3 domains), Premium $180 (up to 8 domains + change log snapshot).</li>
+          <li><span class="label">5) TWO-COMPUTER ROLE SPLIT:</span> Furnace schedules scans, tracks retries, and logs outputs. Cortex aggregates signals, scores risk, and compiles the report.</li>
+          <li><span class="label">6) SELLABLE UNIT (SKU):</span> PDF risk snapshot + CSV indicators list.</li>
+          <li><span class="label">7) DISTRIBUTION SURFACE:</span> API marketplace listing + Stripe Checkout for instant report.</li>
+          <li><span class="label">8) AUTOMATION LOOP:</span> 1) Payment, 2) User submits domains, 3) Furnace queues scans, 4) Cortex compiles risk score, 5) QA, 6) Furnace delivers report, 7) Proof log, 8) Reset.</li>
+          <li><span class="label">9) FAILURE SIGNAL + KILL SWITCH:</span> Incomplete data in &gt;6% of reports → pause until data sources adjusted.</li>
+          <li><span class="label">10) CLONE STRATEGY:</span> Clone with region-specific compliance checks and threat sources.</li>
+        </ul>
+      </div>
+
+      <div class="module">
+        <h4>MODULE NAME: Market Listing Localization Burst (Tier-2)</h4>
+        <ul>
+          <li><span class="label">1) MONEY FLOW ANCHOR:</span> Sellers pay per translation bundle on Fiverr, Gengo, and marketplace localization tools.</li>
+          <li><span class="label">2) BUYER TRIGGER:</span> Launch in a new country with localized listing copy and compliant formatting.</li>
+          <li><span class="label">3) CASH CAPTURE STRUCTURE:</span> Converter + formatter gate for localized listings.</li>
+          <li><span class="label">4) TRANSACTION MODEL (NZD):</span> Micro $30 (1 listing, 1 language), Standard $70 (up to 5 listings, 2 languages), Premium $140 (up to 12 listings, 3 languages + keyword report).</li>
+          <li><span class="label">5) TWO-COMPUTER ROLE SPLIT:</span> Furnace handles upload, queues translation jobs, and validates file counts. Cortex performs translation, locale formatting, and QA.</li>
+          <li><span class="label">6) SELLABLE UNIT (SKU):</span> CSV listing pack + PDF QA summary.</li>
+          <li><span class="label">7) DISTRIBUTION SURFACE:</span> Stripe Checkout + marketplace seller forums listing (paid placement, no audience).</li>
+          <li><span class="label">8) AUTOMATION LOOP:</span> 1) Payment, 2) Upload listings, 3) Furnace validates, 4) Cortex translates, 5) QA, 6) Furnace packages, 7) Delivery, 8) Proof log, 9) Reset.</li>
+          <li><span class="label">9) FAILURE SIGNAL + KILL SWITCH:</span> QA mismatch rate &gt;5% → pause localization for affected language.</li>
+          <li><span class="label">10) CLONE STRATEGY:</span> Clone for different marketplaces (Amazon, Etsy, Shopify, Trade Me).</li>
+        </ul>
+      </div>
+
+      <div class="module">
+        <h4>MODULE NAME: Bulk Public-Domain Ebook Packager (Tier-2)</h4>
+        <ul>
+          <li><span class="label">1) MONEY FLOW ANCHOR:</span> Readers and indie sellers pay for curated ebook packs on Etsy and Gumroad.</li>
+          <li><span class="label">2) BUYER TRIGGER:</span> Need themed ebook bundle for resale or personal archive quickly.</li>
+          <li><span class="label">3) CASH CAPTURE STRUCTURE:</span> Compiler + formatter gate for ready-to-download packs.</li>
+          <li><span class="label">4) TRANSACTION MODEL (NZD):</span> Micro $14 (10 ebooks), Standard $32 (30 ebooks), Premium $60 (80 ebooks + cover pack).</li>
+          <li><span class="label">5) TWO-COMPUTER ROLE SPLIT:</span> Furnace handles catalog selection, queueing, and metadata checks. Cortex creates covers, converts formats, and QA packaging.</li>
+          <li><span class="label">6) SELLABLE UNIT (SKU):</span> ZIP of EPUB/PDF + catalog CSV + cover images.</li>
+          <li><span class="label">7) DISTRIBUTION SURFACE:</span> Etsy digital download + Gumroad checkout.</li>
+          <li><span class="label">8) AUTOMATION LOOP:</span> 1) Payment, 2) Select theme pack, 3) Furnace queues files, 4) Cortex converts/covers, 5) QA, 6) Furnace packages, 7) Delivery, 8) Proof log, 9) Reset.</li>
+          <li><span class="label">9) FAILURE SIGNAL + KILL SWITCH:</span> Format conversion errors &gt;4% → pause batch and refresh source library.</li>
+          <li><span class="label">10) CLONE STRATEGY:</span> Clone by genre (classic sci-fi, romance, business).</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h2>Output 2: Generic Drop-In Building Blueprint</h2>
+      <div class="grid">
+        <div class="card">
+          <h3>Shared Architecture Stencil</h3>
+          <ul>
+            <li><span class="label">Common Folder Layout:</span> /modules/&lt;module-name&gt;/manifest.json, /jobs/incoming, /jobs/processing, /jobs/delivered, /proofs, /assets/templates.</li>
+            <li><span class="label">Job Queue Schema:</span> job_id, buyer_id, module, input_refs, price_tier, status, timestamps, retries, checksum.</li>
+            <li><span class="label">Logging + Proof:</span> immutable JSON log + hash, delivery link, payment receipt, QA summary.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Payment Trigger Pattern</h3>
+          <ul>
+            <li><span class="label">Flow:</span> one-off payment → unlock job → validate input → run pipeline → deliver → log proof → close job.</li>
+            <li><span class="label">Access:</span> temporary upload portal tied to payment intent.</li>
+            <li><span class="label">Refund Rule:</span> auto-refund if SLA breached or validation fails.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Latency Model Pattern</h3>
+          <ul>
+            <li><span class="label">Free Delay vs Paid Instant:</span> optional delay queue (24-48h) vs paid priority processing within 2-4 hours.</li>
+            <li><span class="label">Queue Control:</span> Furnace enforces FIFO with priority flag.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Health Checks + Watchdogs</h3>
+          <ul>
+            <li><span class="label">Furnace:</span> uptime pings, queue depth alerts, failure-rate threshold, retry backoffs.</li>
+            <li><span class="label">Cortex:</span> burst executor, GPU availability check, QA sampling after each batch.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Output 3: Fast Cash Plan (72 Hours)</h2>
+      <p class="muted">Top 2 fastest modules: Instant Listing Photo Pack + One-Click PDF Cleanup &amp; Compression.</p>
+      <div class="timeline">
+        <div class="timeline-item">
+          <h3>Day 1: Setup Steps</h3>
+          <ul>
+            <li>Configure Stripe Checkout for both modules with three tiered price points.</li>
+            <li>Stand up Furnace job queues, upload portal, and basic validation rules.</li>
+            <li>Load Cortex processing scripts for image cleanup and PDF compression.</li>
+          </ul>
+        </div>
+        <div class="timeline-item">
+          <h3>Day 2: First End-to-End Paid Test Transaction</h3>
+          <ul>
+            <li>Run a paid micro-tier test to confirm payment → upload → processing → delivery flow.</li>
+            <li>Validate proof logs, receipts, and delivery links for both modules.</li>
+            <li>Adjust SLA messaging based on measured processing times.</li>
+          </ul>
+        </div>
+        <div class="timeline-item">
+          <h3>Day 3: Automate Delivery + Proof Logs</h3>
+          <ul>
+            <li>Automate delivery emails with time-limited download links.</li>
+            <li>Enable proof log hashing + immutable storage.</li>
+            <li>Turn on failure alerts and automatic refund rules.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Output 4: Scale Plan (30 Days + 90 Days)</h2>
+      <div class="grid">
+        <div class="card">
+          <h3>30-Day Plan</h3>
+          <ul>
+            <li>Launch 6 modules live across Stripe + two marketplaces.</li>
+            <li>Add QA gates for each module with auto-pause thresholds.</li>
+            <li>Deploy reusable dashboards for revenue, queue depth, and failures.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>90-Day Plan</h3>
+          <ul>
+            <li>Scale to 12 modules live with cloned templates.</li>
+            <li>Add automated pricing tests (A/B on tiers and priority speed).</li>
+            <li>Introduce redundancy: second Cortex burst node and backup storage.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="checklist">
+      <h3>Deliverable Checklist</h3>
+      <ul>
+        <li>Module manifests</li>
+        <li>Job schemas</li>
+        <li>Payment mappings</li>
+        <li>Proof logs</li>
+        <li>A single-page operator dashboard view (private) showing money events and failures</li>
+      </ul>
+    </div>
+  </footer>
 </body>
 </html>
