@@ -3,42 +3,191 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Claim 500 KelpCoin</title>
+  <title>BrownEye Cortex Factory Blueprint</title>
   <style>
+    :root {
+      color-scheme: light;
+    }
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f0fdf4;
+      font-family: "Segoe UI", system-ui, sans-serif;
+      background-color: #f8fafc;
+      color: #0f172a;
+      margin: 0;
+      padding: 40px 24px 64px;
+    }
+    main {
+      max-width: 1000px;
+      margin: 0 auto;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      margin: 0;
-      padding: 40px;
+      gap: 32px;
+    }
+    header {
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+      padding: 32px;
     }
     h1 {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
+      font-size: 2.2rem;
+      margin-bottom: 0.25rem;
+    }
+    h2 {
+      font-size: 1.5rem;
+      margin: 0 0 12px;
     }
     p {
-      font-size: 1rem;
-      margin-bottom: 2rem;
-      color: #555;
+      line-height: 1.6;
+      color: #334155;
     }
-    iframe {
-      border: none;
-      width: 100%;
-      max-width: 700px;
-      height: 800px;
-      border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    section {
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+      padding: 24px 28px;
+    }
+    ul {
+      margin: 8px 0 0 18px;
+      color: #1e293b;
+    }
+    ol {
+      margin: 8px 0 0 18px;
+      color: #1e293b;
+    }
+    .grid {
+      display: grid;
+      gap: 16px;
+    }
+    @media (min-width: 860px) {
+      .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+    .label {
+      font-weight: 600;
+      color: #0f172a;
+    }
+    .note {
+      font-size: 0.95rem;
+      color: #475569;
     }
   </style>
 </head>
 <body>
-  <h1>🪙 Claim 500 KelpCoin</h1>
-  <p>Fill in your wallet address. Optional: enter a referrer’s wallet to earn bonus KELP.</p>
-  <iframe 
-    src="https://docs.google.com/forms/d/e/1FAIpQLSclYfRXBxHoDBjpoHCoKM2_lm8VkxN8FjqmkOeK5kqxiOMW9A/viewform?embedded=true"
-    allowfullscreen>
-  </iframe>
+  <main>
+    <header>
+      <h1>BrownEye Cortex Factory Blueprint</h1>
+      <p>
+        Deterministic factory specification for a closed-loop monetization system with a continuous CINEMA subsystem.
+        This document assumes the factory is conceptual and unimplemented, and maps the full build.
+      </p>
+    </header>
+
+    <section>
+      <h2>SECTION 1 — FACTORY STATUS ASSESSMENT</h2>
+      <ul>
+        <li><span class="label">What exists:</span> No observable modules, data stores, agents, or automation pipelines are present in this workspace.</li>
+        <li><span class="label">What is missing:</span> All canonical layers, CINEMA subsystem, storage, and execution tooling are absent.</li>
+        <li><span class="label">What is implied but not implemented:</span> The factory concept, agent roles, and closed-loop revenue model are defined but unbuilt.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>SECTION 2 — FULL FACTORY MAP</h2>
+      <div class="grid">
+        <div>
+          <p class="label">Agents (separated by layer)</p>
+          <ul>
+            <li>Cognitive: Proposer, Critic, Synthesizer, Monetizer, Salesman, Humanizer</li>
+            <li>Judgment: Score Gauntlet, Kill Logic, Retry Logic</li>
+            <li>Learning: Data Lake Steward, ML Predictors, Threshold Evolver</li>
+            <li>Execution: SKU Generator, Pricing Agent, Distribution Agent, Proof Logger</li>
+          </ul>
+        </div>
+        <div>
+          <p class="label">Data stores</p>
+          <ul>
+            <li>Immutable data lake (raw simulations, logs, proofs)</li>
+            <li>Operational database (current SKUs, pricing, inventory)</li>
+            <li>Queue/event bus (agent handoffs, retries)</li>
+            <li>Artifact store (reports, visuals, proof files)</li>
+          </ul>
+        </div>
+        <div>
+          <p class="label">Control flow</p>
+          <ul>
+            <li>Proposer creates candidate offers → Critic validates → Synthesizer packages → Monetizer assigns value</li>
+            <li>Score Gauntlet rates → Kill/Retry logic gates → Execution layer publishes SKUs</li>
+            <li>Salesman distributes with proof artifacts → Humanizer polishes final copy only</li>
+          </ul>
+        </div>
+        <div>
+          <p class="label">Failure points</p>
+          <ul>
+            <li>Insufficient simulation evidence</li>
+            <li>Inventory mismatch with decklists</li>
+            <li>Pricing drift without confidence thresholds</li>
+            <li>Proof artifacts missing or non-auditable</li>
+          </ul>
+        </div>
+      </div>
+      <p class="note">Closed loops: simulation → scoring → SKU prioritization → sales → proof logging → learning updates.</p>
+    </section>
+
+    <section>
+      <h2>SECTION 3 — CINEMA MODULE DESIGN</h2>
+      <ul>
+        <li><span class="label">Subcomponents:</span> Scheduler, Simulation Runner, Aggregator, Artifact Generator, Proof Publisher, Trust Scorer.</li>
+        <li><span class="label">Data flow:</span> Decklists + parameters → simulations → logs → aggregation → artifacts → data lake + SKU linkage.</li>
+        <li><span class="label">Automation cadence:</span> Continuous queue with hourly aggregation snapshots and daily summary rollups.</li>
+        <li><span class="label">Storage:</span> Raw match logs in data lake; summary tables in operational DB; artifacts in object store.</li>
+        <li><span class="label">Proof generation:</span> Deterministic tables, matchup matrices, variance charts with timestamps.</li>
+        <li><span class="label">Integration points:</span> Salesman references proof artifacts; Monetizer adjusts prioritization and pricing based on confidence.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>SECTION 4 — MTG DECK SIMULATION PIPELINE</h2>
+      <ul>
+        <li><span class="label">Inputs:</span> Inventory-aligned decklists, matchup pool, ruleset config, simulation count targets.</li>
+        <li><span class="label">Simulation engine role:</span> Execute head-to-head matches, enforce rules, emit turn-by-turn logs.</li>
+        <li><span class="label">Output schema:</span> Match ID, decks, seed, outcome, turns, win-rate, variance, timestamp.</li>
+        <li><span class="label">Aggregation logic:</span> Rolling win-rate windows, confidence intervals, deck-vs-meta matrix.</li>
+        <li><span class="label">Attachment to products:</span> Each deck SKU stores its latest proof bundle and confidence score.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>SECTION 5 — MONETIZATION MECHANICS</h2>
+      <ul>
+        <li><span class="label">What gets sold:</span> Deck SKUs, data-backed bundles, subscription access to proof archives.</li>
+        <li><span class="label">Cinema impact:</span> Proof artifacts raise trust score, drive prioritization, and replace persuasive copy.</li>
+        <li><span class="label">Pricing logic:</span> Confidence-adjusted tiers: higher win-rate + lower variance → higher price ceiling.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>SECTION 6 — CLOSED-LOOP VERIFICATION</h2>
+      <ul>
+        <li>Simulation loop: Input → run matches → logs → proof → data lake → learning update.</li>
+        <li>SKU loop: Decklist → score → publish SKU → sale → proof link → log → threshold update.</li>
+        <li>Pricing loop: Evidence → pricing model → conversion → revenue → audit → model tuning.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>SECTION 7 — BUILD ORDER (CRITICAL)</h2>
+      <ol>
+        <li>Provision data lake + artifact store + operational DB.</li>
+        <li>Implement simulation runner + logging schema.</li>
+        <li>Build CINEMA aggregation + proof generator.</li>
+        <li>Implement Score Gauntlet + Kill/Retry logic.</li>
+        <li>Stand up SKU generator + pricing agent + distribution pipeline.</li>
+        <li>Connect Salesman + Humanizer to proof artifacts only.</li>
+        <li>Deploy learning layer for thresholds + model updates.</li>
+        <li>Enable monetization after proof and audit trails are verified.</li>
+      </ol>
+    </section>
+  </main>
 </body>
 </html>
