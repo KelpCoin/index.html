@@ -3,42 +3,137 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Claim 500 KelpCoin</title>
+  <title>BrownEye Cortex - Cashflow Factory Blueprint</title>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      background-color: #f0fdf4;
+      background-color: #f6f7fb;
       display: flex;
       flex-direction: column;
       align-items: center;
       margin: 0;
       padding: 40px;
     }
+    .container {
+      width: 100%;
+      max-width: 980px;
+    }
     h1 {
       font-size: 2rem;
-      margin-bottom: 0.5rem;
+      margin: 0 0 0.5rem;
+    }
+    h2 {
+      margin-top: 2rem;
+      font-size: 1.4rem;
     }
     p {
       font-size: 1rem;
-      margin-bottom: 2rem;
-      color: #555;
+      margin-bottom: 0.75rem;
+      color: #444;
     }
-    iframe {
-      border: none;
-      width: 100%;
-      max-width: 700px;
-      height: 800px;
-      border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    ul {
+      padding-left: 1.2rem;
+      margin: 0.5rem 0 0;
+    }
+    li {
+      margin-bottom: 0.5rem;
+      line-height: 1.4;
+    }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+      padding: 24px;
+      margin-top: 24px;
+    }
+    .pill {
+      display: inline-block;
+      background: #1f6feb;
+      color: #fff;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      margin-right: 8px;
+    }
+    .note {
+      background: #eef2ff;
+      border-left: 4px solid #4f46e5;
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-top: 16px;
     }
   </style>
 </head>
 <body>
-  <h1>🪙 Claim 500 KelpCoin</h1>
-  <p>Fill in your wallet address. Optional: enter a referrer’s wallet to earn bonus KELP.</p>
-  <iframe 
-    src="https://docs.google.com/forms/d/e/1FAIpQLSclYfRXBxHoDBjpoHCoKM2_lm8VkxN8FjqmkOeK5kqxiOMW9A/viewform?embedded=true"
-    allowfullscreen>
-  </iframe>
+  <div class="container">
+    <h1>BrownEye Cortex Cashflow Factory Blueprint</h1>
+    <p>Prime directive: increase legal, observable cashflow quickly while reducing human cognitive load. Outputs are factories, not projects.</p>
+
+    <div class="card">
+      <span class="pill">Task 1</span>
+      <h2>Top 5 monetization leaks (value already generated)</h2>
+      <ul>
+        <li>High-signal prompts and wordbanks that never reach a payment surface at the moment of intent.</li>
+        <li>Repeatable research and arbitrage findings not packaged into a low-friction SKU.</li>
+        <li>Internal stencils that create assets but do not emit a proof artifact with a buy link.</li>
+        <li>Automation logs that show demand signals but do not feed pricing or bundles.</li>
+        <li>Cloned templates that ship without a prebuilt checkout or tip jar exposure.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <span class="pill">Task 2-3</span>
+      <h2>Repeatable SKU factories (3)</h2>
+      <ul>
+        <li><strong>SKU Factory A: Prompt-to-Asset Pack</strong>
+          <ul>
+            <li>Produces: 10 themed prompt packs plus 3 ready-made output samples per pack.</li>
+            <li>Proof artifacts: D:\Proof\PromptPacks\YYYYMMDD\pack.json, pack.zip, manifest.txt, hash.txt.</li>
+            <li>Safe rerun: idempotent folder per date; overwrite only within that date folder.</li>
+            <li>Payment exposure: Stripe link embedded in pack.json and in README.txt.</li>
+          </ul>
+        </li>
+        <li><strong>SKU Factory B: Stencil-to-SKU Cloner</strong>
+          <ul>
+            <li>Produces: 25 SKU stencils cloned into unique variations with pricing metadata.</li>
+            <li>Proof artifacts: D:\Proof\Stencils\YYYYMMDD\stencils.zip, manifest.csv, hashes.txt.</li>
+            <li>Safe rerun: deterministic naming via hash of stencil inputs.</li>
+            <li>Payment exposure: Wise and Stripe URLs appended to manifest.csv.</li>
+          </ul>
+        </li>
+        <li><strong>SKU Factory C: Signal-to-Offer Converter</strong>
+          <ul>
+            <li>Produces: 15 offer pages and 1 bundle page with tiered pricing.</li>
+            <li>Proof artifacts: D:\Proof\Offers\YYYYMMDD\offer-*.html, bundle.html, sitemap.xml.</li>
+            <li>Safe rerun: versioned folders with immutable outputs; no manual cleanup.</li>
+            <li>Payment exposure: embedded checkout buttons on every page.</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <span class="pill">Task 4</span>
+      <h2>Reliability and observability gaps</h2>
+      <ul>
+        <li><strong>Gap: silent automation failure.</strong> Guardrail: heartbeat log written to D:\Proof\Heartbeat\status.json with last run time, exit code, and output counts.</li>
+        <li><strong>Gap: missing proof verification.</strong> Guardrail: hash all proof artifacts and append to D:\Proof\Manifests\hashes.txt; alert if hash file is missing.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <span class="pill">Task 5</span>
+      <h2>Money-while-idle loop (72 hours)</h2>
+      <ul>
+        <li>Loop: every 2 hours, generate 5 new prompt packs, update a rolling bundle, and rotate a featured SKU.</li>
+        <li>Proof: each run writes a dated folder, manifest, and hash list in D:\Proof\IdleLoop\YYYYMMDD\.</li>
+        <li>Payment: bundle page keeps always-on Stripe and tip jar links; no manual edits required.</li>
+        <li>Degradation: if any generation step fails, reuse last known good assets and log the failure.</li>
+      </ul>
+      <div class="note">
+        Output validity checklist: proof artifact exists, rerunnable without cleanup, payment surface included, and future work reduced.
+      </div>
+    </div>
+  </div>
 </body>
 </html>
