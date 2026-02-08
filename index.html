@@ -1,44 +1,242 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Claim 500 KelpCoin</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f0fdf4;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin: 0;
-      padding: 40px;
+{
+  "sources": [
+    {
+      "title": "Designing Event-Driven Systems",
+      "author": "Ben Stopford",
+      "year": "2018",
+      "why_it_matters": "Practical event sourcing patterns for append-only logs, replay, and snapshotting strategies.",
+      "url": "https://www.confluent.io/designing-event-driven-systems/"
+    },
+    {
+      "title": "Event Sourcing",
+      "author": "Martin Fowler",
+      "year": "2005",
+      "why_it_matters": "Canonical explanation of event sourcing mechanics and replay model.",
+      "url": "https://martinfowler.com/eaaDev/EventSourcing.html"
+    },
+    {
+      "title": "Refactoring Databases: Evolutionary Database Design (Strangler Application chapter)",
+      "author": "Scott J. Ambler, Pramod J. Sadalage",
+      "year": "2006",
+      "why_it_matters": "Foundational migration framing for incremental replacement with low downtime risk.",
+      "url": "https://martinfowler.com/bliki/StranglerFigApplication.html"
+    },
+    {
+      "title": "The Art of Capacity Planning (SLO and reliability planning)",
+      "author": "John Allspaw",
+      "year": "2007",
+      "why_it_matters": "Grounds reliability work in measurable objectives and operational guardrails.",
+      "url": "https://www.oreilly.com/library/view/the-art-of/9780596518571/"
+    },
+    {
+      "title": "Site Reliability Engineering: How Google Runs Production Systems",
+      "author": "Betsy Beyer et al.",
+      "year": "2016",
+      "why_it_matters": "Primary source for SLI/SLO/error budget operating model.",
+      "url": "https://sre.google/sre-book/table-of-contents/"
+    },
+    {
+      "title": "The Site Reliability Workbook",
+      "author": "Niall Richard Murphy et al.",
+      "year": "2018",
+      "why_it_matters": "Concrete implementation guidance for setting SLIs and operating error budgets.",
+      "url": "https://sre.google/workbook/table-of-contents/"
+    },
+    {
+      "title": "Performing a Project Premortem",
+      "author": "Gary Klein",
+      "year": "2007",
+      "why_it_matters": "Primary source for premortem facilitation and failure forecasting.",
+      "url": "https://hbr.org/2007/09/performing-a-project-premortem"
+    },
+    {
+      "title": "Taxonomy of Computer Program Security Flaws",
+      "author": "Carl E. Landwehr et al.",
+      "year": "1994",
+      "why_it_matters": "Classic taxonomy approach useful for structuring incident categories and failure flavors.",
+      "url": "https://dl.acm.org/doi/10.1145/174666.174669"
+    },
+    {
+      "title": "HTTP Semantics (RFC 9110)",
+      "author": "IETF",
+      "year": "2022",
+      "why_it_matters": "Authoritative semantics for idempotent methods and retry-safe API behavior.",
+      "url": "https://www.rfc-editor.org/rfc/rfc9110"
+    },
+    {
+      "title": "The Idempotency-Key HTTP Header Field",
+      "author": "IETF",
+      "year": "2024",
+      "why_it_matters": "Standardized header-based idempotency mechanism for at-least-once delivery control.",
+      "url": "https://www.rfc-editor.org/rfc/rfc9333"
+    },
+    {
+      "title": "Enterprise Integration Patterns",
+      "author": "Gregor Hohpe, Bobby Woolf",
+      "year": "2003",
+      "why_it_matters": "Defines idempotent receiver and deduplication patterns for exactly-once-ish processing.",
+      "url": "https://www.enterpriseintegrationpatterns.com/"
+    },
+    {
+      "title": "NIST SP 800-218 Secure Software Development Framework (SSDF)",
+      "author": "NIST",
+      "year": "2022",
+      "why_it_matters": "Authoritative practices for reproducible builds, integrity checks, and release controls.",
+      "url": "https://csrc.nist.gov/publications/detail/sp/800-218/final"
+    },
+    {
+      "title": "Reproducible Builds Documentation",
+      "author": "reproducible-builds.org",
+      "year": "ongoing",
+      "why_it_matters": "Practical techniques for deterministic outputs and verification workflows.",
+      "url": "https://reproducible-builds.org/docs/"
+    },
+    {
+      "title": "Data Protection API (DPAPI)",
+      "author": "Microsoft",
+      "year": "2024",
+      "why_it_matters": "Official Windows mechanism for local secret encryption bound to user/machine context.",
+      "url": "https://learn.microsoft.com/windows/win32/seccrypto/data-protection"
+    },
+    {
+      "title": "ProtectedData Class (.NET)",
+      "author": "Microsoft",
+      "year": "2024",
+      "why_it_matters": "Official .NET API to implement DPAPI-backed local secret storage in C#.",
+      "url": "https://learn.microsoft.com/dotnet/api/system.security.cryptography.protecteddata"
+    },
+    {
+      "title": "Set-AuthenticodeSignature",
+      "author": "Microsoft",
+      "year": "2024",
+      "why_it_matters": "Official PowerShell signing command for script/code authenticity.",
+      "url": "https://learn.microsoft.com/powershell/module/microsoft.powershell.security/set-authenticodesignature"
+    },
+    {
+      "title": "Get-FileHash",
+      "author": "Microsoft",
+      "year": "2024",
+      "why_it_matters": "Official hashing command for integrity manifests and promotion gates.",
+      "url": "https://learn.microsoft.com/powershell/module/microsoft.powershell.utility/get-filehash"
+    },
+    {
+      "title": "SLSA v1.0 Specification",
+      "author": "OpenSSF",
+      "year": "2023",
+      "why_it_matters": "Supply-chain framework for provenance, integrity, and release promotion policies.",
+      "url": "https://slsa.dev/spec/v1.0/"
+    },
+    {
+      "title": "NIST SP 800-92 Guide to Computer Security Log Management",
+      "author": "NIST",
+      "year": "2006",
+      "why_it_matters": "Authoritative log governance guidance for append-only auditability and incident analysis.",
+      "url": "https://csrc.nist.gov/publications/detail/sp/800-92/final"
     }
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
+  ],
+  "checklists": [
+    {
+      "pattern": "Event sourcing (append-only log, replay, snapshots)",
+      "one_page_checklist": "Default: newline-delimited JSON event log, immutable writes, deterministic replay.\\nArtifacts to create:\\n- /events/events.log.ndjson (append-only)\\n- /events/snapshots/{aggregateId}.snapshot.json\\n- /schemas/event.schema.json\\n- /tools/replay.ps1 and /src/ReplayTool/Program.cs\\n- /tests/replay-fixture/ with golden state files\\nImplementation steps:\\n1) Define event contract: eventId (GUID), aggregateId, eventType, version, utcTimestamp, payload, hash(previousHash+eventJson).\\n2) Enforce append-only file ACL + code path: no update/delete operations.\\n3) Write events with fsync/Flush(true) before ACK to caller.\\n4) Build replay engine that sorts by sequence number and rejects hash-chain breaks.\\n5) Snapshot every N=500 events or 50 MB, whichever first.\\n6) Replay = latest snapshot + tail events only.\\n7) Add dead-letter event for deserialize/version failures; never drop silently.\\nTests to run:\\n- Append immutability test (attempt overwrite must fail).\\n- Replay determinism test (same input log -> byte-equal output state hash).\\n- Snapshot parity test (full replay hash == snapshot+tail replay hash).\\n- Corruption test (tampered event triggers FAIL and stop).\\nPASS/FAIL:\\n- PASS if all four tests pass and replay of 100k events completes within target time budget.\\n- FAIL on any hash mismatch, dropped event, or mutable-write path detected.\\nPowerShell implementation notes:\\n- Use Add-Content or FileStream with FileMode.Append; disable pipelines that reformat JSON.\\n- Use Get-FileHash for periodic chain validation report.\\n- Keep replay script pure: no wall-clock reads except injected test clock.\\nC# implementation notes:\\n- Use FileStream(FileMode.Append, FileAccess.Write, FileShare.Read) + StreamWriter + Flush(true).\\n- Use System.Text.Json source-gen for stable serialization options.\\n- Implement snapshot loader with schema version gate and explicit upcasters."
+    },
+    {
+      "pattern": "Strangler Fig migration (PS -> C# EXE replacement without downtime)",
+      "one_page_checklist": "Default: facade-first routing with feature flags and instant rollback.\\nArtifacts to create:\\n- /migration/route-map.json (command -> legacy/new target)\\n- /migration/flag-config.json\\n- /scripts/Invoke-Facade.ps1 (single entrypoint)\\n- /src/NewWorker/NewWorker.exe\\n- /migration/parity-baselines/*.json\\nImplementation steps:\\n1) Freeze legacy interface contract and capture I/O examples.\\n2) Build facade PowerShell entrypoint that routes by config; no callers invoke internals directly.\\n3) Introduce shadow mode: call C# path, discard output, compare with legacy output hash.\\n4) Set promotion gate: >=99.5% parity over 500 representative runs.\\n5) Switch low-risk commands first; keep per-command rollback flag.\\n6) Track latency and error deltas before each expansion step.\\n7) Decommission legacy command only after 14 days clean error-budget burn.\\nTests to run:\\n- Contract tests using captured fixtures on both paths.\\n- Shadow parity diff test (normalized output hash compare).\\n- Rollback drill: forced failure in C# path must revert in <=60s.\\nPASS/FAIL:\\n- PASS if parity threshold met, rollback drill passes, and no downtime incidents in canary window.\\n- FAIL if any command lacks rollback or has unknown output divergence.\\nPowerShell implementation notes:\\n- Keep Invoke-Facade.ps1 idempotent and side-effect free before route decision.\\n- Persist per-invocation route/audit line for postmortem traceability.\\nC# implementation notes:\\n- Mirror legacy exit codes and stderr semantics exactly.\\n- Provide --compat mode to emulate legacy quirks until retired."
+    },
+    {
+      "pattern": "SLOs / SLIs / error budgets (reliability guardrails)",
+      "one_page_checklist": "Default SLOs: availability 99.9%, job success 99.5%, p95 latency target per operation.\\nArtifacts to create:\\n- /reliability/sli.yaml\\n- /reliability/slo.yaml\\n- /reliability/error-budget.md\\n- /telemetry/metrics-schema.json\\n- /dashboards/slo-summary.json\\nImplementation steps:\\n1) Define user-visible SLIs only (success ratio, latency, freshness).\\n2) Set 30-day rolling SLOs with explicit exclusions documented.\\n3) Compute error budget = 1 - SLO; publish remaining budget daily.\\n4) Add release policy: freeze feature releases when budget burn-rate >2x for 24h.\\n5) Tie incident severity and on-call actions to burn-rate thresholds.\\n6) Review SLOs monthly; adjust only with documented customer impact analysis.\\nTests to run:\\n- Metric correctness test against synthetic traffic fixtures.\\n- Burn-rate calculator unit tests (fast and slow burn windows).\\n- Alert simulation test for threshold crossings.\\nPASS/FAIL:\\n- PASS if SLIs emit continuously, burn-rate alerts fire correctly, and freeze policy is automatable.\\n- FAIL if any SLO lacks measurable SLI or if alerting cannot be replay-tested.\\nPowerShell implementation notes:\\n- Emit structured JSON metrics lines from scripts for ingestion consistency.\\n- Use scheduled task to compute and write daily budget report artifact.\\nC# implementation notes:\\n- Expose counters/histograms via OpenTelemetry SDK.\\n- Centralize SLO constants in strongly typed options to avoid drift."
+    },
+    {
+      "pattern": "Premortem (failure forecasting) and incident taxonomy (failure flavors)",
+      "one_page_checklist": "Default: quarterly premortem + fixed taxonomy used in every incident record.\\nArtifacts to create:\\n- /risk/premortem-template.md\\n- /risk/top-risks-register.csv\\n- /incidents/taxonomy.md\\n- /incidents/incident-report-template.md\\n- /incidents/taxonomy-tags.json\\nImplementation steps:\\n1) Run 60-minute premortem: assume project failed in 12 months; collect causes silently first, then round-robin.\\n2) Normalize causes into taxonomy buckets: Change, Dependency, Capacity, Data, Security, Human Process, Unknown.\\n3) Assign each top risk an owner, trigger signal, mitigation, and detection metric.\\n4) Require incident reports to include primary + contributing taxonomy tags.\\n5) Perform monthly taxonomy review; split/merge categories only via versioned change log.\\nTests to run:\\n- Template completeness check (all mandatory fields present).\\n- Incident tagging lint (no untagged reports).\\n- Risk register freshness check (owner and review date <=30 days old).\\nPASS/FAIL:\\n- PASS if 100% incidents are tagged and top-10 risks have active mitigations.\\n- FAIL if incidents bypass taxonomy or risk owners are missing.\\nPowerShell implementation notes:\\n- Add CI lint script to parse markdown front matter for taxonomy tags.\\n- Generate monthly CSV summary by taxonomy for trend review.\\nC# implementation notes:\\n- Implement enum-backed taxonomy model with version field.\\n- Validate incident payloads against JSON schema before persistence."
+    },
+    {
+      "pattern": "Idempotency keys and exactly-once-ish processing (webhooks, retries)",
+      "one_page_checklist": "Default: at-least-once delivery + dedupe store keyed by Idempotency-Key and payload hash.\\nArtifacts to create:\\n- /api/idempotency-policy.md\\n- /state/idempotency-store.sqlite (or local db)\\n- /schemas/request-canonicalization.json\\n- /tests/idempotency-fixtures/*.json\\n- /src/Common/Idempotency.cs and /scripts/Test-Idempotency.ps1\\nImplementation steps:\\n1) Require Idempotency-Key for all mutating endpoints/webhooks.\\n2) Canonicalize request body before hashing (stable property order, UTF-8).\\n3) On first-seen key: lock key, process, persist response envelope + status + expiry (24h default).\\n4) On retry with same key and same hash: return stored response exactly.\\n5) On same key with different hash: return 409 Conflict.\\n6) Use outbox/inbox tables for side effects to avoid duplicate downstream sends.\\nTests to run:\\n- Replay same key/body returns byte-identical response.\\n- Same key/different body returns 409.\\n- Concurrent duplicate requests result in single side effect.\\n- Crash recovery test preserves dedupe guarantees after restart.\\nPASS/FAIL:\\n- PASS if duplicate deliveries never create duplicate side effects in stress test.\\n- FAIL if race conditions allow >1 side effect per key.\\nPowerShell implementation notes:\\n- Store key state transactionally via SQLite module or file lock discipline.\\n- Include key + hash in structured logs for audit and replay.\\nC# implementation notes:\\n- Use unique index on (idempotency_key) and transaction isolation around handler.\\n- Serialize stored response envelope with explicit schema version."
+    },
+    {
+      "pattern": "Determinism and reproducibility (fixtures, golden files, hash manifests)",
+      "one_page_checklist": "Default: deterministic mode ON in CI and release builds.\\nArtifacts to create:\\n- /fixtures/input/*.json\\n- /golden/*.expected.json\\n- /build/hash-manifest.sha256\\n- /build/repro-instructions.md\\n- /tests/repro-check.ps1 and /tests/ReproTests.cs\\nImplementation steps:\\n1) Eliminate nondeterminism: inject clock, random seed, locale, timezone, and file ordering.\\n2) Pin dependency versions and lockfiles.\\n3) Produce build outputs in normalized paths; strip timestamps where possible.\\n4) Generate SHA-256 manifest for all release artifacts.\\n5) Rebuild twice in clean environments; compare binary/hash equality.\\n6) Keep golden files under review; update only with explicit approval label.\\nTests to run:\\n- Golden file test suite across representative fixtures.\\n- Two-build reproducibility test (hash equality).\\n- Manifest verification test on staged artifacts.\\nPASS/FAIL:\\n- PASS if two clean builds are hash-identical and all golden tests pass.\\n- FAIL if any nondeterministic diff appears without approved change note.\\nPowerShell implementation notes:\\n- Sort file lists explicitly before processing; set $env:TZ and culture in test runner.\\n- Use Get-FileHash to emit manifest and verify before promotion.\\nC# implementation notes:\\n- Enable deterministic build flags and path mapping in project files.\\n- Replace DateTime.UtcNow/Random direct calls with injectable abstractions."
+    },
+    {
+      "pattern": "Secure secret storage on Windows (DPAPI) for local-only key material",
+      "one_page_checklist": "Default: user-scope DPAPI, non-exportable plaintext, rotate every 90 days.\\nArtifacts to create:\\n- /security/secret-storage-policy.md\\n- /security/dpapi-context.json\\n- /security/secret-rotation-log.csv\\n- /src/Security/SecretStore.cs\\n- /scripts/Set-LocalSecret.ps1 and /scripts/Get-LocalSecret.ps1\\nImplementation steps:\\n1) Classify local-only secrets; deny storing in repo/env vars/plain config.\\n2) Encrypt secret bytes with DPAPI (CurrentUser scope by default, LocalMachine only if service account needs sharing).\\n3) Store ciphertext + metadata (createdAt, purpose, version) in protected local file.\\n4) Limit ACL to required principal; audit access attempts.\\n5) Implement rotate command writing new version while retaining previous for rollback window (7 days).\\n6) Zero sensitive buffers in memory when practical after use.\\nTests to run:\\n- Decrypt success under same user context.\\n- Decrypt failure under different user context (for CurrentUser scope).\\n- Rotation test (new version active, old expires as scheduled).\\nPASS/FAIL:\\n- PASS if plaintext never hits disk/logs and cross-user decryption behavior matches policy.\\n- FAIL if any secret appears in logs or unprotected files.\\nPowerShell implementation notes:\\n- Use ConvertTo-SecureString/ConvertFrom-SecureString with DPAPI-backed defaults cautiously and document scope.\\n- Lock down files with icacls and verify ACL in tests.\\nC# implementation notes:\\n- Use ProtectedData.Protect/Unprotect with optional entropy and DataProtectionScope.CurrentUser.\\n- Wrap secret retrieval in minimal-lifetime object and clear byte arrays after use."
+    },
+    {
+      "pattern": "Supply chain safety basics (hashing, signing, release promotion gates)",
+      "one_page_checklist": "Default: signed artifacts + hash manifest + staged promotion with provenance check.\\nArtifacts to create:\\n- /release/release-policy.md\\n- /release/promotion-gates.yaml\\n- /release/provenance.json\\n- /release/artifacts.sha256\\n- /scripts/Sign-And-Verify.ps1\\nImplementation steps:\\n1) Generate SHA-256 for every artifact; publish immutable manifest.\\n2) Sign scripts/binaries with trusted cert; verify signature before execution.\\n3) Require provenance record: source commit, build runner identity, dependency lock digest.\\n4) Promotion gates: Dev->Stage->Prod requires hash match, signature valid, tests pass, and approver identity.\\n5) Block direct-to-prod publication by policy.\\n6) Keep revocation/expiry checks for signing cert in release validation.\\nTests to run:\\n- Tamper test: modify artifact, verify hash gate blocks promotion.\\n- Signature test: expired/untrusted cert must fail verification.\\n- Gate simulation: missing provenance field blocks promotion.\\nPASS/FAIL:\\n- PASS if any tamper/signature/provenance failure blocks release automatically.\\n- FAIL if manual override can bypass all gates without break-glass record.\\nPowerShell implementation notes:\\n- Use Set-AuthenticodeSignature and Get-AuthenticodeSignature in CI scripts.\\n- Validate hash manifest with Get-FileHash before each environment hop.\\nC# implementation notes:\\n- Verify signed payloads using X509Chain policy checks at runtime when needed.\\n- Emit provenance metadata as structured JSON attached to build artifacts."
     }
-    p {
-      font-size: 1rem;
-      margin-bottom: 2rem;
-      color: #555;
+  ],
+  "mapping": [
+    {
+      "pattern": "Event sourcing (append-only log, replay, snapshots)",
+      "checklist_item": "Append-only event contract with replay + snapshot parity tests",
+      "source_titles": [
+        "Designing Event-Driven Systems",
+        "Event Sourcing",
+        "NIST SP 800-92 Guide to Computer Security Log Management"
+      ]
+    },
+    {
+      "pattern": "Strangler Fig migration (PS -> C# EXE replacement without downtime)",
+      "checklist_item": "Facade routing, shadow mode parity threshold, and rollback drill",
+      "source_titles": [
+        "Refactoring Databases: Evolutionary Database Design (Strangler Application chapter)",
+        "The Site Reliability Workbook"
+      ]
+    },
+    {
+      "pattern": "SLOs / SLIs / error budgets (reliability guardrails)",
+      "checklist_item": "30-day SLOs with burn-rate alerts and release freeze policy",
+      "source_titles": [
+        "Site Reliability Engineering: How Google Runs Production Systems",
+        "The Site Reliability Workbook",
+        "The Art of Capacity Planning (SLO and reliability planning)"
+      ]
+    },
+    {
+      "pattern": "Premortem (failure forecasting) and incident taxonomy (failure flavors)",
+      "checklist_item": "Quarterly premortem and mandatory taxonomy tags in incident reports",
+      "source_titles": [
+        "Performing a Project Premortem",
+        "Taxonomy of Computer Program Security Flaws"
+      ]
+    },
+    {
+      "pattern": "Idempotency keys and exactly-once-ish processing (webhooks, retries)",
+      "checklist_item": "Require Idempotency-Key, dedupe store, and conflict-on-mismatch behavior",
+      "source_titles": [
+        "HTTP Semantics (RFC 9110)",
+        "The Idempotency-Key HTTP Header Field",
+        "Enterprise Integration Patterns"
+      ]
+    },
+    {
+      "pattern": "Determinism and reproducibility (fixtures, golden files, hash manifests)",
+      "checklist_item": "Two-build hash equality, golden fixtures, and manifest verification",
+      "source_titles": [
+        "NIST SP 800-218 Secure Software Development Framework (SSDF)",
+        "Reproducible Builds Documentation"
+      ]
+    },
+    {
+      "pattern": "Secure secret storage on Windows (DPAPI) for local-only key material",
+      "checklist_item": "DPAPI CurrentUser protection with ACL checks and rotation",
+      "source_titles": [
+        "Data Protection API (DPAPI)",
+        "ProtectedData Class (.NET)"
+      ]
+    },
+    {
+      "pattern": "Supply chain safety basics (hashing, signing, release promotion gates)",
+      "checklist_item": "Signed artifacts, hash manifests, provenance, and promotion gates",
+      "source_titles": [
+        "Set-AuthenticodeSignature",
+        "Get-FileHash",
+        "SLSA v1.0 Specification",
+        "NIST SP 800-218 Secure Software Development Framework (SSDF)"
+      ]
     }
-    iframe {
-      border: none;
-      width: 100%;
-      max-width: 700px;
-      height: 800px;
-      border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
-    }
-  </style>
-</head>
-<body>
-  <h1>🪙 Claim 500 KelpCoin</h1>
-  <p>Fill in your wallet address. Optional: enter a referrer’s wallet to earn bonus KELP.</p>
-  <iframe 
-    src="https://docs.google.com/forms/d/e/1FAIpQLSclYfRXBxHoDBjpoHCoKM2_lm8VkxN8FjqmkOeK5kqxiOMW9A/viewform?embedded=true"
-    allowfullscreen>
-  </iframe>
-</body>
-</html>
+  ]
+}
