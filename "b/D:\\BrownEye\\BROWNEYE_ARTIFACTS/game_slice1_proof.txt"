@@ -1,0 +1,5 @@
+cycle=game_slice1
+artifact_root=D:\BrownEye\BROWNEYE_ARTIFACTS
+phases=["Proposer","Critic","Synthesizer","Monetizer","Humanizer"]
+payment_path=doorway -> pay placeholder -> delivery proof -> ledger
+verifier=bash scripts/run_cycle.sh verify

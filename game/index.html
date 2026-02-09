@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Kelphaven Core Loop</title>
+    <style>
+      body { margin:0; background:#091017; color:#eaf2ff; font-family:system-ui,sans-serif; }
+      main { max-width:860px; margin:0 auto; padding:1rem; }
+      canvas { width:100%; max-width:640px; border:1px solid #375077; background:#0f1b2a; image-rendering: pixelated; }
+      #hud { margin:.7rem 0; }
+      kbd { background:#22324a; border-radius:.3rem; padding:.1rem .3rem; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Kelphaven / Kelplantis Prototype</h1>
+      <p>Core loop: move to gather kelp seeds, deliver to dock, score 5 to win.</p>
+      <div id="hud"></div>
+      <canvas id="game" width="320" height="180"></canvas>
+      <p>Input: <kbd>Arrow Keys</kbd> or <kbd>WASD</kbd>. Action auto-triggers near resource/dock.</p>
+      <p>Asset pipeline lock: 2:1 isometric illusion, 16x16 tile source, nearest-neighbor scale, 24-color cap.</p>
+    </main>
+    <script src="game.js"></script>
+  </body>
+</html>
