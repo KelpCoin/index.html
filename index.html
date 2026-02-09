@@ -1,44 +1,30 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Claim 500 KelpCoin</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f0fdf4;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin: 0;
-      padding: 40px;
-    }
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
-    }
-    p {
-      font-size: 1rem;
-      margin-bottom: 2rem;
-      color: #555;
-    }
-    iframe {
-      border: none;
-      width: 100%;
-      max-width: 700px;
-      height: 800px;
-      border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
-    }
-  </style>
-</head>
-<body>
-  <h1>🪙 Claim 500 KelpCoin</h1>
-  <p>Fill in your wallet address. Optional: enter a referrer’s wallet to earn bonus KELP.</p>
-  <iframe 
-    src="https://docs.google.com/forms/d/e/1FAIpQLSclYfRXBxHoDBjpoHCoKM2_lm8VkxN8FjqmkOeK5kqxiOMW9A/viewform?embedded=true"
-    allowfullscreen>
-  </iframe>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BrownEye Build Console</title>
+    <style>
+      body { font-family: system-ui, sans-serif; margin: 2rem; background:#0f1014; color:#e8ecff; }
+      a { color:#89b4ff; }
+      .card { background:#1a1d27; padding:1rem; border-radius:.75rem; margin-bottom:1rem; }
+      code { background:#11131a; padding:.2rem .4rem; border-radius:.25rem; }
+    </style>
+  </head>
+  <body>
+    <h1>BrownEye Two-Machine Iterative Loop</h1>
+    <div class="card">
+      <h2>Cinema</h2>
+      <p><a href="cinema/doorway.html">Doorway (Slice 1)</a></p>
+      <p><a href="cinema/billboard.html">Billboard Wall (Slice 2)</a></p>
+    </div>
+    <div class="card">
+      <h2>Game</h2>
+      <p><a href="game/index.html">Kelphaven Core Loop (Slice 1)</a></p>
+    </div>
+    <div class="card">
+      <h2>Automation</h2>
+      <p>Run <code>bash scripts/run_cycle.sh</code> to execute the proposer→critic→synthesizer→monetizer→humanizer cycle, emit proofs, and append ledgers.</p>
+    </div>
+  </body>
 </html>

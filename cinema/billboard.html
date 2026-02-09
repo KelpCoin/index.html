@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>BrownEye Billboard Wall</title>
+    <style>
+      body { margin:0; font-family: system-ui, sans-serif; background:#0c1019; color:#e9edff; }
+      header { padding:1rem; border-bottom:1px solid #283250; }
+      #cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:.8rem; padding:1rem; }
+      .card { background:#161d31; border:1px solid #2f3d64; border-radius:.7rem; padding:.8rem; }
+      .status { font-size:.75rem; opacity:.8; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Billboard Wall Surfaces</h1>
+      <p>Renderer supports Notion export URL via <code>?source=...</code> or local stub fallback.</p>
+    </header>
+    <section id="cards"></section>
+
+    <script>
+      const cards = document.getElementById('cards');
+      const source = new URLSearchParams(location.search).get('source') || 'notion_stub.json';
+
+      async function loadWall() {
+        try {
+          const res = await fetch(source, { cache: 'no-store' });
+          if (!res.ok) throw new Error('Source unavailable');
+          const data = await res.json();
+          render(data.wall || []);
+        } catch {
+          const fallback = await fetch('notion_stub.json').then(r => r.json());
+          render(fallback.wall || []);
+        }
+      }
+
+      function render(items) {
+        if (!items.length) {
+          cards.innerHTML = '<p>No wall items available.</p>';
+          return;
+        }
+        cards.innerHTML = items.map((item) => `
+          <article class="card">
+            <h3>${item.title}</h3>
+            <p>Surface: ${item.surface}</p>
+            <p>Price: ${item.price}</p>
+            <div class="status">Status: ${item.status}</div>
+          </article>
+        `).join('');
+      }
+
+      loadWall();
+    </script>
+  </body>
+</html>
