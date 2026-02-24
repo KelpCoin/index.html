@@ -2,43 +2,387 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Claim 500 KelpCoin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MTG Singles Dynamic Pricing Planner (Supabase)</title>
   <style>
+    :root {
+      --bg: #0b1020;
+      --card: #121a2f;
+      --soft: #1d2743;
+      --text: #edf2ff;
+      --muted: #a8b3cf;
+      --accent: #4fd1c5;
+      --accent-2: #90cdf4;
+      --danger: #feb2b2;
+      --ok: #9ae6b4;
+      --mono: "SFMono-Regular", Menlo, Consolas, monospace;
+    }
+
+    * { box-sizing: border-box; }
+
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f0fdf4;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
       margin: 0;
-      padding: 40px;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      background: radial-gradient(circle at top, #1f2b51, var(--bg));
+      color: var(--text);
+      line-height: 1.45;
     }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .hero {
+      background: linear-gradient(145deg, #18264a, #121a2f);
+      border: 1px solid #2a3a67;
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+
     h1 {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
+      margin: 0 0 10px;
+      font-size: clamp(1.5rem, 3vw, 2.4rem);
     }
-    p {
-      font-size: 1rem;
-      margin-bottom: 2rem;
-      color: #555;
+
+    h2 {
+      margin-top: 0;
+      font-size: 1.2rem;
     }
-    iframe {
-      border: none;
-      width: 100%;
-      max-width: 700px;
-      height: 800px;
+
+    .muted { color: var(--muted); }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid #2a3a67;
+      border-radius: 14px;
+      padding: 18px;
+    }
+
+    .kpi {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(90px, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .kpi-item {
+      background: #1a2440;
       border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      padding: 10px;
+      border: 1px solid #2c3d6d;
+    }
+
+    .kpi-item strong {
+      display: block;
+      font-size: 1.1rem;
+      margin-top: 4px;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 5px;
+      margin-top: 11px;
+    }
+
+    input, select, textarea, button {
+      width: 100%;
+      border-radius: 10px;
+      border: 1px solid #34497f;
+      background: #0f1730;
+      color: var(--text);
+      padding: 10px 11px;
+      font-size: 0.95rem;
+    }
+
+    button {
+      background: linear-gradient(120deg, var(--accent), var(--accent-2));
+      color: #081226;
+      border: none;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 12px;
+    }
+
+    button:hover { filter: brightness(1.05); }
+
+    pre {
+      background: #0a1125;
+      border: 1px solid #253560;
+      border-radius: 10px;
+      padding: 14px;
+      overflow-x: auto;
+      white-space: pre;
+      font-family: var(--mono);
+      font-size: 0.84rem;
+      color: #c7d4f9;
+    }
+
+    .pill {
+      display: inline-block;
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      margin-right: 6px;
+      border: 1px solid #2f4274;
+      background: #172447;
+    }
+
+    .result {
+      border: 1px solid #35518e;
+      background: #111b35;
+      border-radius: 12px;
+      padding: 12px;
+      margin-top: 12px;
+    }
+
+    .result strong {
+      font-size: 1.3rem;
+      display: block;
+      margin-top: 2px;
+    }
+
+    .small { font-size: 0.86rem; }
+    .ok { color: var(--ok); }
+    .danger { color: var(--danger); }
+
+    ul { padding-left: 18px; }
+
+    code {
+      background: #0c1733;
+      padding: 2px 6px;
+      border-radius: 6px;
     }
   </style>
 </head>
 <body>
-  <h1>🪙 Claim 500 KelpCoin</h1>
-  <p>Fill in your wallet address. Optional: enter a referrer’s wallet to earn bonus KELP.</p>
-  <iframe 
-    src="https://docs.google.com/forms/d/e/1FAIpQLSclYfRXBxHoDBjpoHCoKM2_lm8VkxN8FjqmkOeK5kqxiOMW9A/viewform?embedded=true"
-    allowfullscreen>
-  </iframe>
+  <div class="container">
+    <section class="hero">
+      <span class="pill">Supabase-ready</span>
+      <span class="pill">100k+ cards</span>
+      <span class="pill">Live USD→NZD FX</span>
+      <h1>MTG Singles Dynamic Pricing Planner</h1>
+      <p class="muted">
+        This starter page gives you a production-ready <strong>data model + pricing formula + API flow</strong> for
+        pricing Magic singles from Scryfall IDs. Scan in Matterbox, save into Supabase, and compute your NZD retail price with a configurable discount/margin layer.
+      </p>
+      <div class="kpi">
+        <div class="kpi-item">Target scale<strong>100,000+</strong><span class="small muted">inventory rows</span></div>
+        <div class="kpi-item">Input id<strong>Scryfall ID</strong><span class="small muted">UUID from scan flow</span></div>
+        <div class="kpi-item">Pricing<strong>USD → NZD</strong><span class="small muted">live FX + your rules</span></div>
+      </div>
+    </section>
+
+    <div class="grid">
+      <section class="card">
+        <h2>1) Live pricing simulator</h2>
+        <p class="muted small">Use this to test your NZD formula before wiring it into Supabase Edge Functions.</p>
+
+        <label for="usdPrice">Market price (USD)</label>
+        <input id="usdPrice" type="number" value="2.50" min="0" step="0.01" />
+
+        <label for="fxRate">USD → NZD rate</label>
+        <input id="fxRate" type="number" value="1.65" min="0" step="0.0001" />
+
+        <label for="discountPercent">Customer discount from full conversion (%)</label>
+        <input id="discountPercent" type="number" value="8" min="0" max="100" step="0.1" />
+
+        <label for="bufferPercent">Risk buffer / margin (%)</label>
+        <input id="bufferPercent" type="number" value="5" min="0" max="100" step="0.1" />
+
+        <button id="fetchFxBtn">Fetch live USD→NZD rate</button>
+        <button id="calcBtn">Calculate NZD selling price</button>
+
+        <div class="result" id="output">
+          <div class="small muted">Price output</div>
+          <strong>$0.00 NZD</strong>
+          <div class="small muted">Waiting for calculation…</div>
+        </div>
+
+        <p id="fxStatus" class="small muted">FX status: not fetched yet.</p>
+      </section>
+
+      <section class="card">
+        <h2>2) Supabase schema (copy/paste SQL)</h2>
+        <p class="small muted">Designed for high-cardinality inventory with fast lookups and price history tracking.</p>
+<pre>-- Core inventory table (100k+ rows friendly)
+create table if not exists public.cards_inventory (
+  id bigserial primary key,
+  scryfall_id uuid not null,
+  card_name text not null,
+  set_code text,
+  collector_number text,
+  condition text not null default 'NM',
+  language text not null default 'EN',
+  quantity integer not null default 1,
+  usd_market numeric(10,2),
+  usd_source text,
+  fx_usd_nzd numeric(12,6),
+  nzd_list numeric(10,2),
+  pricing_rule_id bigint,
+  updated_at timestamptz not null default now(),
+  unique (scryfall_id, condition, language)
+);
+
+create index if not exists idx_cards_scryfall on public.cards_inventory (scryfall_id);
+create index if not exists idx_cards_name on public.cards_inventory (card_name);
+create index if not exists idx_cards_updated on public.cards_inventory (updated_at desc);
+
+-- Pricing rules so you can test multiple strategies
+create table if not exists public.pricing_rules (
+  id bigserial primary key,
+  rule_name text not null,
+  discount_pct numeric(5,2) not null default 0,
+  buffer_pct numeric(5,2) not null default 0,
+  floor_nzd numeric(10,2) not null default 0,
+  round_to_cents numeric(4,2) not null default 0.05,
+  active boolean not null default true,
+  created_at timestamptz not null default now()
+);
+
+-- Optional: keep a full audit trail for pricing changes
+create table if not exists public.price_history (
+  id bigserial primary key,
+  card_inventory_id bigint not null references public.cards_inventory(id) on delete cascade,
+  old_nzd_list numeric(10,2),
+  new_nzd_list numeric(10,2) not null,
+  old_fx_usd_nzd numeric(12,6),
+  new_fx_usd_nzd numeric(12,6) not null,
+  changed_at timestamptz not null default now(),
+  reason text
+);</pre>
+      </section>
+    </div>
+
+    <div class="grid">
+      <section class="card">
+        <h2>3) Pricing function logic</h2>
+        <p class="small muted">Use this SQL function from your Edge Function/batch job.</p>
+<pre>create or replace function public.calc_nzd_price(
+  usd_market numeric,
+  usd_nzd_rate numeric,
+  discount_pct numeric,
+  buffer_pct numeric,
+  floor_nzd numeric default 0,
+  round_to_cents numeric default 0.05
+)
+returns numeric
+language plpgsql
+as $$
+declare
+  raw_nzd numeric;
+  adjusted numeric;
+begin
+  raw_nzd := usd_market * usd_nzd_rate;
+
+  -- discount means customer pays less than pure conversion
+  adjusted := raw_nzd
+    * (1 - discount_pct / 100.0)
+    * (1 + buffer_pct / 100.0);
+
+  if adjusted < floor_nzd then
+    adjusted := floor_nzd;
+  end if;
+
+  -- round to nearest 5 cents by default
+  return round(adjusted / round_to_cents) * round_to_cents;
+end;
+$$;</pre>
+      </section>
+
+      <section class="card">
+        <h2>4) Workflow blueprint</h2>
+        <ul>
+          <li><strong>Matterbox scan</strong> → get <code>scryfall_id</code>.</li>
+          <li><strong>Upsert into Supabase</strong> with quantity/condition/language.</li>
+          <li><strong>Scheduled job</strong> (e.g. every hour) fetches USD card prices + current USD/NZD FX.</li>
+          <li><strong>Edge Function</strong> calculates NZD list price via <code>calc_nzd_price</code>.</li>
+          <li><strong>Store history</strong> in <code>price_history</code> for transparency and strategy tuning.</li>
+        </ul>
+
+        <h2 style="margin-top:16px;">5) Future deck pattern matching</h2>
+        <p class="small muted">
+          When ready, add <code>decks</code>, <code>deck_cards</code>, and <code>orders</code> tables. Then compute co-occurrence scores
+          (cards sold together) and use pgvector/embeddings for "build a deck from current stock" recommendations.
+        </p>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const usdInput = document.getElementById('usdPrice');
+    const fxInput = document.getElementById('fxRate');
+    const discountInput = document.getElementById('discountPercent');
+    const bufferInput = document.getElementById('bufferPercent');
+    const output = document.getElementById('output');
+    const fxStatus = document.getElementById('fxStatus');
+
+    const toMoney = (value) => new Intl.NumberFormat('en-NZ', {
+      style: 'currency',
+      currency: 'NZD'
+    }).format(value);
+
+    function calculatePrice() {
+      const usd = Number(usdInput.value);
+      const fx = Number(fxInput.value);
+      const discount = Number(discountInput.value) / 100;
+      const buffer = Number(bufferInput.value) / 100;
+
+      if ([usd, fx, discount, buffer].some((n) => Number.isNaN(n) || n < 0)) {
+        output.innerHTML = '<div class="small danger">Please provide valid positive numbers.</div>';
+        return;
+      }
+
+      const raw = usd * fx;
+      const adjusted = raw * (1 - discount) * (1 + buffer);
+      const rounded = Math.round(adjusted / 0.05) * 0.05;
+
+      output.innerHTML = `
+        <div class="small muted">Suggested NZD selling price</div>
+        <strong>${toMoney(rounded)}</strong>
+        <div class="small muted">Raw conversion ${toMoney(raw)} → adjusted ${toMoney(adjusted)} (rounded to 5c)</div>
+      `;
+    }
+
+    async function fetchFx() {
+      fxStatus.textContent = 'FX status: fetching latest USD→NZD…';
+      fxStatus.className = 'small muted';
+
+      try {
+        const response = await fetch('https://open.er-api.com/v6/latest/USD');
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+        const nzdRate = data?.rates?.NZD;
+
+        if (!nzdRate) {
+          throw new Error('NZD rate missing');
+        }
+
+        fxInput.value = Number(nzdRate).toFixed(4);
+        fxStatus.innerHTML = `FX status: <span class="ok">live rate loaded (${fxInput.value})</span> from open.er-api.com`;
+      } catch (error) {
+        fxStatus.innerHTML = `FX status: <span class="danger">failed to fetch live rate (${error.message})</span>. Keep manual rate.`;
+      }
+    }
+
+    document.getElementById('calcBtn').addEventListener('click', calculatePrice);
+    document.getElementById('fetchFxBtn').addEventListener('click', fetchFx);
+
+    calculatePrice();
+  </script>
 </body>
 </html>
