@@ -1,0 +1,16 @@
+{
+  "id": "canon-proof-on-disk",
+  "title": "Proof-on-disk doctrine",
+  "class": "canon",
+  "silo": "operations",
+  "status": "active",
+  "confidence": 1,
+  "source": "seed.install",
+  "created_utc": "2026-01-01T00:00:00Z",
+  "modified_utc": "2026-01-01T00:00:00Z",
+  "tags": ["proof", "artifact", "disk"],
+  "summary": "Decisions and outputs require persistent local artifacts.",
+  "body": "No claim is accepted without local proof files that can be inspected and re-queried.",
+  "supersedes": [],
+  "related_ids": ["canon-append-only-ledger", "canon-local-first-requirement"]
+}

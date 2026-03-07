@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "memory_record.schema.json",
+  "title": "MemoryVault Record",
+  "type": "object",
+  "required": [
+    "id",
+    "title",
+    "class",
+    "silo",
+    "status",
+    "confidence",
+    "source",
+    "created_utc",
+    "modified_utc",
+    "tags",
+    "summary",
+    "body",
+    "supersedes",
+    "related_ids"
+  ],
+  "properties": {
+    "id": { "type": "string", "minLength": 3 },
+    "title": { "type": "string", "minLength": 1 },
+    "class": {
+      "type": "string",
+      "enum": [
+        "canon",
+        "mutable_notes",
+        "quarantine",
+        "monetization_doctrine",
+        "signal_doctrine",
+        "silo_doctrine",
+        "path_canon",
+        "prompt_stencils",
+        "telemetry_taxonomy",
+        "project_registry",
+        "module_registry",
+        "risk_registry"
+      ]
+    },
+    "silo": { "type": "string", "minLength": 1 },
+    "status": { "type": "string", "enum": ["active", "draft", "quarantined", "retired"] },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+    "source": { "type": "string", "minLength": 1 },
+    "created_utc": { "type": "string", "format": "date-time" },
+    "modified_utc": { "type": "string", "format": "date-time" },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "summary": { "type": "string", "minLength": 1 },
+    "body": { "type": "string", "minLength": 1 },
+    "supersedes": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "related_ids": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "additionalProperties": false
+}

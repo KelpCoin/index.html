@@ -1,0 +1,16 @@
+{
+  "id": "canon-d-drive-preference",
+  "title": "D drive path preference",
+  "class": "canon",
+  "silo": "pathing",
+  "status": "active",
+  "confidence": 1,
+  "source": "seed.install",
+  "created_utc": "2026-01-01T00:00:00Z",
+  "modified_utc": "2026-01-01T00:00:00Z",
+  "tags": ["path", "windows", "d-drive"],
+  "summary": "Prefer D:\\ for primary memory root and fallback to C:\\ only when needed.",
+  "body": "Install and operate from D:\\BrownEye\\MemoryVault when available. Use C:\\BrownEye\\MemoryVault as deterministic fallback.",
+  "supersedes": [],
+  "related_ids": ["canon-local-first-requirement"]
+}

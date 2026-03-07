@@ -1,0 +1,16 @@
+{
+  "id": "canon-payment-first-doctrine",
+  "title": "Payment-first doctrine",
+  "class": "canon",
+  "silo": "monetization",
+  "status": "active",
+  "confidence": 0.98,
+  "source": "seed.install",
+  "created_utc": "2026-01-01T00:00:00Z",
+  "modified_utc": "2026-01-01T00:00:00Z",
+  "tags": ["payment", "revenue", "priority"],
+  "summary": "Prefer work that creates cash flow before optional expansion.",
+  "body": "Sequence work so payment paths and collections are solved first, then optimize secondary concerns.",
+  "supersedes": [],
+  "related_ids": ["canon-clone-winners-kill-losers"]
+}

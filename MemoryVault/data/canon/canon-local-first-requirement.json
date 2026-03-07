@@ -1,0 +1,16 @@
+{
+  "id": "canon-local-first-requirement",
+  "title": "Local-first requirement",
+  "class": "canon",
+  "silo": "architecture",
+  "status": "active",
+  "confidence": 1,
+  "source": "seed.install",
+  "created_utc": "2026-01-01T00:00:00Z",
+  "modified_utc": "2026-01-01T00:00:00Z",
+  "tags": ["local-first", "offline", "durability"],
+  "summary": "Memory operations must succeed from local disk without internet.",
+  "body": "All critical reads and writes run against local files so future agents can operate offline.",
+  "supersedes": [],
+  "related_ids": ["canon-d-drive-preference", "canon-proof-on-disk"]
+}

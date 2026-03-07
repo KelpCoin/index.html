@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "memory_event.schema.json",
+  "title": "MemoryVault Event",
+  "type": "object",
+  "required": ["event_id", "event_utc", "event_type", "record_id", "record_class", "path", "actor", "note"],
+  "properties": {
+    "event_id": { "type": "string" },
+    "event_utc": { "type": "string", "format": "date-time" },
+    "event_type": { "type": "string", "enum": ["install", "seed", "add", "archive", "verify", "query"] },
+    "record_id": { "type": "string" },
+    "record_class": { "type": "string" },
+    "path": { "type": "string" },
+    "actor": { "type": "string" },
+    "note": { "type": "string" }
+  },
+  "additionalProperties": false
+}
