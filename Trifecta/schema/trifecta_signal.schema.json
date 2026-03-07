@@ -1,0 +1,84 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "BrownEye Trifecta Packet",
+  "type": "object",
+  "required": [
+    "packet_id",
+    "subject",
+    "subject_type",
+    "created_utc",
+    "signals"
+  ],
+  "properties": {
+    "packet_id": {
+      "type": "string",
+      "pattern": "^trifecta-[a-f0-9]{16}$"
+    },
+    "subject": {
+      "type": "string",
+      "minLength": 1
+    },
+    "subject_type": {
+      "type": "string",
+      "enum": ["idea", "revenue_cell", "prompt", "module", "decision", "offer", "other"]
+    },
+    "created_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "context": {
+      "type": "object",
+      "additionalProperties": {
+        "type": ["string", "number", "boolean", "null"]
+      }
+    },
+    "signals": {
+      "type": "object",
+      "required": ["A", "B", "C"],
+      "properties": {
+        "A": { "$ref": "#/definitions/signal" },
+        "B": { "$ref": "#/definitions/signal" },
+        "C": { "$ref": "#/definitions/triangulationSignal" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "definitions": {
+    "signal": {
+      "type": "object",
+      "required": ["label", "strength", "confidence", "evidence"],
+      "properties": {
+        "label": { "type": "string", "minLength": 1 },
+        "strength": { "type": "number", "minimum": 0, "maximum": 1 },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        }
+      },
+      "additionalProperties": false
+    },
+    "triangulationSignal": {
+      "allOf": [
+        { "$ref": "#/definitions/signal" },
+        {
+          "type": "object",
+          "required": ["mode", "orientation", "veto"],
+          "properties": {
+            "mode": {
+              "type": "string",
+              "enum": ["SHARPEN", "RESOLVE", "DISAMBIGUATE", "VETO"]
+            },
+            "orientation": {
+              "type": "string",
+              "enum": ["POSITIVE", "NEGATIVE", "NEUTRAL"]
+            },
+            "veto": { "type": "boolean" }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "subject": "Third-party scraping offer",
+  "subject_type": "offer",
+  "context": {
+    "owner": "bizdev",
+    "jurisdiction": "US"
+  },
+  "signal_a": {
+    "label": "Immediate lead volume",
+    "strength": 0.8,
+    "confidence": 0.68,
+    "evidence": ["Vendor promises 50k records weekly"]
+  },
+  "signal_b": {
+    "label": "Compliance and legal exposure",
+    "strength": 0.87,
+    "confidence": 0.84,
+    "evidence": ["Terms-of-service violation likely", "Counsel flagged statutory risk"]
+  },
+  "signal_c": {
+    "label": "Legal veto",
+    "strength": 0.94,
+    "confidence": 0.92,
+    "evidence": ["General counsel issued written prohibition"],
+    "mode": "VETO",
+    "orientation": "NEGATIVE",
+    "veto": true
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "subject": "Creator referral growth loop",
+  "subject_type": "idea",
+  "context": {
+    "owner": "strategy",
+    "horizon_days": 30
+  },
+  "signal_a": {
+    "label": "Compounding acquisition potential",
+    "strength": 0.82,
+    "confidence": 0.76,
+    "evidence": ["Pilot cohort produced 1.8x invite rate", "Cost per invite within budget"]
+  },
+  "signal_b": {
+    "label": "Attribution uncertainty",
+    "strength": 0.34,
+    "confidence": 0.65,
+    "evidence": ["Tracking coverage 72 percent", "Channel overlap unresolved"]
+  },
+  "signal_c": {
+    "label": "Controlled holdout confirms lift",
+    "strength": 0.71,
+    "confidence": 0.79,
+    "evidence": ["Holdout delta statistically significant"],
+    "mode": "RESOLVE",
+    "orientation": "POSITIVE",
+    "veto": false
+  }
+}

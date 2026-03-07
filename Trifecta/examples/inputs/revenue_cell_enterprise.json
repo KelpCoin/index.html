@@ -1,0 +1,29 @@
+{
+  "subject": "Enterprise outbound revenue cell",
+  "subject_type": "revenue_cell",
+  "context": {
+    "owner": "sales_ops",
+    "quota_q": "Q3"
+  },
+  "signal_a": {
+    "label": "Large pipeline expansion",
+    "strength": 0.77,
+    "confidence": 0.7,
+    "evidence": ["22 target accounts accepted discovery", "Average deal size above baseline"]
+  },
+  "signal_b": {
+    "label": "Long procurement cycle",
+    "strength": 0.59,
+    "confidence": 0.74,
+    "evidence": ["Security review adds 45 days", "Legal redlines increased"]
+  },
+  "signal_c": {
+    "label": "Bridge offer reduces cycle time",
+    "strength": 0.55,
+    "confidence": 0.62,
+    "evidence": ["Pilot bridge closed 3 of 5 in-cycle"],
+    "mode": "DISAMBIGUATE",
+    "orientation": "POSITIVE",
+    "veto": false
+  }
+}
