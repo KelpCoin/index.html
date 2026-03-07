@@ -1,0 +1,127 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://browneye.local/schemas/BROWNEYE.UNIVERSAL.v1.json",
+  "title": "BrownEye Universal Cartridge Envelope v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "envelope_version",
+    "cartridge_type",
+    "cartridge_id",
+    "created_utc",
+    "source",
+    "routing",
+    "payload",
+    "proof",
+    "verifier",
+    "approval"
+  ],
+  "properties": {
+    "envelope_version": {
+      "type": "string",
+      "const": "BROWNEYE.UNIVERSAL.v1"
+    },
+    "cartridge_type": {
+      "type": "string",
+      "enum": [
+        "prompt",
+        "seed",
+        "task",
+        "revenue_cell",
+        "handover_packet",
+        "memory_update",
+        "watchdog_job",
+        "proof_request",
+        "verifier_request",
+        "approval_request"
+      ]
+    },
+    "cartridge_id": {
+      "type": "string",
+      "pattern": "^[A-Z0-9._-]{8,64}$"
+    },
+    "created_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["agent", "module", "host"],
+      "properties": {
+        "agent": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "module": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "host": { "type": "string", "minLength": 1, "maxLength": 128 }
+      }
+    },
+    "routing": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["priority", "target", "tags"],
+      "properties": {
+        "priority": { "type": "integer", "minimum": 1, "maximum": 9 },
+        "target": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "tags": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1, "maxLength": 64 },
+          "maxItems": 32
+        }
+      }
+    },
+    "payload": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["summary", "body"],
+      "properties": {
+        "summary": { "type": "string", "minLength": 1, "maxLength": 1024 },
+        "body": { "type": "object" }
+      }
+    },
+    "proof": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["requested", "status", "artifacts"],
+      "properties": {
+        "requested": { "type": "boolean" },
+        "status": { "type": "string", "enum": ["pending", "complete", "failed"] },
+        "artifacts": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1, "maxLength": 512 },
+          "maxItems": 64
+        }
+      }
+    },
+    "verifier": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["requested", "status", "checks"],
+      "properties": {
+        "requested": { "type": "boolean" },
+        "status": { "type": "string", "enum": ["pending", "pass", "fail"] },
+        "checks": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1, "maxLength": 512 },
+          "maxItems": 64
+        }
+      }
+    },
+    "approval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["required", "status", "approver"],
+      "properties": {
+        "required": { "type": "boolean" },
+        "status": { "type": "string", "enum": ["not_required", "pending", "approved", "rejected"] },
+        "approver": { "type": "string", "minLength": 1, "maxLength": 128 }
+      }
+    },
+    "relations": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "parent_cartridge_id": { "type": "string", "pattern": "^[A-Z0-9._-]{8,64}$" },
+        "conversation_id": { "type": "string", "pattern": "^[A-Z0-9._-]{8,64}$" }
+      }
+    }
+  }
+}
