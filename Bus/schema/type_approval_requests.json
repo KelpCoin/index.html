@@ -1,0 +1,16 @@
+{
+  "$id": "BROWNEYE.TYPE.APPROVAL_REQUESTS.v1",
+  "type": "object",
+  "required": ["payload"],
+  "properties": {
+    "payload": {
+      "type": "object",
+      "required": ["request_summary", "requested_by"],
+      "properties": {
+        "request_summary": { "type": "string" },
+        "requested_by": { "type": "string" },
+        "visibility": { "type": "string", "enum": ["private", "public"] }
+      }
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "$id": "BROWNEYE.TYPE.TASKS.v1",
+  "type": "object",
+  "required": ["payload"],
+  "properties": {
+    "payload": {
+      "type": "object",
+      "required": ["objective", "steps"],
+      "properties": {
+        "objective": { "type": "string", "minLength": 3 },
+        "steps": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string" }
+        },
+        "visibility": { "type": "string", "enum": ["private", "public"] }
+      }
+    }
+  }
+}

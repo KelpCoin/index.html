@@ -1,0 +1,17 @@
+{
+  "$id": "BROWNEYE.TYPE.REVENUE_CELLS.v1",
+  "type": "object",
+  "required": ["payload"],
+  "properties": {
+    "payload": {
+      "type": "object",
+      "required": ["job_name", "currency", "value"],
+      "properties": {
+        "job_name": { "type": "string" },
+        "currency": { "type": "string", "pattern": "^[A-Z]{3}$" },
+        "value": { "type": "number", "minimum": 0 },
+        "visibility": { "type": "string", "enum": ["private", "public"] }
+      }
+    }
+  }
+}
