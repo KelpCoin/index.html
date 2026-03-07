@@ -1,0 +1,29 @@
+{
+  "subject": "Sync engine module refactor",
+  "subject_type": "module",
+  "context": {
+    "owner": "platform",
+    "risk_class": "medium"
+  },
+  "signal_a": {
+    "label": "Performance and maintainability gains",
+    "strength": 0.7,
+    "confidence": 0.69,
+    "evidence": ["Benchmark throughput +24 percent", "Code complexity down 31 percent"]
+  },
+  "signal_b": {
+    "label": "Migration breakage risk",
+    "strength": 0.63,
+    "confidence": 0.78,
+    "evidence": ["Legacy adapters untested", "Rollback path incomplete"]
+  },
+  "signal_c": {
+    "label": "Canary reveals controlled fault envelope",
+    "strength": 0.58,
+    "confidence": 0.71,
+    "evidence": ["Canary incidents auto-recovered"],
+    "mode": "RESOLVE",
+    "orientation": "NEUTRAL",
+    "veto": false
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "subject": "Tier-1 support prompt v4",
+  "subject_type": "prompt",
+  "context": {
+    "owner": "ops_ai",
+    "locale": "en-US"
+  },
+  "signal_a": {
+    "label": "Resolution quality improvement",
+    "strength": 0.64,
+    "confidence": 0.81,
+    "evidence": ["CSAT rose 7 points", "Escalation rate reduced"]
+  },
+  "signal_b": {
+    "label": "Policy drift risk",
+    "strength": 0.51,
+    "confidence": 0.73,
+    "evidence": ["Two edge-case policy misses", "Hallucination guard not comprehensive"]
+  },
+  "signal_c": {
+    "label": "Rule-constrained rewrite",
+    "strength": 0.48,
+    "confidence": 0.66,
+    "evidence": ["Replay set passes high-risk cases"],
+    "mode": "SHARPEN",
+    "orientation": "POSITIVE",
+    "veto": false
+  }
+}
