@@ -1,0 +1,16 @@
+{
+  "id": "canon-clone-winners-kill-losers",
+  "title": "Clone winners, kill losers",
+  "class": "canon",
+  "silo": "strategy",
+  "status": "active",
+  "confidence": 0.96,
+  "source": "seed.install",
+  "created_utc": "2026-01-01T00:00:00Z",
+  "modified_utc": "2026-01-01T00:00:00Z",
+  "tags": ["strategy", "experiments", "selection"],
+  "summary": "Scale proven paths and archive failing branches quickly.",
+  "body": "Replicate winning modules and archive losing modules with event evidence and rationale.",
+  "supersedes": [],
+  "related_ids": ["canon-payment-first-doctrine"]
+}

@@ -1,0 +1,16 @@
+{
+  "id": "canon-browneye-trifecta",
+  "title": "BrownEye Trifecta",
+  "class": "canon",
+  "silo": "core",
+  "status": "active",
+  "confidence": 0.99,
+  "source": "seed.install",
+  "created_utc": "2026-01-01T00:00:00Z",
+  "modified_utc": "2026-01-01T00:00:00Z",
+  "tags": ["browneye", "trifecta", "core"],
+  "summary": "Three anchors: doctrine clarity, measurable execution, and durable proof.",
+  "body": "Operate with doctrine first, execute with measurable checkpoints, and require proof artifacts on disk.",
+  "supersedes": [],
+  "related_ids": ["canon-proof-on-disk", "canon-append-only-ledger"]
+}

@@ -1,0 +1,16 @@
+{
+  "id": "canon-append-only-ledger",
+  "title": "Append-only ledger doctrine",
+  "class": "canon",
+  "silo": "operations",
+  "status": "active",
+  "confidence": 0.99,
+  "source": "seed.install",
+  "created_utc": "2026-01-01T00:00:00Z",
+  "modified_utc": "2026-01-01T00:00:00Z",
+  "tags": ["ledger", "append-only", "audit"],
+  "summary": "Record events without destructive edits.",
+  "body": "Write every install, seed, query, verify, and add event to JSONL. Never rewrite history in place.",
+  "supersedes": [],
+  "related_ids": ["canon-proof-on-disk"]
+}

@@ -1,0 +1,16 @@
+{
+  "id": "canon-approval-gated-publishing",
+  "title": "Approval-gated publishing",
+  "class": "canon",
+  "silo": "governance",
+  "status": "active",
+  "confidence": 0.97,
+  "source": "seed.install",
+  "created_utc": "2026-01-01T00:00:00Z",
+  "modified_utc": "2026-01-01T00:00:00Z",
+  "tags": ["approval", "publishing", "governance"],
+  "summary": "Promotion from draft to canon requires explicit approval.",
+  "body": "No doctrine moves into canon until approved and logged as a discrete ledger event.",
+  "supersedes": [],
+  "related_ids": ["canon-hard-silo-separation"]
+}

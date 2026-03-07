@@ -1,0 +1,16 @@
+{
+  "id": "canon-hard-silo-separation",
+  "title": "Hard silo separation",
+  "class": "canon",
+  "silo": "architecture",
+  "status": "active",
+  "confidence": 0.99,
+  "source": "seed.install",
+  "created_utc": "2026-01-01T00:00:00Z",
+  "modified_utc": "2026-01-01T00:00:00Z",
+  "tags": ["silo", "separation", "safety"],
+  "summary": "Keep doctrine, drafts, and quarantine in separate folders and workflows.",
+  "body": "Use strict class and folder boundaries so suspect ideas cannot silently contaminate canon.",
+  "supersedes": [],
+  "related_ids": ["canon-approval-gated-publishing"]
+}

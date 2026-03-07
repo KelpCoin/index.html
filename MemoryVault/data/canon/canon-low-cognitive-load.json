@@ -1,0 +1,16 @@
+{
+  "id": "canon-low-cognitive-load",
+  "title": "Low cognitive load requirement",
+  "class": "canon",
+  "silo": "ux",
+  "status": "active",
+  "confidence": 0.95,
+  "source": "seed.install",
+  "created_utc": "2026-01-01T00:00:00Z",
+  "modified_utc": "2026-01-01T00:00:00Z",
+  "tags": ["simplicity", "operations", "cognitive-load"],
+  "summary": "Use predictable structures and commands to reduce mental overhead.",
+  "body": "Prefer clear file names, fixed schemas, and simple scripts over hidden automation.",
+  "supersedes": [],
+  "related_ids": ["canon-proof-on-disk"]
+}
