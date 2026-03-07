@@ -2,43 +2,390 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Claim 500 KelpCoin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BrownEye Cortex Voice Bus</title>
   <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f0fdf4;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+    :root {
+      color-scheme: dark;
+      --bg: #0f172a;
+      --panel: #1e293b;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --accent: #22d3ee;
+      --good: #22c55e;
+      --warn: #f59e0b;
+      --bad: #ef4444;
+    }
+
+    * {
+      box-sizing: border-box;
       margin: 0;
-      padding: 40px;
+      padding: 0;
     }
+
+    body {
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      background: radial-gradient(circle at top, #1e293b, var(--bg));
+      color: var(--text);
+      min-height: 100vh;
+      padding: 24px;
+      display: grid;
+      place-items: center;
+    }
+
+    .app {
+      width: min(980px, 100%);
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid #334155;
+      border-radius: 16px;
+      backdrop-filter: blur(8px);
+      padding: 24px;
+      display: grid;
+      gap: 18px;
+      box-shadow: 0 18px 50px rgba(2, 6, 23, 0.45);
+    }
+
     h1 {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
+      font-size: clamp(1.4rem, 2.2vw, 2rem);
+      margin-bottom: 6px;
     }
+
     p {
-      font-size: 1rem;
-      margin-bottom: 2rem;
-      color: #555;
+      color: var(--muted);
+      line-height: 1.45;
     }
-    iframe {
-      border: none;
-      width: 100%;
-      max-width: 700px;
-      height: 800px;
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 12px;
+    }
+
+    label {
+      display: grid;
+      gap: 6px;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    input, select, button, textarea {
       border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      border: 1px solid #334155;
+      background: #0f172a;
+      color: var(--text);
+      padding: 10px 12px;
+      font-size: 0.95rem;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 220px;
+      resize: vertical;
+      line-height: 1.4;
+    }
+
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    button {
+      cursor: pointer;
+      font-weight: 600;
+      transition: transform 0.1s ease, border-color 0.2s ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      border-color: var(--accent);
+    }
+
+    .status {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 100%;
+      margin-right: 6px;
+      background: var(--bad);
+    }
+
+    .dot.good { background: var(--good); }
+    .dot.warn { background: var(--warn); }
+
+    .pill {
+      border: 1px solid #334155;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 0.78rem;
+      color: var(--muted);
+      width: fit-content;
     }
   </style>
 </head>
 <body>
-  <h1>🪙 Claim 500 KelpCoin</h1>
-  <p>Fill in your wallet address. Optional: enter a referrer’s wallet to earn bonus KELP.</p>
-  <iframe 
-    src="https://docs.google.com/forms/d/e/1FAIpQLSclYfRXBxHoDBjpoHCoKM2_lm8VkxN8FjqmkOeK5kqxiOMW9A/viewform?embedded=true"
-    allowfullscreen>
-  </iframe>
+  <main class="app">
+    <div>
+      <h1>🎙️ BrownEye Cortex Voice Bus</h1>
+      <p>
+        Use this page on your phone as the mic source and on your desktop as the live receiver.
+        Choose Browser STT for fastest real-time captions, or Whisper chunk mode for server-side transcription.
+      </p>
+    </div>
+
+    <div class="grid">
+      <label>
+        Role
+        <select id="role">
+          <option value="phone">Phone (capture + send)</option>
+          <option value="desktop">Desktop (receive only)</option>
+        </select>
+      </label>
+
+      <label>
+        Room / Session ID
+        <input id="room" value="brown-eye-main" />
+      </label>
+
+      <label>
+        STT Mode (phone)
+        <select id="mode">
+          <option value="browser">Browser STT (real-time)</option>
+          <option value="whisper">Whisper server chunks (~4s)</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="buttons">
+      <button id="connect">Connect</button>
+      <button id="start" disabled>Start Capture</button>
+      <button id="stop" disabled>Stop Capture</button>
+      <button id="clear">Clear Text</button>
+      <button id="copy">Copy Transcript</button>
+    </div>
+
+    <div class="status">
+      <div><span id="wsDot" class="dot"></span><span id="wsStatus">WebSocket: disconnected</span></div>
+      <div><span id="micDot" class="dot"></span><span id="micStatus">Mic: idle</span></div>
+      <div class="pill" id="lastUpdate">No transcript yet</div>
+    </div>
+
+    <label>
+      Live transcript buffer (syncs across all connected devices in this room)
+      <textarea id="transcript" placeholder="Transcript appears here..."></textarea>
+    </label>
+  </main>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+
+    const state = {
+      ws: null,
+      recognition: null,
+      mediaRecorder: null,
+      stream: null,
+      room: 'brown-eye-main'
+    };
+
+    const transcriptEl = $('transcript');
+
+    function setDot(dotId, type = 'bad') {
+      const dot = $(dotId);
+      dot.className = `dot${type === 'good' ? ' good' : type === 'warn' ? ' warn' : ''}`;
+    }
+
+    function setStatus() {
+      $('wsStatus').textContent = `WebSocket: ${state.ws?.readyState === WebSocket.OPEN ? 'connected' : 'disconnected'}`;
+      setDot('wsDot', state.ws?.readyState === WebSocket.OPEN ? 'good' : 'bad');
+    }
+
+    function appendTranscript(text) {
+      if (!text) return;
+      const timestamp = new Date().toLocaleTimeString();
+      transcriptEl.value += (transcriptEl.value ? '\n' : '') + `[${timestamp}] ${text}`;
+      transcriptEl.scrollTop = transcriptEl.scrollHeight;
+      $('lastUpdate').textContent = `Last update: ${timestamp}`;
+    }
+
+    function send(event) {
+      if (state.ws?.readyState !== WebSocket.OPEN) return;
+      state.ws.send(JSON.stringify(event));
+    }
+
+    function connectWebSocket() {
+      state.room = $('room').value.trim() || 'brown-eye-main';
+      const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
+      const wsUrl = `${protocol}://${window.location.host}/ws?room=${encodeURIComponent(state.room)}`;
+
+      state.ws?.close();
+      state.ws = new WebSocket(wsUrl);
+      setStatus();
+
+      state.ws.onopen = () => {
+        setStatus();
+        send({ type: 'presence', role: $('role').value });
+      };
+
+      state.ws.onclose = () => setStatus();
+
+      state.ws.onmessage = (msg) => {
+        try {
+          const payload = JSON.parse(msg.data);
+          if (payload.type === 'transcript') {
+            appendTranscript(payload.text);
+          }
+        } catch (error) {
+          console.error('Invalid WS payload', error);
+        }
+      };
+    }
+
+    function stopCapture() {
+      state.recognition?.stop();
+      state.recognition = null;
+
+      if (state.mediaRecorder?.state !== 'inactive') {
+        state.mediaRecorder.stop();
+      }
+      state.mediaRecorder = null;
+
+      state.stream?.getTracks().forEach((track) => track.stop());
+      state.stream = null;
+
+      $('start').disabled = false;
+      $('stop').disabled = true;
+      $('micStatus').textContent = 'Mic: idle';
+      setDot('micDot', 'bad');
+    }
+
+    async function startBrowserStt() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        alert('Browser SpeechRecognition is not available on this device. Use Whisper mode instead.');
+        return;
+      }
+
+      const recognition = new SpeechRecognition();
+      recognition.lang = 'en-US';
+      recognition.interimResults = true;
+      recognition.continuous = true;
+
+      recognition.onresult = (event) => {
+        let interimText = '';
+        for (let i = event.resultIndex; i < event.results.length; i += 1) {
+          const result = event.results[i];
+          const text = result[0].transcript.trim();
+          if (result.isFinal) {
+            send({ type: 'transcript', text, source: 'browser-stt' });
+          } else {
+            interimText = text;
+          }
+        }
+        $('micStatus').textContent = interimText ? `Mic: hearing "${interimText}"` : 'Mic: listening';
+      };
+
+      recognition.onerror = (event) => {
+        $('micStatus').textContent = `Mic error: ${event.error}`;
+        setDot('micDot', 'warn');
+      };
+
+      recognition.onend = () => {
+        if ($('stop').disabled === false) {
+          recognition.start();
+        }
+      };
+
+      recognition.start();
+      state.recognition = recognition;
+    }
+
+    async function startWhisperMode() {
+      state.stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const recorder = new MediaRecorder(state.stream, { mimeType: 'audio/webm' });
+
+      recorder.ondataavailable = async (event) => {
+        if (!event.data || event.data.size < 1000) return;
+
+        const form = new FormData();
+        form.append('audio', event.data, `chunk-${Date.now()}.webm`);
+        form.append('room', state.room);
+
+        try {
+          const response = await fetch('/api/transcribe', {
+            method: 'POST',
+            body: form
+          });
+          if (!response.ok) {
+            const text = await response.text();
+            $('micStatus').textContent = `Whisper error: ${text}`;
+            setDot('micDot', 'warn');
+          }
+        } catch (error) {
+          $('micStatus').textContent = `Whisper network error: ${error.message}`;
+          setDot('micDot', 'warn');
+        }
+      };
+
+      recorder.start(4000);
+      state.mediaRecorder = recorder;
+    }
+
+    async function startCapture() {
+      if (!state.ws || state.ws.readyState !== WebSocket.OPEN) {
+        alert('Connect first.');
+        return;
+      }
+
+      if ($('role').value !== 'phone') {
+        alert('Switch role to Phone to capture audio.');
+        return;
+      }
+
+      $('start').disabled = true;
+      $('stop').disabled = false;
+      $('micStatus').textContent = 'Mic: listening';
+      setDot('micDot', 'good');
+
+      try {
+        if ($('mode').value === 'browser') {
+          await startBrowserStt();
+        } else {
+          await startWhisperMode();
+        }
+      } catch (error) {
+        $('micStatus').textContent = `Mic startup failed: ${error.message}`;
+        setDot('micDot', 'warn');
+        $('start').disabled = false;
+        $('stop').disabled = true;
+      }
+    }
+
+    $('connect').addEventListener('click', () => {
+      connectWebSocket();
+      $('start').disabled = false;
+    });
+
+    $('start').addEventListener('click', startCapture);
+    $('stop').addEventListener('click', stopCapture);
+    $('clear').addEventListener('click', () => { transcriptEl.value = ''; });
+    $('copy').addEventListener('click', async () => {
+      await navigator.clipboard.writeText(transcriptEl.value);
+      $('lastUpdate').textContent = 'Transcript copied to clipboard';
+    });
+
+    $('role').addEventListener('change', () => {
+      if ($('role').value === 'desktop') stopCapture();
+    });
+
+    setStatus();
+  </script>
 </body>
 </html>
