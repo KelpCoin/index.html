@@ -1,0 +1,32 @@
+BrownEye migration note: move modules to the universal cartridge bus in phases.
+
+Phase 1: Mirror mode
+- Keep existing module inputs unchanged.
+- Add a thin adapter that emits a matching cartridge into Bus/inbox.
+- Keep legacy output paths active.
+
+Phase 2: Dual read mode
+- Update each module to read from both legacy input and Bus/done.
+- Prefer cartridge payload fields when both exist.
+- Write proof and verifier fields on each produced cartridge.
+
+Phase 3: Bus first mode
+- Make cartridge envelopes the primary contract between modules.
+- Keep legacy format only as fallback.
+- Route failed or malformed envelopes into Bus/quarantine.
+
+Phase 4: Legacy retirement
+- Remove legacy format writers once no downstream dependency remains.
+- Keep archive copies of legacy records for audit.
+- Continue logging all events in Bus/ledgers/bus_events.jsonl.
+
+Compatibility guidance
+- Map old fields into payload.body without data loss.
+- Preserve module ownership in source.module.
+- Use cartridge_type to keep behavior clear.
+- Use deterministic cartridge_id values to prevent duplicates.
+
+Operational guidance
+- Run Install_Bus.ps1 on each host before traffic cutover.
+- Run Verify_Bus.ps1 after install and after release updates.
+- Use Submit_BusCartridge.ps1 for ingestion to guarantee proof and verifier artifacts.
