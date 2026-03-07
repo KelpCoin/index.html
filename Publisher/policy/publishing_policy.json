@@ -1,0 +1,42 @@
+{
+  "policy_name": "BrownEye Cortex Default Publishing Posture",
+  "version": "1.0.0",
+  "last_updated_utc": "1970-01-01T00:00:00Z",
+  "default_action": "deny",
+  "require_explicit_approval": true,
+  "approval": {
+    "required_fields": [
+      "action_id",
+      "requested_by",
+      "requested_at_utc",
+      "target_channel",
+      "content_summary",
+      "reason",
+      "proof_paths"
+    ]
+  },
+  "quarantine_rules": {
+    "cross_silo_content": "quarantine",
+    "safety_boundary_violation": "quarantine",
+    "missing_proof": "quarantine",
+    "missing_payment_linkage_when_required": "quarantine"
+  },
+  "retention": {
+    "delete_allowed": false,
+    "archive_required": true,
+    "artifact_retention_days": 3650
+  },
+  "audit": {
+    "ledger_path": "Publisher\\ledgers\\publisher_events.jsonl",
+    "capture": [
+      "who",
+      "what",
+      "when",
+      "why",
+      "source_path",
+      "destination_path",
+      "decision",
+      "notes"
+    ]
+  }
+}
