@@ -1,0 +1,47 @@
+{
+  "envelope_version": "BROWNEYE.UNIVERSAL.v1",
+  "cartridge_type": "approval_request",
+  "cartridge_id": "EXAMPLE_APPROVAL_001",
+  "created_utc": "2026-01-01T00:09:00Z",
+  "source": {
+    "agent": "BrownEye.Cortex",
+    "module": "DemoModule",
+    "host": "LOCALHOST"
+  },
+  "routing": {
+    "priority": 5,
+    "target": "BrownEye.Bus",
+    "tags": [
+      "approval_request",
+      "example"
+    ]
+  },
+  "payload": {
+    "summary": "Example approval_request cartridge",
+    "body": {
+      "content": "replace with real work item",
+      "sequence": 10
+    }
+  },
+  "proof": {
+    "requested": true,
+    "status": "pending",
+    "artifacts": []
+  },
+  "verifier": {
+    "requested": true,
+    "status": "pending",
+    "checks": [
+      "required_fields",
+      "type_check"
+    ]
+  },
+  "approval": {
+    "required": true,
+    "status": "pending",
+    "approver": "unassigned"
+  },
+  "relations": {
+    "conversation_id": "EXAMPLECONV_001"
+  }
+}
