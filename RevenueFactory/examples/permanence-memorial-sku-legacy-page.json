@@ -1,0 +1,27 @@
+{
+  "cell_id": "RCELL-EX-003",
+  "created_utc": "2026-01-01T00:00:00Z",
+  "offer_name": "Legacy Memory Page Build",
+  "silo": "memorial",
+  "offer_summary": "Legacy Memory Page Build with proof-first fulfillment and approval gate.",
+  "audience": "Families wanting a private remembrance page package.",
+  "price_logic": "Flat 149 USD prepay plus optional 20 USD annual archive refresh.",
+  "delivery_logic": "Static html package plus archive hash and delivery proof.",
+  "proof_artifact_format": "JSON proof containing payment_receipt_id, delivery_timestamp_utc, and artifact_checksum_sha256.",
+  "ledger_format": "Append-only JSONL events with event_id,event_utc,event_type,amount_usd,paid_signal,approval_status,notes.",
+  "verifier_command": "powershell -ExecutionPolicy Bypass -File Verify_RevenueFactory.ps1 -CellPath .\\RevenueFactory\\examples\\permanence-memorial-sku-legacy-page.json",
+  "risk_flags": [
+    "scope_creep_risk",
+    "payment_dispute_risk"
+  ],
+  "approval_status": "quarantined",
+  "kill_condition": "Kill if no paid signal appears within 14 days from created_utc.",
+  "clone_condition": "Clone when 3 paid_signal=true fulfillment_complete events occur with zero refunds.",
+  "operator_load_estimate": "42 minutes per order",
+  "dependencies": [
+    "PowerShell 5.1",
+    "Local file storage",
+    "Payment receipt export"
+  ],
+  "success_criteria": "Generate at least 3 paid deliveries in 30 days with zero approval breaches."
+}

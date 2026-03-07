@@ -1,0 +1,11 @@
+{
+  "proof_type": "revenue_factory_install",
+  "installed_utc": "2026-01-01T00:00:00Z",
+  "factory_root": "D:\\BrownEye\\RevenueFactory",
+  "fallback_root": "C:\\BrownEye\\RevenueFactory",
+  "installer_idempotent": true,
+  "append_only_ledger": true,
+  "proof_on_disk_mandatory": true,
+  "approval_gate_enabled": true,
+  "notes": "Seed proof artifact shipped with repository; running installer refreshes with host timestamps."
+}
