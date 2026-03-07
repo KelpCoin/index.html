@@ -1,0 +1,30 @@
+[workspace]
+name = "BrownEye Cortex"
+mode = "local-first"
+platform = "windows-11"
+preferred_drive = "D:\\"
+fallback_drive = "C:\\"
+
+[runtime]
+powershell_required = "5.1"
+ascii_only = true
+implementation_first = true
+fail_closed = true
+
+[safety]
+public_actions_default = "deny"
+require_explicit_approval_for_public = true
+hard_silo_separation = true
+no_silent_gpu_fallback = true
+
+[outputs]
+require_proof_on_disk = true
+ledger_mode = "append-only"
+archive_replace_instead_of_delete = true
+require_verifier = true
+require_exact_paths_in_summary = true
+
+[operator]
+low_operator_load = true
+double_click_safe_launchers = true
+no_manual_post_generation_edits_when_avoidable = true
