@@ -1,0 +1,29 @@
+{
+  "correlation_id": "corr-20260101-core-0001",
+  "created_utc": "2026-01-01T12:00:00Z",
+  "source": "browneye.local.bootstrap",
+  "silo": "core_ops",
+  "silo_tags": [
+    "core_ops",
+    "local_only"
+  ],
+  "priority": "normal",
+  "status": "submitted",
+  "risk_flags": [
+    "none"
+  ],
+  "required_approval": false,
+  "proof_required": true,
+  "verifier_required": false,
+  "related_paths": [
+    "Bus/examples"
+  ],
+  "id": "cartridge-0005-handover_packets",
+  "type": "handover_packets",
+  "payload": {
+    "from_operator": "day_shift",
+    "to_operator": "night_shift",
+    "summary": "Carry unresolved verifier backlog",
+    "visibility": "private"
+  }
+}

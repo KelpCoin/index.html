@@ -1,0 +1,125 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "BROWNEYE.UNIVERSAL.v1",
+  "title": "BrownEye Universal Cartridge",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "correlation_id",
+    "created_utc",
+    "source",
+    "silo",
+    "silo_tags",
+    "type",
+    "priority",
+    "status",
+    "payload",
+    "risk_flags",
+    "required_approval",
+    "proof_required",
+    "verifier_required",
+    "related_paths"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9._-]{8,80}$"
+    },
+    "correlation_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9._-]{8,80}$"
+    },
+    "created_utc": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+    },
+    "source": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 120
+    },
+    "silo": {
+      "type": "string",
+      "pattern": "^[a-z0-9._-]{2,60}$"
+    },
+    "silo_tags": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9._-]{2,40}$"
+      }
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "prompts",
+        "seeds",
+        "tasks",
+        "revenue_cells",
+        "handover_packets",
+        "memory_updates",
+        "watchdog_jobs",
+        "proof_requests",
+        "verifier_requests",
+        "approval_requests",
+        "quarantine_notices"
+      ]
+    },
+    "priority": {
+      "type": "string",
+      "enum": ["low", "normal", "high", "critical"]
+    },
+    "status": {
+      "type": "string",
+      "enum": ["submitted", "processing", "done", "quarantined"]
+    },
+    "payload": {
+      "type": "object"
+    },
+    "risk_flags": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "none",
+          "public_action",
+          "external_write",
+          "secret_access",
+          "destructive_change",
+          "financial_impact"
+        ]
+      }
+    },
+    "required_approval": {
+      "type": "boolean"
+    },
+    "proof_required": {
+      "type": "boolean"
+    },
+    "verifier_required": {
+      "type": "boolean"
+    },
+    "related_paths": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "approval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status"],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["pending", "approved", "denied"]
+        },
+        "approver": { "type": "string" },
+        "approval_id": { "type": "string" },
+        "approved_utc": { "type": "string" }
+      }
+    }
+  }
+}

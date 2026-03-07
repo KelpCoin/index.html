@@ -1,0 +1,8 @@
+{
+  "proof_type": "install",
+  "status": "template",
+  "bus_version": "BROWNEYE.UNIVERSAL.v1",
+  "created_utc": "2026-01-01T00:00:00Z",
+  "host": "unbound",
+  "paths_verified": []
+}

@@ -1,0 +1,16 @@
+{
+  "$id": "BROWNEYE.TYPE.MEMORY_UPDATES.v1",
+  "type": "object",
+  "required": ["payload"],
+  "properties": {
+    "payload": {
+      "type": "object",
+      "required": ["memory_key", "memory_value"],
+      "properties": {
+        "memory_key": { "type": "string" },
+        "memory_value": { "type": "string" },
+        "visibility": { "type": "string", "enum": ["private", "public"] }
+      }
+    }
+  }
+}
