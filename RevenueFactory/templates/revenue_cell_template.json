@@ -1,0 +1,27 @@
+{
+  "cell_id": "RCELL-YYYYMMDD-HHMMSS-XXXX",
+  "created_utc": "2026-01-01T00:00:00Z",
+  "offer_name": "Decision Dissection Sprint",
+  "silo": "consulting",
+  "offer_summary": "A 48-hour written dissection of one business decision with options and ranked recommendations.",
+  "audience": "Solo operators and small teams deciding between two to four growth paths.",
+  "price_logic": "Flat 249 USD prepay. No delivery starts until payment receipt exists in proof artifacts.",
+  "delivery_logic": "Collect client brief, analyze options, and deliver a structured markdown memo within 48 hours.",
+  "proof_artifact_format": "JSON file with payment receipt id, fulfillment timestamp, and delivery checksum.",
+  "ledger_format": "JSONL append-only events with event_type, amount_usd, paid_signal, and verifier_outcome.",
+  "verifier_command": "powershell -ExecutionPolicy Bypass -File Verify_RevenueFactory.ps1 -CellPath \"<path-to-cell>\"",
+  "risk_flags": [
+    "manual_judgment_risk",
+    "delivery_scope_creep"
+  ],
+  "approval_status": "quarantined",
+  "kill_condition": "Kill after 14 days without any paid signal event in ledger.",
+  "clone_condition": "Clone after 3 paid deliveries with at least 4.5 average rating and on-time proof.",
+  "operator_load_estimate": "35 minutes per order",
+  "dependencies": [
+    "PowerShell 5.1",
+    "Local filesystem access",
+    "Payment receipt export"
+  ],
+  "success_criteria": "At least 3 paid deliveries in 30 days with zero refund events."
+}

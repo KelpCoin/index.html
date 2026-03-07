@@ -1,0 +1,15 @@
+{
+  "triage_fields": {
+    "paid_signal_count_30d": 0,
+    "gross_usd_30d": 0,
+    "refund_count_30d": 0,
+    "on_time_delivery_rate": 0,
+    "operator_minutes_per_order": 0,
+    "approval_breaches": 0
+  },
+  "triage_rules": [
+    "quarantine if approval_breaches > 0",
+    "kill if paid_signal_count_30d = 0 after day 14",
+    "clone candidate if paid_signal_count_30d >= 3 and refund_count_30d = 0"
+  ]
+}

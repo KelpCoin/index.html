@@ -1,0 +1,27 @@
+{
+  "cell_id": "RCELL-EX-006",
+  "created_utc": "2026-01-01T00:00:00Z",
+  "offer_name": "Inbox Tagger Automation Setup",
+  "silo": "private_automation",
+  "offer_summary": "Inbox Tagger Automation Setup with proof-first fulfillment and approval gate.",
+  "audience": "Busy operators needing private email triage automation.",
+  "price_logic": "Flat 299 USD prepay for one mailbox automation deployment.",
+  "delivery_logic": "PowerShell automation script plus dry-run log and proof json.",
+  "proof_artifact_format": "JSON proof containing payment_receipt_id, delivery_timestamp_utc, and artifact_checksum_sha256.",
+  "ledger_format": "Append-only JSONL events with event_id,event_utc,event_type,amount_usd,paid_signal,approval_status,notes.",
+  "verifier_command": "powershell -ExecutionPolicy Bypass -File Verify_RevenueFactory.ps1 -CellPath .\\RevenueFactory\\examples\\private-utility-automation-sku-inbox-tagger.json",
+  "risk_flags": [
+    "scope_creep_risk",
+    "payment_dispute_risk"
+  ],
+  "approval_status": "quarantined",
+  "kill_condition": "Kill if no paid signal appears within 14 days from created_utc.",
+  "clone_condition": "Clone when 3 paid_signal=true fulfillment_complete events occur with zero refunds.",
+  "operator_load_estimate": "55 minutes per order",
+  "dependencies": [
+    "PowerShell 5.1",
+    "Local file storage",
+    "Payment receipt export"
+  ],
+  "success_criteria": "Generate at least 3 paid deliveries in 30 days with zero approval breaches."
+}

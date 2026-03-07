@@ -1,0 +1,27 @@
+{
+  "cell_id": "RCELL-EX-001",
+  "created_utc": "2026-01-01T00:00:00Z",
+  "offer_name": "Invoice Cleanroom Template Pack",
+  "silo": "digital_templates",
+  "offer_summary": "Invoice Cleanroom Template Pack with proof-first fulfillment and approval gate.",
+  "audience": "Freelancers needing reusable invoice and follow-up templates.",
+  "price_logic": "Flat 19 USD prepay for instant download.",
+  "delivery_logic": "Zip delivery with checksum and download proof json.",
+  "proof_artifact_format": "JSON proof containing payment_receipt_id, delivery_timestamp_utc, and artifact_checksum_sha256.",
+  "ledger_format": "Append-only JSONL events with event_id,event_utc,event_type,amount_usd,paid_signal,approval_status,notes.",
+  "verifier_command": "powershell -ExecutionPolicy Bypass -File Verify_RevenueFactory.ps1 -CellPath .\\RevenueFactory\\examples\\digital-template-sku-invoice-cleanroom.json",
+  "risk_flags": [
+    "scope_creep_risk",
+    "payment_dispute_risk"
+  ],
+  "approval_status": "quarantined",
+  "kill_condition": "Kill if no paid signal appears within 14 days from created_utc.",
+  "clone_condition": "Clone when 3 paid_signal=true fulfillment_complete events occur with zero refunds.",
+  "operator_load_estimate": "12 minutes per order",
+  "dependencies": [
+    "PowerShell 5.1",
+    "Local file storage",
+    "Payment receipt export"
+  ],
+  "success_criteria": "Generate at least 3 paid deliveries in 30 days with zero approval breaches."
+}
